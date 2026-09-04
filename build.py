@@ -39,6 +39,11 @@ MOBILE_SOCIAL_RE = re.compile(r'(<div class="js-responsive-nav">.*?)<div class="
 MOBILE_EMAIL_ROW = '<div class="link-title"><a href="mailto:hello@maxhammons.com">Email me</a></div>'
 BFCACHE_RELOAD_RE = re.compile(r"<script type=\"text/javascript\">\s*// fix for Safari.s back/forward cache.*?</script>\s*", re.S)
 LONG_INTRO_CHARS = 360
+# GitHub Pages refuses sites over 1 GB. Image variants wider than this, and the
+# full-size originals the lightbox used, are dropped and every reference is
+# pointed at the largest variant that remains (Max, 2026-09-03).
+MAX_IMAGE_WIDTH = 2000
+VARIANT_RE = re.compile(r"^(" + UUID_RE.pattern + r")(?:_rw_(\d+)|_carw_\d+x\d+x(\d+)|_rwc_\d+x\d+x\d+x\d+x(\d+))?\.([a-z0-9]+)$", re.I)
 
 # The exported theme came as 29 near-identical per-page stylesheets. Four are kept,
 # one per page layout; theme/site.css normalises everything on top of them.
@@ -74,6 +79,41 @@ def fetch(url, dest):
 
 def localise(s):
     return CDN_RE.sub(lambda m: "/assets/" + cdn_basename(m.group(0)), s)
+
+
+def plan_trim(names):
+    """Return (dropped:set, remap:{dropped basename -> kept basename}) for the size cap."""
+    families = {}
+    for n in names:
+        m = VARIANT_RE.match(n)
+        if not m:
+            continue
+        uid, ext = m.group(1), m.group(5).lower()
+        w = next((int(g) for g in m.groups()[1:4] if g), None)  # None = original
+        families.setdefault((uid, ext), []).append((w, n))
+    dropped, remap = set(), {}
+    for _, variants in families.items():
+        keep = [(w, n) for w, n in variants if w is not None and w <= MAX_IMAGE_WIDTH]
+        if not keep:
+            continue  # nothing small enough to fall back to: keep everything in this family
+        best = max(keep)[1]
+        for w, n in variants:
+            if w is None or w > MAX_IMAGE_WIDTH:
+                dropped.add(n)
+                remap[n] = best
+    return dropped, remap
+
+
+def apply_trim(s, dropped, remap):
+    def fix_srcset(m):
+        entries = []
+        for e in m.group(2).split(","):
+            e = e.strip()
+            if e and os.path.basename(e.split()[0]) not in dropped:
+                entries.append(e)
+        return f'{m.group(1)}="{",".join(entries)}"'
+    s = re.sub(r'((?:data-)?srcset)="([^"]*)"', fix_srcset, s)
+    return re.sub(r"/assets/([^\s\"'()<>,]+)", lambda m: "/assets/" + remap.get(m.group(1), m.group(1)), s)
 
 
 def load_content():
@@ -138,6 +178,9 @@ def main():
     by_name = {}
     for u in urls:
         by_name.setdefault(cdn_basename(u), u)
+    dropped, remap = plan_trim(by_name)
+    for n in dropped:
+        by_name.pop(n, None)
 
     # 2. site/assets (reuse what is already there or in raw/, download the rest)
     os.makedirs(ASSETS, exist_ok=True)
@@ -173,7 +216,7 @@ def main():
     shutil.copyfile(os.path.join(THEME, "site.js"), os.path.join(OUT, "js", "site.js"))
     for name, text in css_src.items():
         with open(os.path.join(OUT, "css", f"adobe-{name}.css"), "w", encoding="utf-8") as f:
-            f.write(localise(text))
+            f.write(apply_trim(localise(text), dropped, remap))
     shutil.copyfile(os.path.join(THEME, "site.css"), os.path.join(OUT, "css", "site.css"))
     shutil.copyfile(os.path.join(RAW_SITE, "dist", "css", "main.css"), os.path.join(OUT, "dist", "css", "main.css"))
     js = [f for f in os.listdir(os.path.join(RAW_SITE, "dist", "js")) if f.startswith("main.js")][0]
@@ -197,7 +240,7 @@ def main():
         s = PAGE_CSS_RE.sub(
             f'<link rel="stylesheet" href="/css/adobe-{layout}.css" type="text/css" />\n'
             f'    <link rel="stylesheet" href="/css/site.css" type="text/css" />', s)
-        s = localise(s)
+        s = apply_trim(localise(s), dropped, remap)
         s = re.sub(r'src="/dist/js/main\.js\?cb=[0-9a-f]+"', 'src="/dist/js/main.js"', s)
         s = re.sub(r'src="/site/translations\?cb=[0-9a-f]+"', 'src="/site/translations.js"', s)
         s = s.replace('<html class="', '<html class="wf-active ').replace("<html>", '<html class="wf-active">')
@@ -235,6 +278,8 @@ def main():
             if fn.endswith((".html", ".css")):
                 t = open(os.path.join(dp, fn), encoding="utf-8", errors="ignore").read()
                 left += len(CDN_RE.findall(t)) + t.count("use.typekit.net")
+    total = sum(os.path.getsize(os.path.join(dp, fn)) for dp, _, fns in os.walk(OUT) for fn in fns)
+    print(f"images: {len(dropped)} variants over {MAX_IMAGE_WIDTH}px or originals dropped, {len(by_name)} kept; site/ is {total / 1e6:.0f} MB")
     print(f"alt text: {report['added']} added, {report['missing']} images with no text yet")
     print(f"copy edits: {len(report['copy_applied'])} applied, {len(report['copy_failed'])} failed")
     for slug, find in report["copy_failed"]:

@@ -35,8 +35,17 @@ open http://localhost:8765/
 6. Applies alt text and copy edits from `content/pages/*.json`.
 7. Writes every page as `slug/index.html`, plus `CNAME`, `.nojekyll`, and a `404.html`.
 
+## Hosting
+
+GitHub Pages, deployed by `.github/workflows/pages.yml` from `site/` on every push to `main`.
+Custom domain `maxhammons.com` via `site/CNAME`; DNS stays at Squarespace (A records to
+GitHub's IPs for the apex, CNAME `www` to `maxhammons.github.io`).
+
+Image variants wider than 2000px and the full-size originals are dropped by the build
+(`MAX_IMAGE_WIDTH` in `build.py`) so the published site stays under the 1 GB Pages cap.
+The originals are still in `raw/` on Max's Mac (ignored by git).
+
 ## Known open items
 
-- Site is 2.0 GB of images. GitHub Pages caps a published site at 1 GB. Decision deferred (trim to 1920px, or host on Cloudflare Pages).
 - Proxima Nova web files came from the Adobe Fonts kit. Self-hosting needs a Proxima Nova web license.
 - The Reel page is a placeholder: a background GIF and a "Click Here" button that links back to the portfolio.

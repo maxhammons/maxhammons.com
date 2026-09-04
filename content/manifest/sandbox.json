@@ -1,0 +1,37 @@
+{
+ "slug": "sandbox",
+ "url": "https://maxhammons.com/sandbox",
+ "texts": [
+  {
+   "kind": "cover_title",
+   "html": "NIXED Apparel Company",
+   "plain": "NIXED Apparel Company"
+  },
+  {
+   "kind": "cover_title",
+   "html": "Project Montauk",
+   "plain": "Project Montauk"
+  },
+  {
+   "kind": "footer",
+   "html": "Copyright Max Hammons 2025",
+   "plain": "Copyright Max Hammons 2025"
+  }
+ ],
+ "images": [
+  {
+   "id": "da8058c9-6e56-40c5-a74b-38d5c171e30f",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/da8058c9-6e56-40c5-a74b-38d5c171e30f_carw_202x158x640.jpg",
+   "preceding_text": "",
+   "cover_link": "/nixed-apparel"
+  },
+  {
+   "id": "485bcd3c-3674-4c6d-9f12-6b16690d1ca7",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/485bcd3c-3674-4c6d-9f12-6b16690d1ca7_carw_202x158x640.jpg",
+   "preceding_text": "",
+   "cover_link": "/project-montauk"
+  }
+ ],
+ "page_title_tag": "Max Hammons: Senior Graphic & UX Designer | Empathy-Driven Ideator - Sandbox",
+ "meta_description": ""
+}

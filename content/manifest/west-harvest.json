@@ -1,0 +1,295 @@
+{
+ "slug": "west-harvest",
+ "url": "https://maxhammons.com/west-harvest",
+ "texts": [
+  {
+   "kind": "title",
+   "html": "West Harvest",
+   "plain": "West Harvest"
+  },
+  {
+   "kind": "description",
+   "html": "I directed branding, environmental graphics, and wayfinding for a high‑volume Fortune-50 tech campus café, creating a distinct identity and mural series, designing digital menu boards and a signage system, and managing on‑site reviews and placement approvals; the café became a stand‑out space with smooth peak‑time flows and a memorable atmosphere.",
+   "plain": "I directed branding, environmental graphics, and wayfinding for a high‑volume Fortune-50 tech campus café, creating a distinct identity and mural series, designing digital menu boards and a signage system, and managing on‑site reviews and placement approvals; the café became a stand‑out space with smooth peak‑time flows and a memorable atmosphere."
+  },
+  {
+   "kind": "footer",
+   "html": "Copyright Max Hammons 2025",
+   "plain": "Copyright Max Hammons 2025"
+  }
+ ],
+ "images": [
+  {
+   "id": "124c842f-c322-4674-9111-a7b8a8c6ee82",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/124c842f-c322-4674-9111-a7b8a8c6ee82_rw_600.jpg",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "336f7094-3791-4e3d-9d8c-64862864c1b4",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/336f7094-3791-4e3d-9d8c-64862864c1b4_rw_600.jpg",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "c14e9915-cc63-4a13-be22-2fc1acc1d791",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/c14e9915-cc63-4a13-be22-2fc1acc1d791_rw_600.jpg",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "d5d6aadb-d53e-4ea2-8ba7-c44163967365",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/d5d6aadb-d53e-4ea2-8ba7-c44163967365_rw_600.jpg",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "ea809522-b684-4f92-b84f-7b44edf97aa7",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/ea809522-b684-4f92-b84f-7b44edf97aa7_rw_600.jpg",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "97b96d3a-a31b-4eb9-9afb-53b9989a8e63",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/97b96d3a-a31b-4eb9-9afb-53b9989a8e63_rw_600.jpg",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "b880d4fe-39ee-480b-9267-5156ac35248a",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/b880d4fe-39ee-480b-9267-5156ac35248a_rw_600.jpg",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "aa9d8482-b571-4e6e-8939-ec43e9ab8097",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/aa9d8482-b571-4e6e-8939-ec43e9ab8097_rw_600.jpg",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "95e44876-dedd-47c0-8acf-b7fad9fbf864",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/95e44876-dedd-47c0-8acf-b7fad9fbf864_rw_600.jpg",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "a326ad78-6698-4675-8532-802a410192fc",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/a326ad78-6698-4675-8532-802a410192fc_rw_600.jpg",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "93ddc712-da83-491b-bee9-e4441ac9a6e8",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/93ddc712-da83-491b-bee9-e4441ac9a6e8_rw_600.jpg",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "de877113-574c-4206-b18b-9708359a1355",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/de877113-574c-4206-b18b-9708359a1355_rw_600.jpg",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "c7b0f09e-6ab4-44cf-92b2-6a92174ac63d",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/c7b0f09e-6ab4-44cf-92b2-6a92174ac63d_rw_600.jpg",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "0d78c5b0-6baf-474c-89fb-90a42e918f6a",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/0d78c5b0-6baf-474c-89fb-90a42e918f6a_rw_600.jpg",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "918feb6d-a91a-4d47-93a1-4a24505d5b57",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/918feb6d-a91a-4d47-93a1-4a24505d5b57_rw_600.jpg",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "739dbc3e-ed29-4005-97e3-a2e605690368",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/739dbc3e-ed29-4005-97e3-a2e605690368_rw_600.jpg",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "bf97826d-0e42-4717-b8fa-c757ed9d905f",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/bf97826d-0e42-4717-b8fa-c757ed9d905f_rw_600.jpg",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "b2a25457-3486-43ac-9dc4-bc6e9bc76016",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/b2a25457-3486-43ac-9dc4-bc6e9bc76016_rw_600.png",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "c9f27dd8-12ec-44a8-a334-4ab35ecc9881",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/c9f27dd8-12ec-44a8-a334-4ab35ecc9881_rw_600.png",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "dea0cfc5-67cd-4f13-8bd3-8e353f3bc336",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/dea0cfc5-67cd-4f13-8bd3-8e353f3bc336_rw_600.png",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "a815686f-6c7c-452b-a34f-b02206917f1d",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/a815686f-6c7c-452b-a34f-b02206917f1d_rw_600.png",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "6a39f3bc-8aad-4cf8-a3e3-eed1afb90fce",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/6a39f3bc-8aad-4cf8-a3e3-eed1afb90fce_rw_600.png",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "c2a4bab4-4170-4292-8411-428e639d2c73",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/c2a4bab4-4170-4292-8411-428e639d2c73_rw_600.png",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "7f95fe59-a0e2-4353-9e61-11fa9f24371f",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/7f95fe59-a0e2-4353-9e61-11fa9f24371f_rw_600.png",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "0199f58f-d811-484b-8dfc-4a3e87b21a93",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/0199f58f-d811-484b-8dfc-4a3e87b21a93_rw_600.png",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "010f697d-d483-45b6-9e73-3f1e183e89ca",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/010f697d-d483-45b6-9e73-3f1e183e89ca_rw_600.png",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "a6e15c4e-49d9-4608-8d01-e3b184bbe5f8",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/a6e15c4e-49d9-4608-8d01-e3b184bbe5f8_rw_600.png",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "92341807-27cc-4fc3-83e4-4e9be70abd14",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/92341807-27cc-4fc3-83e4-4e9be70abd14_rw_600.png",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "f31c51d5-f8f8-4ad1-876d-d5ef9d3260ab",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/f31c51d5-f8f8-4ad1-876d-d5ef9d3260ab_rw_600.png",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "e6d96232-7c82-481f-ba4d-7df00d5b8e80",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/e6d96232-7c82-481f-ba4d-7df00d5b8e80_rw_600.png",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "1c871a30-dd45-4ff5-87e2-f755433b4b0f",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/1c871a30-dd45-4ff5-87e2-f755433b4b0f_rw_600.png",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "59127b31-1af1-4b38-a22d-e2f26145acd1",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/59127b31-1af1-4b38-a22d-e2f26145acd1_rw_600.png",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "f92a0654-a5eb-43b8-a821-0691073bd3b0",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/f92a0654-a5eb-43b8-a821-0691073bd3b0_rw_600.png",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "6d7c294f-ac45-46ce-b333-ef59719d966b",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/6d7c294f-ac45-46ce-b333-ef59719d966b_rw_600.png",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "fc7f673e-a1e2-45ef-8c82-ff8739880ba9",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/fc7f673e-a1e2-45ef-8c82-ff8739880ba9_rw_600.png",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "c66b3131-da83-4ab5-9e98-6e1a7cdee142",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/c66b3131-da83-4ab5-9e98-6e1a7cdee142_rw_600.png",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "ea69873b-9c45-481b-ad0e-9578617a9eec",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/ea69873b-9c45-481b-ad0e-9578617a9eec_rw_600.png",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "de6189c2-4ed6-444b-86b8-5593e4c60828",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/de6189c2-4ed6-444b-86b8-5593e4c60828_rw_600.png",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "10f7596e-4d1c-4448-b91f-c439790ec749",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/10f7596e-4d1c-4448-b91f-c439790ec749_rw_600.png",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "4b65ae20-6c45-4cb9-a5b0-3b65997d339d",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/4b65ae20-6c45-4cb9-a5b0-3b65997d339d_rw_600.png",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "0706c009-4fe3-4521-bcab-5d445f48430b",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/0706c009-4fe3-4521-bcab-5d445f48430b_rw_600.png",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "21da0ce4-c56a-4190-b160-620265c725db",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/21da0ce4-c56a-4190-b160-620265c725db_rw_600.png",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "906e0e94-d960-42c4-a6bc-456cf48630b8",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/906e0e94-d960-42c4-a6bc-456cf48630b8_rw_600.png",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "acdfe0ae-edaf-4001-b471-a18f4dc44f77",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/acdfe0ae-edaf-4001-b471-a18f4dc44f77_rw_600.png",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "c807bd85-e289-4629-8797-9055fa911575",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/c807bd85-e289-4629-8797-9055fa911575_rw_600.png",
+   "preceding_text": "",
+   "cover_link": null
+  }
+ ],
+ "page_title_tag": "Max Hammons: Senior Graphic & UX Designer | Empathy-Driven Ideator - West Harvest",
+ "meta_description": ""
+}

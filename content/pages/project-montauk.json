@@ -1,0 +1,34 @@
+{
+ "slug": "project-montauk",
+ "alt": {},
+ "copy": [
+  {
+   "kind": "text_module",
+   "find": "0.98 .",
+   "replace": "0.98.",
+   "reason": "Stray space before the closing period at the end of the Sharpe-ratio sentence."
+  },
+  {
+   "kind": "text_module",
+   "find": "enter = upTrendcrossDn = ta.crossunder(emaFast, emaLong)",
+   "replace": "enter = upTrend<br>crossDn = ta.crossunder(emaFast, emaLong)",
+   "reason": "Missing line break in the code block merged two statements into one unreadable line (enter = upTrend and crossDn = ... are separate assignments, and crossDn is used on its own later)."
+  },
+  {
+   "kind": "text_module",
+   "find": "prioritised",
+   "replace": "prioritized",
+   "reason": "Max 2026-09-03: US spelling, matches the rest of the page"
+  },
+  {
+   "kind": "text_module",
+   "find": "Direxion Technology Bull 3×",
+   "replace": "Direxion Daily Technology Bull 3×",
+   "reason": "Max 2026-09-03: the fund's real name includes 'Daily'"
+  }
+ ],
+ "questions": [
+  "Abstract calls TECL the “Direxion Technology Bull 3× Shares ETF” — the fund's actual name is “Direxion Daily Technology Bull 3X Shares.” Didn't correct it since it reads like a proper-name/content call rather than a typo, but flagging in case “Daily” was dropped by mistake.",
+  "Spelling is inconsistent within one paragraph: “prioritised” (British) vs. “emphasized” (American) two sentences apart in the Strategy Evolution section. Left both since either could be the intended spelling."
+ ]
+}

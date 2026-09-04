@@ -1,0 +1,122 @@
+#!/usr/bin/env python3
+"""Drive the built site in Chrome (Playwright) and check the things that matter.
+Usage: python3 qa.py [base_url] [screenshot_dir]"""
+import os
+import sys
+import time
+
+from playwright.sync_api import sync_playwright
+
+BASE = sys.argv[1] if len(sys.argv) > 1 else "http://localhost:8765"
+SHOTS = sys.argv[2] if len(sys.argv) > 2 else os.path.join(os.path.dirname(os.path.abspath(__file__)), "qa-shots")
+os.makedirs(SHOTS, exist_ok=True)
+fails = []
+
+
+def check(name, ok, detail=""):
+    print(("PASS " if ok else "FAIL ") + name + (f"  [{detail}]" if detail else ""))
+    if not ok:
+        fails.append(name)
+
+
+def style(pg, sel, *props):
+    return pg.evaluate("([s,p]) => { const e=document.querySelector(s); if(!e) return null; const c=getComputedStyle(e); return Object.fromEntries(p.map(k=>[k,c[k]])); }", [sel, list(props)])
+
+
+def box(pg, sel):
+    return pg.evaluate("s => { const r=document.querySelector(s).getBoundingClientRect(); return [r.x,r.y,r.width,r.height].map(v=>Math.round(v*10)/10); }", sel)
+
+
+with sync_playwright() as p:
+    b = p.chromium.launch(channel="chrome", headless=True)
+    pg = b.new_page(viewport={"width": 1440, "height": 900})
+
+    # ---- home masthead
+    pg.goto(BASE + "/"); pg.wait_for_timeout(1500)
+    pg.screenshot(path=f"{SHOTS}/01-home-masthead.png")
+    check("masthead title is brand red", style(pg, ".masthead h1", "color")["color"] == "rgb(234, 61, 61)")
+    check("masthead subtitle is ink", style(pg, ".masthead p", "color")["color"] == "rgb(17, 17, 17)")
+    b1, b2 = style(pg, ".masthead-button-1", "backgroundColor", "color"), style(pg, ".masthead-button-2", "backgroundColor", "color", "borderColor")
+    check("primary button black", b1["backgroundColor"] == "rgb(17, 17, 17)", str(b1))
+    check("secondary button red outline, no fill", b2["borderColor"] == "rgb(234, 61, 61)" and b2["backgroundColor"] == "rgba(0, 0, 0, 0)", str(b2))
+    before1, before2 = box(pg, ".masthead-button-1"), box(pg, ".masthead-button-2")
+    pg.hover(".masthead-button-1"); pg.wait_for_timeout(250)
+    h1 = style(pg, ".masthead-button-1", "backgroundColor")["backgroundColor"]
+    pg.hover(".masthead-button-2"); pg.wait_for_timeout(250)
+    h2 = style(pg, ".masthead-button-2", "backgroundColor", "color")
+    pg.screenshot(path=f"{SHOTS}/02-home-button2-hover.png", clip={"x": 380, "y": 330, "width": 680, "height": 260})
+    after1, after2 = box(pg, ".masthead-button-1"), box(pg, ".masthead-button-2")
+    check("primary button hover turns red", h1 == "rgb(234, 61, 61)", h1)
+    check("secondary button hover fills red", h2["backgroundColor"] == "rgb(234, 61, 61)", str(h2))
+    check("no layout shift on button hover", before1 == after1 and before2 == after2, f"{before2} -> {after2}")
+
+    # ---- sticky nav + cover hover
+    pg.evaluate("window.scrollTo(0,1500)"); pg.wait_for_timeout(400)
+    check("nav sticks to top when scrolled", box(pg, "header.site-header")[1] == 0)
+    pg.hover("a.project-cover[href='/ambition-angels/']"); pg.wait_for_timeout(300)
+    ct = style(pg, "a.project-cover[href='/ambition-angels/'] .title", "color", "fontSize", "textDecorationLine")
+    check("cover title red on hover", ct["color"] == "rgb(234, 61, 61)", str(ct))
+    pg.screenshot(path=f"{SHOTS}/03-home-cover-hover.png")
+
+    # ---- nav hover + speed
+    navsel = "header.site-header nav .page-title a[href='/about/']"
+    tr = style(pg, navsel, "transitionDuration", "color")
+    check("hover speed is 100ms on nav links", tr["transitionDuration"].startswith("0.1s"), tr["transitionDuration"])
+    pg.hover(navsel); pg.wait_for_timeout(200)
+    nh = style(pg, navsel, "color", "textDecorationLine")
+    check("nav hover is red + strikethrough", nh["color"] == "rgb(234, 61, 61)" and "line-through" in nh["textDecorationLine"], str(nh))
+    pg.screenshot(path=f"{SHOTS}/04-nav-hover.png", clip={"x": 0, "y": 0, "width": 1440, "height": 100})
+    same = pg.evaluate("Array.from(document.querySelectorAll('a, .button-module, .project-cover .details')).map(e=>getComputedStyle(e).transitionDuration).filter(d=>d && d!=='0s')")
+    check("every hover transition uses the same speed", all(d.split(",")[0].strip() == "0.1s" for d in same), f"{len(same)} elements, distinct={sorted(set(d.split(',')[0].strip() for d in same))}")
+
+    # ---- page fade: click must add transition-out and wait ~250ms before leaving
+    pg.goto(BASE + "/ambition-angels/"); pg.wait_for_timeout(1200)
+    t0 = time.time()
+    pg.click("header.site-header nav .page-title a[href='/about/']", no_wait_after=True)
+    cls = pg.evaluate("document.body.className")
+    pg.wait_for_url("**/about/", timeout=5000)
+    dt = (time.time() - t0) * 1000
+    check("click starts fade-out", "transition-out" in cls, cls)
+    check("navigation waits for the fade (>=200ms)", dt >= 200, f"{dt:.0f}ms")
+    op = pg.evaluate("getComputedStyle(document.body).opacity")
+    pg.wait_for_timeout(600)
+    check("new page fades in to full opacity", pg.evaluate("getComputedStyle(document.body).opacity") == "1", f"early={op}")
+
+    # ---- reel button font
+    pg.goto(BASE + "/reel/"); pg.wait_for_timeout(1500)
+    ff = style(pg, ".button-module", "fontFamily")["fontFamily"]
+    check("reel button uses Proxima Nova", "Proxima Nova" in ff, ff)
+    pg.screenshot(path=f"{SHOTS}/05-reel.png")
+
+    # ---- mobile menu
+    m = b.new_context(viewport={"width": 390, "height": 844}, device_scale_factor=2).new_page()
+    m.goto(BASE + "/about/"); m.wait_for_timeout(1200)
+    m.screenshot(path=f"{SHOTS}/06-mobile-about.png")
+    m.click(".js-hamburger"); m.wait_for_timeout(600)
+    m.screenshot(path=f"{SHOTS}/07-mobile-menu.png")
+    labels = m.evaluate("Array.from(document.querySelectorAll('.responsive-nav nav a')).filter(a=>a.offsetParent!==null).map(a=>[a.textContent.trim(), Math.round(parseFloat(getComputedStyle(a).fontSize)), Math.round(a.getBoundingClientRect().height)])")
+    check("mobile menu has 6 rows ending in Email me", len(labels) == 6 and labels[-1][0] == "Email me", str(labels))
+    check("mobile menu labels are big (>=34px) with tall tap targets (>=64px)", all(l[1] >= 34 and l[2] >= 64 for l in labels), str(labels))
+    m.click(".js-close-responsive-nav"); m.wait_for_timeout(400)
+    m.evaluate("window.scrollTo(0,800)"); m.wait_for_timeout(300)
+    check("mobile header sticks", box(m, "header.site-header")[1] == 0)
+
+    # ---- every page: no broken requests, no console errors
+    bad, errs = [], []
+    pg.on("response", lambda r: bad.append(f"{r.status} {r.url}") if r.status >= 400 and "google-analytics" not in r.url else None)
+    pg.on("requestfailed", lambda r: bad.append("FAILED " + r.url) if "google-analytics" not in r.url else None)
+    pg.on("console", lambda msg: errs.append(msg.text) if msg.type == "error" else None)
+    slugs = [d for d in os.listdir(os.path.join(os.path.dirname(os.path.abspath(__file__)), "site")) if os.path.isdir(os.path.join(os.path.dirname(os.path.abspath(__file__)), "site", d)) and d not in ("assets", "css", "js", "dist", "fonts", "site")]
+    for s in [""] + sorted(slugs):
+        pg.goto(f"{BASE}/{s}/" if s else BASE + "/"); pg.wait_for_timeout(500)
+        pg.evaluate("window.scrollTo(0,document.body.scrollHeight)"); pg.wait_for_timeout(500)
+        noalt = pg.evaluate("document.querySelectorAll('img:not([alt])').length")
+        if noalt:
+            bad.append(f"{s or '/'}: {noalt} img without alt")
+    check(f"{len(slugs) + 1} pages load with no broken requests", not bad, "; ".join(bad[:5]))
+    check("no console errors across the site", not errs, "; ".join(errs[:3]))
+    b.close()
+
+print(f"\n{len(fails)} failures" if fails else "\nALL CHECKS PASSED")
+print("screenshots:", SHOTS)
+sys.exit(1 if fails else 0)

@@ -1,0 +1,20 @@
+{
+  "slug": "torrey-ridge-courtyard-art",
+  "alt": {
+    "305e58d2-d380-42a3-9d91-a0bc58ae4f02": "Courtyard concept plan for Torrey Ridge with labeled callouts for hanging koi mesh sculptures, river-bed paths, and zen garden planters",
+    "763ccdb9-8e67-470f-ac47-625f156cc5a0": "3D rendering of the Torrey Ridge courtyard with curved koi-inspired paths and hanging kite-like koi sculptures guiding guests",
+    "518d9b36-0a06-4afe-a232-be2414cc98fd": "Courtyard concept plan with callouts for color-gradient hanging mesh, rust-painted monkey sculptures, and LED-lit leaf-pattern trellis, with reference photos",
+    "1261530d-3f55-41cb-9645-9764577c9401": "Courtyard walkway rendering showing a trellis draped in leaf-pattern mylar canvas beside inset views of LED-lit and moss-pattern trellis options",
+    "fa8e5257-528e-41c0-9ed3-bcd742c923db": "Aerial rendering of the courtyard with diagonal orange and yellow hanging mesh lines representing the topography-inspired color intervention",
+    "0f26cc5b-51d4-479d-9267-38baaecf5053": "Bench design elevations with curvilinear wave-inspired seating, a blue wave texture reference, and a photo of a similar wood bench"
+  },
+  "copy": [
+    {
+      "kind": "title",
+      "find": "Ridge- Courtyard",
+      "replace": "Ridge - Courtyard",
+      "reason": "Add missing space before hyphen for consistent punctuation"
+    }
+  ],
+  "questions": []
+}

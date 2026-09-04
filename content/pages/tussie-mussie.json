@@ -1,0 +1,28 @@
+{
+  "slug": "tussie-mussie",
+  "alt": {
+    "fe073941-8360-4c0d-bcd2-142fc681cfba": "Hand holding a cream tote bag with the Tussie Mussie t·m logo in a green circle",
+    "f1ea479e-32d7-44b8-b607-1e742605b15c": "Scattered Tussie Mussie business cards in green, teal, and white featuring the cursive wordmark and staff names"
+  },
+  "copy": [
+    {
+      "kind": "description",
+      "find": "straightforward,  and &quot;homey.&quot;",
+      "replace": "straightforward, and &quot;homey.&quot;",
+      "reason": "Removed a stray double space."
+    },
+    {
+      "kind": "description",
+      "find": "a local flower and fundraising aide located in Kansas City",
+      "replace": "a local flower and fundraising aid located in Kansas City",
+      "reason": "\"Aide\" means a person; \"aid\" (assistance) is the correct word for what the business provides."
+    },
+    {
+      "kind": "description",
+      "find": "giving back part of their profits back to the school",
+      "replace": "giving back part of their profits to the school",
+      "reason": "Removed the doubled \"back\"."
+    }
+  ],
+  "questions": []
+}

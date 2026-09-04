@@ -1,0 +1,61 @@
+{
+ "slug": "called",
+ "url": "https://maxhammons.com/called",
+ "texts": [
+  {
+   "kind": "title",
+   "html": "Called",
+   "plain": "Called"
+  },
+  {
+   "kind": "description",
+   "html": "I was commissioned by the department heads of The Colleges of Mathematical, Information and Computer Sciences, Physics and Engineering, and Arts and Humanities to design a vocational reader that would be required reading for select general education courses. This book showcases the best in each vocational calling and helps guide students through the process of choosing a career path for them.\n\nI worked with the department heads to implement a system to present the content. Even though the book was to be required reading, I didn’t want it to feel that way. This was a really exciting opportunity to not only work with high quality art and literature but also with people from very different backgrounds and fields.",
+   "plain": "I was commissioned by the department heads of The Colleges of Mathematical, Information and Computer Sciences, Physics and Engineering, and Arts and Humanities to design a vocational reader that would be required reading for select general education courses. This book showcases the best in each vocational calling and helps guide students through the process of choosing a career path for them. I worked with the department heads to implement a system to present the content. Even though the book was to be required reading, I didn’t want it to feel that way. This was a really exciting opportunity to not only work with high quality art and literature but also with people from very different backgrounds and fields."
+  },
+  {
+   "kind": "footer",
+   "html": "Copyright Max Hammons 2025",
+   "plain": "Copyright Max Hammons 2025"
+  }
+ ],
+ "images": [
+  {
+   "id": "a30e384e-3f67-4611-8a1e-0c408b3e23b8",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/a30e384e-3f67-4611-8a1e-0c408b3e23b8_rw_600.jpg",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "d3b50178-6e17-4af3-87df-dc19bf233faf",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/d3b50178-6e17-4af3-87df-dc19bf233faf_rw_600.jpg",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "bfba530f-dbc7-4cf4-9d88-f026ac0d2706",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/bfba530f-dbc7-4cf4-9d88-f026ac0d2706_rw_600.jpg",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "93624b87-8eaf-4365-8fb9-e95c660e58de",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/93624b87-8eaf-4365-8fb9-e95c660e58de_rw_600.jpg",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "7851ec50-e961-4224-9336-84e0f855551b",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/7851ec50-e961-4224-9336-84e0f855551b_rw_600.jpg",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "91591249-8733-48b9-9fa0-d449206f5ec9",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/91591249-8733-48b9-9fa0-d449206f5ec9_rw_600.jpg",
+   "preceding_text": "",
+   "cover_link": null
+  }
+ ],
+ "page_title_tag": "Max Hammons: Senior Graphic & UX Designer | Empathy-Driven Ideator - Called",
+ "meta_description": ""
+}

@@ -1,0 +1,70 @@
+{
+ "slug": "sur-coffee-email-flows",
+ "url": "https://maxhammons.com/sur-coffee-email-flows",
+ "texts": [
+  {
+   "kind": "title",
+   "html": "Sur Coffee Email Flows",
+   "plain": "Sur Coffee Email Flows"
+  },
+  {
+   "kind": "description",
+   "html": "I directed the visual and UX approach for lifecycle email, auditing current flows, analyzing drop‑offs, and delivering a modular template system with a clean, modern layout and brand‑true voice in collaboration with copy; the system accelerated updates, ensured consistent aesthetics, and increased engagement while keeping Sur Coffee’s inviting tone.",
+   "plain": "I directed the visual and UX approach for lifecycle email, auditing current flows, analyzing drop‑offs, and delivering a modular template system with a clean, modern layout and brand‑true voice in collaboration with copy; the system accelerated updates, ensured consistent aesthetics, and increased engagement while keeping Sur Coffee’s inviting tone."
+  },
+  {
+   "kind": "text_module",
+   "html": "<div>Browse Abandonment Flow",
+   "plain": "Browse Abandonment Flow"
+  },
+  {
+   "kind": "text_module",
+   "html": "<div>Abandoned Cart Flow",
+   "plain": "Abandoned Cart Flow"
+  },
+  {
+   "kind": "text_module",
+   "html": "<div>Welcome Flow",
+   "plain": "Welcome Flow"
+  },
+  {
+   "kind": "footer",
+   "html": "Copyright Max Hammons 2025",
+   "plain": "Copyright Max Hammons 2025"
+  }
+ ],
+ "images": [
+  {
+   "id": "363f8f77-0df3-4cfa-b5c4-082f4a97ebc7",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/363f8f77-0df3-4cfa-b5c4-082f4a97ebc7_rw_600.jpg",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "92c8cfe4-697c-4187-bf0d-9b293ec62b4e",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/92c8cfe4-697c-4187-bf0d-9b293ec62b4e_rw_600.jpg",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "63ee6670-c55a-4ae4-8331-81d09d9d5dee",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/63ee6670-c55a-4ae4-8331-81d09d9d5dee_rw_600.png",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "f144e232-35a1-47a3-b869-6f2a3258dc55",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/f144e232-35a1-47a3-b869-6f2a3258dc55_rw_600.png",
+   "preceding_text": "Browse Abandonment Flow",
+   "cover_link": null
+  },
+  {
+   "id": "ca4f6e09-7a37-48ea-948d-945956d6149c",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/ca4f6e09-7a37-48ea-948d-945956d6149c_rw_600.png",
+   "preceding_text": "Abandoned Cart Flow",
+   "cover_link": null
+  }
+ ],
+ "page_title_tag": "Max Hammons: Senior Graphic & UX Designer | Empathy-Driven Ideator - Sur Coffee Email Flows",
+ "meta_description": ""
+}

@@ -1,0 +1,21 @@
+{
+ "slug": "mindalign-2024",
+ "alt": {
+  "372bb206-8317-40d1-96e0-d734d3457d66": "Resilience Rodeo campaign graphic on a torn kraft-paper background with a bucking bronco rider, stars, and the MindAlign 2024 wordmark",
+  "c783797f-cd3f-4167-ab62-d2b8233af208": "Two Resilience Rodeo MindAlign 2024 lockups, one stacked over a bronco rider and one horizontal on an orange sunset background",
+  "7a11eab1-6f10-424c-a517-345f2e04727a": "MindAlign 2024 events calendar with a roping cowboy illustration and a blank weekly grid, beside five Western-landscape motivational banner thumbnails",
+  "6b8ef0f9-9adc-4144-9104-3a411dea08e3": "Five MindAlign inspirational posters pairing Western landscape photos with cowboy-themed headlines like Wrangle Your Worries and Ride Through Adversity",
+  "120e5dd4-d940-479f-a4bf-6df9a68318ed": "Resilience Rodeo Spirit Week banner in bold Western lettering flanked by two illustrated cowboy character portraits"
+ },
+ "copy": [
+  {
+   "kind": "text_module",
+   "find": "Large \"Spirit Week Banners\"",
+   "replace": "Large Spirit Week banners",
+   "reason": "Sentence-case section labels site-wide (Max 2026-09-03); Spirit Week is an event name"
+  }
+ ],
+ "questions": [
+  "The 'Large \"Spirit Week Banners\"' header uses quotation marks unlike the other three section headers on this page (MindAlign 2024 logos, Events calendar and bookmarks, Large inspirational posters) — left as-is since it may be intentional emphasis of the campaign name rather than an error."
+ ]
+}

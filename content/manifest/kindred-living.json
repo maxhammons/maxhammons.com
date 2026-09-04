@@ -1,0 +1,61 @@
+{
+ "slug": "kindred-living",
+ "url": "https://maxhammons.com/kindred-living",
+ "texts": [
+  {
+   "kind": "title",
+   "html": "Kindred Living",
+   "plain": "Kindred Living"
+  },
+  {
+   "kind": "description",
+   "html": "I partnered from concept to ship as narrative design and UX lead, owning IA, page frameworks, CMS patterns, and the visual system, using accessibility checks, diagrams, and photo treatments to clarify the care model so families could navigate with confidence; the site became a staple in investor and grant meetings, increased trust and clarity, and enabled the founder to update content independently without design support.",
+   "plain": "I partnered from concept to ship as narrative design and UX lead, owning IA, page frameworks, CMS patterns, and the visual system, using accessibility checks, diagrams, and photo treatments to clarify the care model so families could navigate with confidence; the site became a staple in investor and grant meetings, increased trust and clarity, and enabled the founder to update content independently without design support."
+  },
+  {
+   "kind": "footer",
+   "html": "Copyright Max Hammons 2025",
+   "plain": "Copyright Max Hammons 2025"
+  }
+ ],
+ "images": [
+  {
+   "id": "14ce30fd-4b93-4fff-ab4f-d8a864c61776",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/14ce30fd-4b93-4fff-ab4f-d8a864c61776_rw_600.jpg",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "20b2bbd6-7ac0-47a4-99fa-4cc511c101f9",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/20b2bbd6-7ac0-47a4-99fa-4cc511c101f9_rw_600.jpg",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "c9f68dcb-e185-444c-aba8-b6c64b0791c0",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/c9f68dcb-e185-444c-aba8-b6c64b0791c0_rw_600.gif",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "ccbc8013-a86e-4e95-b56b-adab26b3af7f",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/ccbc8013-a86e-4e95-b56b-adab26b3af7f_rw_600.jpg",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "ce90168b-708f-4470-8e80-3b5d169ead49",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/ce90168b-708f-4470-8e80-3b5d169ead49_rw_600.jpg",
+   "preceding_text": "",
+   "cover_link": null
+  },
+  {
+   "id": "e2258afb-0141-4dcc-9c32-058f2a47ae91",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/e2258afb-0141-4dcc-9c32-058f2a47ae91_rw_600.png",
+   "preceding_text": "",
+   "cover_link": null
+  }
+ ],
+ "page_title_tag": "Max Hammons: Senior Graphic & UX Designer | Empathy-Driven Ideator - Kindred Living",
+ "meta_description": ""
+}

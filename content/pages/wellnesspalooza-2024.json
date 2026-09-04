@@ -1,0 +1,39 @@
+{
+ "slug": "wellnesspalooza-2024",
+ "alt": {
+  "b22bd5cb-bc1a-4430-b4c1-49fb4f1dd740": "Cabin Assignments corkboard sign mounted on a green wood fence, displaying colorful WellnessPalooza team name cards",
+  "a072be7f-d285-4e2c-93e9-13424502dfd6": "Eight embroidered-style circular patches on a wood background, each naming a WellnessPalooza 2024 activity team like Muscle Mania and Trailblazer",
+  "d12c8438-be47-4aa5-a876-facaf4c82cdf": "Four people and a dog posing beside a Welcome to Cooper National Forest sign at the Camp TCW WellnessPalooza event",
+  "98c557cc-5731-4f94-ab94-c04817f03d00": "Eight CAMPTCW wordmark logo variations in different colors, each labeled WellnessPalooza 2024",
+  "eb69a109-40c2-4832-a8c2-43c3ea403dae": "Eight flat circular badge icons representing WellnessPalooza 2024 activities such as Core Champion and Chef's Apprentice",
+  "ace85ec8-9e19-4094-8d3b-08155e1130f5": "Nine colorful pennant flags advertising WellnessPalooza activities including hiking, meditation, trivia, cooking class, and yoga",
+  "010de426-f18d-4932-86d2-f84c732b0729": "Four WellnessPalooza 2024 Camp TCW badge sticker designs in brown, blue, green, and red mountain motifs",
+  "95f90515-5782-4a03-88b2-39ab98fcc1c5": "Ten colorful team name labels for WellnessPalooza cabins, including Wellness Warriors, S'more Squad, and Tent Titans",
+  "ad5dcf49-228d-448a-98c1-66478d463f63": "Two CAMPTCW posters: a Gotta Catch 'Em All badge collection design and a Cabin Assignments corkboard layout",
+  "e45edce5-64fd-439c-be96-ba52b727e3c1": "Two monthly calendar posters: a Deskercise office-workout calendar and a WellnessPalooza Events Calendar, both Camp TCW branded",
+  "bfa0ae3f-8475-4bb8-a330-5be650f81852": "Two Camp TCW printed planner sheets: a Weekly Fitness Planner tracker and a Weekly Wingo bingo challenge card"
+ },
+ "copy": [
+  {
+   "kind": "text_module",
+   "find": "Pennat",
+   "replace": "Pennant",
+   "reason": "Misspelling of 'Pennant' (matches the pennant-flag images and the design's own product naming)"
+  },
+  {
+   "kind": "text_module",
+   "find": "Embroidered Patches",
+   "replace": "Embroidered patches",
+   "reason": "Sentence-case section labels site-wide (Max 2026-09-03)"
+  },
+  {
+   "kind": "text_module",
+   "find": "Event Calendars",
+   "replace": "Event calendars",
+   "reason": "Sentence-case section labels site-wide (Max 2026-09-03)"
+  }
+ ],
+ "questions": [
+  "Section labels mix capitalization styles (e.g. 'Embroidered Patches' and 'Event Calendars' are Title Case, while 'Pennant flags', 'Team name flags', and 'Fitness planners' are sentence case) — left as is since these read as a deliberate label style, not a brand-name inconsistency."
+ ]
+}

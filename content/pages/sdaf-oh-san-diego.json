@@ -1,0 +1,40 @@
+{
+ "slug": "sdaf-oh-san-diego",
+ "alt": {
+  "ed64156f-8eb9-4aa0-9a6c-c5c454c5c301": "Open House San Diego guide booklet open to a Point Loma spread with a map, photo, and site listings",
+  "47d20422-d5f1-4c61-8fe7-68222685ec5d": "OH! San Diego neighborhood map poster laid on concrete beside a decorative metal screen and a plant",
+  "e63d046c-f428-4376-a5b5-e5134798fb41": "Framed OH! San Diego poster of the Hotel del Coronado leaning against a wall beside a ceramic vase",
+  "f167ec02-f303-41df-8549-2c20959ede90": "Open House guide spread with the OH! San Diego family tree, a welcome letter, and honorary co-chair photos",
+  "37b233de-3c91-4c37-92cd-8f46583e937b": "At a Glance guide spread listing OH! San Diego sites by neighborhood, from Balboa Park to Coronado",
+  "048ef00f-c9cc-4bdd-98be-db0b44d7da0d": "Guide spread listing downtown San Diego walking-tour sites with a photo of an ornate library reading room",
+  "5cef89aa-f846-421e-b313-361efb2ba611": "Point Loma guide spread with an aerial coastline photo, a teardrop location icon, and walking-tour listings",
+  "31328c6a-9994-489a-8171-c21906c772fc": "Coronado guide spread listing walking-tour sites with a photo of the Coronado Public Library building",
+  "81c05685-c619-499a-9a8e-a39f689ae003": "Guide spread covering About SDAF, orchid winners, and historic sites, each marked with a small line icon",
+  "a5d26c51-41d2-4651-8089-0912061076f8": "Guide spread listing the SDAF committee, board of directors, and sponsor and partner organization logos",
+  "41364ddd-633c-472e-aa11-4d18887b2e39": "Location Guide Booklet cover with the OH! San Diego logo over a photo of the Hotel del Coronado",
+  "c81c8a7c-11b8-4e0a-ab62-878536185940": "Location Guide Booklet spread listing sites by neighborhood with a map of Coronado and San Diego Bay",
+  "f62f0c82-ba52-48f8-aaeb-6fd6faf5a5e2": "Accompanying Location Map poster of the Hotel del Coronado with a cyclist in the foreground and event details",
+  "6339876b-0973-4ff9-bd1a-55799553a147": "Accompanying Location Map poster of Coronado beach and the Hotel del Coronado with event dates and sponsor logos"
+ },
+ "copy": [
+  {
+   "kind": "text_module",
+   "find": "Location Guide Booklet",
+   "replace": "Location guide booklet",
+   "reason": "Sentence-case section labels site-wide (Max 2026-09-03)"
+  },
+  {
+   "kind": "text_module",
+   "find": "Accompanying Location Map",
+   "replace": "Accompanying location map",
+   "reason": "Sentence-case section labels site-wide (Max 2026-09-03)"
+  },
+  {
+   "kind": "text_module",
+   "find": "Poster Ads",
+   "replace": "Poster ads",
+   "reason": "Sentence-case section labels site-wide (Max 2026-09-03)"
+  }
+ ],
+ "questions": []
+}

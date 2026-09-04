@@ -1,0 +1,14 @@
+# mai exemptions for maxhammons.com.
+#
+# WHAT THIS SUPPRESSES, stated plainly:
+#
+#   site/   generated output of build.py: every file here is rebuilt from source,
+#           so findings would be repaired in a copy and lost on the next build.
+#   raw/    verbatim mirror of the old Adobe Portfolio export (HTML + their CSS).
+#           It is the input to the build and is never edited by hand.
+#   fonts/  binary font files.
+#
+# Everything else (build.py, make_manifest.py, qa.py, theme/, content/) is gated.
+site/
+raw/
+fonts/

@@ -1,0 +1,253 @@
+/* maxhammons.com design system.
+   Loaded after the exported Adobe Portfolio theme CSS on every page and wins
+   over it. Everything the site should be consistent about lives here:
+   fonts, palette, type scale, nav, links, grids, buttons. */
+
+/* ---------- fonts (Proxima Nova, self-hosted; "vcsm"/"mtyl" are the old kit names) ---------- */
+@font-face { font-family: "Proxima Nova"; font-weight: 300; font-style: normal; font-display: swap;
+  src: url("/fonts/vcsm-n3.woff2") format("woff2"), url("/fonts/vcsm-n3.woff") format("woff"); }
+@font-face { font-family: "Proxima Nova"; font-weight: 400; font-style: normal; font-display: swap;
+  src: url("/fonts/vcsm-n4.woff2") format("woff2"), url("/fonts/vcsm-n4.woff") format("woff"); }
+@font-face { font-family: "Proxima Nova"; font-weight: 600; font-style: normal; font-display: swap;
+  src: url("/fonts/vcsm-n6.woff2") format("woff2"), url("/fonts/vcsm-n6.woff") format("woff"); }
+@font-face { font-family: "Proxima Nova"; font-weight: 700; font-style: normal; font-display: swap;
+  src: url("/fonts/vcsm-n7.woff2") format("woff2"), url("/fonts/vcsm-n7.woff") format("woff"); }
+@font-face { font-family: "Site Mono"; font-weight: 400; font-style: normal; font-display: swap;
+  src: url("/fonts/bcnw-n4.woff2") format("woff2"), url("/fonts/bcnw-n4.woff") format("woff"); }
+/* aliases for the family names the exported Adobe CSS still uses, so nothing can fall back to a system font */
+@font-face { font-family: "vcsm"; font-weight: 300; src: url("/fonts/vcsm-n3.woff2") format("woff2"); }
+@font-face { font-family: "vcsm"; font-weight: 400; src: url("/fonts/vcsm-n4.woff2") format("woff2"); }
+@font-face { font-family: "vcsm"; font-weight: 600; src: url("/fonts/vcsm-n6.woff2") format("woff2"); }
+@font-face { font-family: "vcsm"; font-weight: 700; src: url("/fonts/vcsm-n7.woff2") format("woff2"); }
+@font-face { font-family: "mtyl"; font-weight: 400; src: url("/fonts/vcsm-n4.woff2") format("woff2"); }
+@font-face { font-family: "mtyl"; font-weight: 700; src: url("/fonts/vcsm-n7.woff2") format("woff2"); }
+@font-face { font-family: "bcnw"; font-weight: 400; src: url("/fonts/bcnw-n4.woff2") format("woff2"); }
+
+/* ---------- tokens ---------- */
+:root {
+  --font-sans: "Proxima Nova", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-mono: "Site Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  --ink: #111111;        /* primary text */
+  --ink-muted: #999999;  /* secondary text, captions */
+  --ink-faint: #aaaaaa;  /* footer, inactive nav, icons */
+  --line: #eeeeee;       /* hairlines, image placeholders */
+  --paper: #ffffff;
+  --paper-tint: #fafafa;
+  --accent: #ea3d3d;     /* brand red: logo, hover, sub-titles */
+
+  --gutter: 8px;         /* every image grid */
+  --speed: 100ms;        /* every hover / colour change on the site */
+  --fade: 250ms;         /* page fade out / in between pages (site.js + dist/css/main.css) */
+  --strike: 0.08em;      /* link strikethrough thickness, relative to font size */
+  --nav-h: 96px;
+
+  /* type scale, desktop */
+  --fs-display: 48px; --lh-display: 52px;
+  --fs-lede: 20px;    --lh-lede: 28px;
+  --fs-body: 20px;    --lh-body: 28px;
+  --fs-label: 18px;   --lh-label: 28px;
+  --fs-nav: 16px;     --lh-nav: 28px;
+  --fs-small: 14px;   --lh-small: 20px;
+  --fs-logo: 24px;    --lh-logo: 36px;
+}
+@media (max-width: 932px) {
+  :root { --fs-display: 30px; --lh-display: 33px; --fs-lede: 17px; --lh-lede: 24px;
+          --fs-body: 17px; --lh-body: 24px; --fs-label: 16px; --lh-label: 24px; --nav-h: 80px; }
+}
+@media (max-width: 540px) {
+  :root { --fs-display: 25px; --lh-display: 27px; --fs-lede: 15px; --lh-lede: 22px;
+          --fs-body: 15px; --lh-body: 22px; --fs-label: 15px; --lh-label: 22px; --fs-logo: 22px; --lh-logo: 23px; }
+}
+
+/* ---------- base ---------- */
+/* no background on html/body: splash pages (Reel) paint their GIF on <html> */
+html, body { font-family: var(--font-sans); color: var(--ink); }
+code, kbd, pre, samp, [style*="bcnw"] { font-family: var(--font-mono) !important; }
+.logo, .logo-secondary, nav a, .masthead h1, .masthead p, .masthead-button, .site-footer,
+.page-header .title, .page-header .description, .page-header .date, .page-header .custom1, .page-header .custom2,
+.rich-text, .rich-text *, .button-module, .project-cover .title, .project-cover .description,
+.other-projects-title, .grid__caption-text, .responsive-nav a, .lightbox-content { font-family: var(--font-sans); }
+
+/* ---------- sticky header ---------- */
+.site-header {
+  position: sticky; top: 0; z-index: 1000;
+  background: var(--paper);
+}
+.masthead ~ .site-wrap .site-header,
+.page-background-video ~ .site-wrap .site-header { background: var(--paper); }
+.logo-wrap, nav { padding-top: 30px; padding-bottom: 30px; }
+.logo { font-size: var(--fs-logo); line-height: var(--lh-logo); font-weight: 700; }
+.logo, .logo a { color: var(--accent); }
+nav .gallery-title a, nav .page-title a, nav .link-title a, nav .project-title a {
+  font-family: var(--font-sans);
+  font-size: var(--fs-nav); line-height: var(--lh-nav); font-weight: 700; color: var(--ink);
+  text-transform: uppercase; letter-spacing: 0.02em;
+}
+nav .gallery-title a.active, nav .page-title a.active, nav .link-title a.active { color: var(--ink-faint); }
+.pf-nav-social svg { fill: var(--ink-faint); }
+.pf-nav-social a:hover { background: var(--accent); }
+.pf-nav-social a:hover svg { fill: var(--paper); }
+
+/* ---------- links: one hover everywhere (red + strikethrough scaled to the type) ---------- */
+body.link-transition a, a, .link-transition a svg, .pf-nav-social svg, .masthead-button, .button-module,
+.project-cover .details, .project-cover .details-wrap, .project-cover .title, .hamburger i {
+  transition-property: color, background-color, border-color, fill, opacity, text-decoration-color;
+  transition-duration: var(--speed);
+  transition-timing-function: ease;
+}
+.logo a:hover, .logo-secondary a:hover,
+nav a:hover, .responsive-nav a:hover, .other-projects-title a:hover,
+.masthead-button:hover, .button-module:hover {
+  text-decoration: line-through;
+  text-decoration-thickness: var(--strike);
+  text-decoration-color: currentColor;
+  text-underline-offset: 0;
+}
+/* links inside copy: red at rest, ink + strikethrough on hover (inline colour spans from the editor are neutralised) */
+.standard-modules .rich-text a, .splash-modules .rich-text a, .modules .rich-text a,
+.modules span.texteditor-inline-color a, .page-header .description a, .site-footer a {
+  color: var(--accent); text-decoration: none;
+}
+.standard-modules .rich-text a:hover, .splash-modules .rich-text a:hover, .modules .rich-text a:hover,
+.modules span.texteditor-inline-color a:hover, .page-header .description a:hover, .site-footer a:hover {
+  color: var(--ink); text-decoration: line-through; text-decoration-thickness: var(--strike);
+}
+.logo a:hover, .logo-secondary a:hover, nav a:hover, .responsive-nav a:hover, .other-projects-title a:hover {
+  color: var(--accent);
+  text-decoration: line-through;
+  text-decoration-thickness: var(--strike);
+}
+/* no weight or transform change on hover: keeps the line from jumping and the layout from shifting */
+.logo a:hover, nav a:hover, .responsive-nav a:hover { font-weight: inherit; font-style: normal; }
+nav .gallery-title a.active:hover, nav .page-title a.active:hover { color: var(--accent); }
+
+/* ---------- page header (every page: left aligned, same scale) ---------- */
+.page-header { float: left; width: 50%; max-width: 800px; padding-top: 20px; padding-bottom: 60px; margin: 0; }
+.page-header .title {
+  color: var(--ink); font-size: var(--fs-display); line-height: var(--lh-display); font-weight: 700;
+  text-transform: none; text-align: left; padding: 20px 0 8px;
+}
+.page-header .description {
+  color: var(--ink); font-size: var(--fs-lede); line-height: var(--lh-lede); font-weight: 300;
+  text-align: left; padding: 0;
+}
+.page-header .date, .page-header .custom1, .page-header .custom2 {
+  color: var(--ink-muted); font-size: var(--fs-small); line-height: var(--lh-small); font-weight: 400;
+}
+/* long intros run as two columns across the full width, above the first image */
+.page-header.is-long { width: 100%; max-width: none; }
+.page-header.is-long .description { column-count: 2; column-gap: 48px; column-fill: balance; }
+@media (max-width: 932px) { .page-header { width: 100%; } }
+@media (max-width: 768px) { .page-header.is-long .description { column-count: 1; } }
+
+/* ---------- text modules ---------- */
+.standard-modules .rich-text .title, .splash-modules .rich-text .title {
+  color: var(--ink); font-size: var(--fs-display); line-height: var(--lh-display); font-weight: 700; text-transform: none;
+}
+.standard-modules .rich-text .sub-title, .splash-modules .rich-text .sub-title {
+  color: var(--accent); font-size: var(--fs-label); line-height: var(--lh-label); font-weight: 700; text-transform: none;
+}
+.standard-modules .rich-text .main-text, .standard-modules .rich-text div, .standard-modules .rich-text p,
+.splash-modules .rich-text .main-text, .splash-modules .rich-text div, .splash-modules .rich-text p {
+  color: var(--ink); font-size: var(--fs-body); line-height: var(--lh-body); font-weight: 400; text-transform: none;
+}
+.standard-modules .rich-text .caption, .standard-modules .module-caption div,
+.splash-modules .rich-text .caption, .splash-modules .module-caption div {
+  color: var(--ink-muted); font-size: var(--fs-small); line-height: var(--lh-small); font-weight: 400; text-transform: none;
+}
+.rich-text .sub-title + div, .rich-text .sub-title + p { padding-top: 4px; }
+
+/* ---------- image grids: one gutter ---------- */
+.standard-modules .media_collection .grid__item-container, .splash-modules .media_collection .grid__item-container,
+.standard-modules .modules .project-module-media_collection[data-id] .grid__item-container,
+.splash-modules .modules .project-module-media_collection[data-id] .grid__item-container {
+  border-bottom: var(--gutter) solid transparent !important;
+  border-left: calc(var(--gutter) / 2) solid transparent !important;
+  border-right: calc(var(--gutter) / 2) solid transparent !important;
+}
+.standard-modules .media_collection .grid--main, .splash-modules .media_collection .grid--main,
+.standard-modules .modules .project-module-media_collection[data-id] .grid--main,
+.splash-modules .modules .project-module-media_collection[data-id] .grid--main {
+  margin: 0 calc(var(--gutter) / -2) !important;
+}
+.project-module-image img, .grid__img, .cover__img { background: var(--line); }
+
+/* ---------- gallery covers (home, sandbox): white overlay, red title, as on the live site ---------- */
+.project-cover .title, .project-cover:hover .title, .project-cover.touch-hover .title {
+  color: var(--accent); font-size: 24px; line-height: 28px; font-weight: 700; text-transform: none; text-decoration: none;
+}
+.project-cover .description, .project-cover .date { color: var(--ink); font-size: var(--fs-small); line-height: var(--lh-small); font-weight: 400; }
+@media (max-width: 540px) { .project-cover .title { font-size: 19px; line-height: 22px; } }
+
+/* ---------- masthead (home) ---------- */
+.masthead h1 { color: var(--accent); font-weight: 700; text-transform: none; }
+.masthead p { color: var(--ink); font-weight: 400; }
+
+.masthead-contents { padding: 0 24px; box-sizing: border-box; }
+.masthead-text { text-align: center; }
+.masthead-buttons { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 16px; padding-top: 12px; }
+.masthead-button + .masthead-button-spacer + .masthead-button { margin-left: 0; }
+.masthead-button-spacer { display: none !important; }
+/* tablet */
+@media (max-width: 932px) {
+  .masthead h1 { font-size: 56px; line-height: 60px; margin: 0 0 8px; }
+  .masthead p { font-size: 18px; line-height: 26px; margin: 0 0 12px; }
+}
+/* phone: bigger name, more air, buttons stacked at one width */
+@media (max-width: 540px) {
+  .masthead { padding-left: 5% !important; padding-right: 5% !important; }   /* the export used 17% each side, which left 209px for the name */
+  .masthead-contents { padding: 0; max-width: none; }
+  .masthead h1 { font-size: 44px; line-height: 48px; margin: 0 0 10px; }
+  .masthead p { font-size: 17px; line-height: 24px; margin: 0 0 20px; }
+  .masthead-buttons { flex-direction: column; gap: 12px; padding-top: 4px; }
+  .masthead-button, .masthead-button-1, .masthead-button-2 {
+    width: min(320px, 100%); text-align: center; height: 44px; line-height: 42px; margin: 0; padding: 0 12px; white-space: nowrap;
+  }
+}
+
+/* ---------- buttons: same box in every state so nothing shifts on hover ---------- */
+.masthead-button, .masthead-button-1, .masthead-button-2, .button-module, .project-module-button .button-module {
+  font-family: var(--font-sans) !important; font-size: 16px; font-weight: 700; letter-spacing: 0.02em; text-transform: uppercase;
+  box-sizing: border-box; height: 40px; line-height: 38px; padding: 0 20px; border: 1px solid var(--ink); border-radius: 8px;
+  color: var(--paper); background-color: var(--ink);
+}
+/* primary: black, hover red */
+.masthead-button-1:hover, .button-module:hover, .project-module-button .button-module:hover {
+  color: var(--paper); background-color: var(--accent); border-color: var(--accent);
+}
+/* secondary: red outline, no fill; hover fills red */
+.masthead-button-2 { color: var(--accent); background-color: transparent; border-color: var(--accent); }
+.masthead-button-2:hover { color: var(--paper); background-color: var(--accent); border-color: var(--accent); }
+
+/* ---------- footer ---------- */
+.site-footer, .site-footer a { color: var(--ink-faint); font-size: var(--fs-small); line-height: var(--lh-small); font-weight: 300; }
+
+/* ---------- removed UI ---------- */
+.back-to-top, .back-to-top-fixed { display: none !important; }
+
+/* ---------- lightbox ---------- */
+.lightbox-content .grid__caption-text, .grid__caption-text { font-size: var(--fs-small); line-height: var(--lh-small); }
+
+/* ---------- mobile menu: full-screen rows of big bold labels (breakpoint matches the Adobe hamburger) ---------- */
+@media (max-width: 932px) {
+  .responsive-nav { padding: 0; }
+  .responsive-nav .nav-container { height: 100%; }
+  .show-responsive-nav .responsive-nav nav,
+  .responsive-nav nav {
+    display: flex; flex-direction: column; height: 100%; padding: 72px 0 0; margin: 0; max-width: none;
+  }
+  .responsive-nav.has-social nav { padding-bottom: 0; }
+  .responsive-nav .page-title, .responsive-nav .gallery-title, .responsive-nav .link-title, .responsive-nav .project-title {
+    flex: 1 1 0; display: flex; margin: 0; padding: 0; min-height: 64px;
+  }
+  .responsive-nav .page-title a, .responsive-nav .gallery-title a, .responsive-nav .link-title a, .responsive-nav .project-title a {
+    flex: 1; display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-sans); font-size: clamp(34px, 11vw, 64px); line-height: 1; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.01em; color: var(--ink);
+  }
+  .responsive-nav a.active { color: var(--ink-faint); }
+  .responsive-nav a:hover, .responsive-nav a:active { color: var(--accent); text-decoration: line-through; text-decoration-thickness: var(--strike); }
+  .responsive-nav .social { display: none; }   /* the icon is replaced by an "Email me" row at build time */
+  .close-responsive-click-area { z-index: 2; }
+}

@@ -1,0 +1,23 @@
+{
+  "slug": "wellnesspalooza-2023",
+  "alt": {
+    "742d1bb0-1c22-4c43-918d-29dfc3ccb267": "Trivia and cooking challenge poster mockups propped against a wall, alongside a framed Hike Club poster on a tiled shelf",
+    "02828b18-cdde-4b37-982f-d679317c41ed": "White baseball cap embroidered with the pink and teal Wellness Palooza palm-tree logo, sitting in a bin of lemons",
+    "5e0e59c0-cd8f-43fc-9e75-954dde112dd9": "Wellnesspalooza pennant and circular badge stickers applied to the corner of a laptop's trackpad area",
+    "623931a9-ecc2-409c-a513-7ccd1f8b4194": "Five Wellness Palooza event posters displayed on an outdoor wall at sunset with a pedestrian passing by",
+    "5d41028f-01f2-4824-b4c4-d5a80372e358": "Dental Clinic event poster with a glowing neon tooth outline, shown against a wall with palm-leaf shadows",
+    "c34df06c-27d7-42eb-b413-ee221d353a85": "Primary Wellness Palooza logo: yellow retro script wordmark over pink palm trees inside a neon triangle",
+    "1d7e9074-4917-4b2d-aaf8-8d2a46542ff5": "Grid of six alternate Wellness Palooza logo lockups in varied colors, shapes, and palm-tree treatments",
+    "48e5f366-f527-4ec1-9537-9d7f1cf2b82a": "Three event posters: a jet-fighter-themed Lunch and Learn, an explosion-themed Lunch and Learn, and Afternoon Trivia",
+    "d1e1919c-2400-4a90-92d4-5840cb9808d5": "Three event posters: Blood Drive, In Body Assessment, and Dental Clinic, each in a neon eighties style",
+    "d8fc527c-baee-476a-b2f7-03805a5bc52b": "Three event posters: Hike Club, Lunch Crunch, and Boujie's Cooking Challenge, in a retro sunset palette",
+    "66db88e7-4516-4d7b-b881-3d18cc45a12b": "Three event posters: TCW Gym, Flash Dance Friday, and Renegade, in neon pink and blue tones",
+    "d1928545-9d83-466f-9a83-d18313cfbd5c": "Wide Wellness Palooza promotional banner reading Get Involved, Get Fit, All August Long over a neon grid",
+    "c1c47a6e-b0f1-4ab4-8b51-00edafa8f406": "Weekly Wingo bingo card and Weekly Fitness Planner worksheet with activity squares and goal checkboxes",
+    "7f6b4761-b1ec-46bf-9d54-f085926a5b14": "Deskercise and Wellness Palooza monthly calendars listing daily desk-exercise and event schedules"
+  },
+  "copy": [],
+  "questions": [
+    "The manifest's preceding_text for several images doesn't match what's actually shown: image 48e5f366-f527-4ec1-9537-9d7f1cf2b82a is captioned 'Secondary event logos' but shows three event posters (not logos); images d1928545-9d83-466f-9a83-d18313cfbd5c and c1c47a6e-b0f1-4ab4-8b51-00edafa8f406 are captioned 'Event posters' but show a promo banner and a bingo card/fitness planner respectively; image 7f6b4761-b1ec-46bf-9d54-f085926a5b14 is captioned 'Fitness planners' but shows two monthly calendars. I wrote alt text from what's actually visible rather than the caption. Worth checking whether the manifest extraction has the text-to-image association right on this page."
+  ]
+}

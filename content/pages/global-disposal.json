@@ -1,0 +1,31 @@
+{
+ "slug": "global-disposal",
+ "alt": {
+  "8c8618dd-a9ab-4f6c-86bf-76152a03bced": "City of Poway Food Donation Guide cover, with text on food waste practices and a mesh bag of lemons",
+  "65a685d8-0ca2-419d-b01f-7dcd9d67db4e": "Source Reduction First guide spread with food waste assessment steps, donation tips, and a photo of an orange",
+  "a6538ed3-5d39-428d-ad8b-48cc12557f92": "Don't Let It Go to Waste safe food handling checklist covering temperature control and safe handling practices",
+  "c025332f-a170-4a76-bff4-043d28b822d8": "Record of Food Donation Delivery blank form for logging perishable food items, temperatures, and donor and receiver details",
+  "d2fedc2f-2acd-4e0f-a2bf-7122d294715e": "Pink info page titled What is SB1383, explaining California's organics waste mandate, with the PinWaste logo",
+  "ddb4372a-9061-4855-9fbb-e8d00fd5431b": "Green What Are Organics info page with icons for yard waste, food scraps, and dairy, plus PinWaste bin guidance",
+  "8d8580a7-07d8-44e2-bc1b-5856cc8a2ed7": "Orange What Is Recyclable info page with icons for glass, cans, paper, and plastic items, plus PinWaste bin guidance",
+  "f9fac6e9-ca7b-4bc8-b0b4-061f82d3dd2d": "Blue What Is Trash info page with icons for glassware, diapers, styrofoam, and plastic wrap, plus PinWaste bin guidance"
+ },
+ "copy": [
+  {
+   "kind": "description",
+   "find": "sustainability. ",
+   "replace": "sustainability.",
+   "reason": "removed stray trailing space after the final period"
+  },
+  {
+   "kind": "description",
+   "find": "for Chula Vista’s waste contractor",
+   "replace": "for the City of Poway’s waste contractor",
+   "reason": "Max 2026-09-03: client is the City of Poway, matching the branded collateral on the page"
+  }
+ ],
+ "questions": [
+  "Description says the client is 'Chula Vista's waste contractor' but the collateral images are branded City of Poway (poway.org, PinWaste) and one is a Chula Vista public-works style checklist with no city named — worth confirming Chula Vista is the right attribution, or whether it should mention both cities/PinWaste.",
+  "Description opens with a sentence fragment ('Including curating a type, image, and iconography system...') — left as-is since it may be an intentional stylistic choice, flagging in case it should be a complete sentence."
+ ]
+}

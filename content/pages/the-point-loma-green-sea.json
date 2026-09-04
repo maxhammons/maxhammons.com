@@ -1,0 +1,26 @@
+{
+ "slug": "the-point-loma-green-sea",
+ "alt": {
+  "3af8be8c-1136-4f17-935c-29b63f1262c9": "Point Loma Green Sea circular wave logo with 1902 founding year, overlaid on a green-tinted photo of cheering student fans",
+  "39b68155-3d08-4be2-ae45-fa009e5c378c": "Green Sea Hooligans circular logo with a sea lion mark and 1902 founding year, overlaid on a green-tinted crowd photo",
+  "699adcdb-d950-4829-97b3-a8fb33d88148": "Back view of a model wearing a green t-shirt printed with the Point Loma Green Sea wave logo and 1902",
+  "a5585350-5a7c-4ead-a792-a70ea76e7612": "Back view of a model wearing a green t-shirt printed with the Green Sea Hooligans sea lion logo and 1902"
+ },
+ "copy": [
+  {
+   "kind": "description",
+   "find": "The Hoolignas are",
+   "replace": "The Hooligans are",
+   "reason": "Fix misspelling; matches the correct spelling 'Hooligans' earlier in the same paragraph"
+  },
+  {
+   "kind": "description",
+   "find": "sub-identity; The Green Sea Hooligans.",
+   "replace": "sub-identity: The Green Sea Hooligans.",
+   "reason": "Max 2026-09-03: colon introduces the name"
+  }
+ ],
+ "questions": [
+  "\"The identity includes a sub-identity; The Green Sea Hooligans.\" uses a semicolon before a capitalized sentence fragment — left as-is since it may be a stylistic choice rather than an error."
+ ]
+}

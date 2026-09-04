@@ -1,0 +1,12 @@
+# not part of the site
+_archive/
+.DS_Store
+qa-shots/
+
+# the wget mirror keeps only its HTML and the exported theme CSS; every image is in site/assets
+raw/cdn.myportfolio.com/*/*
+!raw/cdn.myportfolio.com/*/*.css
+
+# build leftovers
+*.part
+__pycache__/

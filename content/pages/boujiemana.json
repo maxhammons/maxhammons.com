@@ -1,0 +1,16 @@
+{
+  "slug": "boujiemana",
+  "alt": {
+    "9ab51c7f-58b9-480a-a1fb-d4c16c289ee1": "BoujieMana restaurant menu spread listing entrées, small plates, starters, sandwiches, wines, and specialty cocktails",
+    "6fa14edd-7d8a-4a80-82fd-5d8845141a80": "BoujieMana kids' coloring menu with a line-art dog illustration and a food-item menu bordered in green",
+    "242a470f-8de7-4c5c-beb0-1273fe4dcba6": "Two BoujieMana promotional posters for boujie brunch and lunch and dinner service, each with a food photo",
+    "7f8dbbce-8192-40f9-9a20-5459248d8187": "BoujieMana entrance with a frosted glass monstera-leaf treatment on the doors beside a textured accent wall",
+    "e0d385e4-eadb-4e5a-a381-c2d34009a376": "La Maison Event Space custom icon set for chairs, food service, cocktails, wifi, and table layouts",
+    "685cbd22-4027-47d3-9a19-1357d304a53e": "La Maison Event Space floor layouts for cocktail, rounds, theater, and classroom configurations",
+    "a9f394f5-a31e-4e2c-91ca-296a5066672f": "La Maison Event Space floor layouts showing twelve seating configurations including cluster, U-shape, banquet, and theater"
+  },
+  "copy": [],
+  "questions": [
+    "The 'La Maison Event Space custom icon set' caption in the manifest is attached (as preceding_text) to the floor-layout image (685cbd22), while the actual icon-set image (e0d385e4) has no caption attached — the icon set and floor-layout images may be in a different order than their captions on the live page. Alt text was written from what each image actually shows, not from the attached caption."
+  ]
+}

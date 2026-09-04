@@ -1,0 +1,23 @@
+{
+  "slug": "about",
+  "alt": {
+    "fd51675d-bcd6-4aad-882d-b40930e78c8b": "Man and woman smiling outdoors while holding a black Labrador puppy wearing a red collar and yellow bandana"
+  },
+  "copy": [
+    {
+      "kind": "text_module",
+      "find": "I'm a creative leader",
+      "replace": "I’m a creative leader",
+      "reason": "Straight apostrophe doesn't match the curly apostrophes used elsewhere on the page (I’ve, I’m, Let’s)."
+    },
+    {
+      "kind": "text_module",
+      "find": "that's as innovative",
+      "replace": "that’s as innovative",
+      "reason": "Straight apostrophe doesn't match the curly apostrophes used elsewhere on the page."
+    }
+  ],
+  "questions": [
+    "\"building brand systems and UX that scales\" — \"scales\" (singular) reads oddly after the plural \"systems and UX\"; left as-is since it's plausibly meant as \"UX that scales\" on its own rather than a strict agreement error."
+  ]
+}

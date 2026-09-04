@@ -1,0 +1,26 @@
+{
+ "slug": "about",
+ "url": "https://maxhammons.com/about",
+ "texts": [
+  {
+   "kind": "text_module",
+   "html": "<div style=\"line-height:27px; text-align:left;\" class=\"texteditor-inline-lineheight\"><div class=\"title\">A little about me</div><div class=\"main-text\">I'm a creative leader focused on building brand systems and UX that scales. My journey has taken me from the precision of agency work to the freedom of freelance, crafting a portfolio that's as innovative as it is diverse.<br></div><div class=\"main-text\">I care about leaving the world a bit better than when I found it. I’ve teamed up with non-profits and mission-driven orgs that feed the hungry, shelter pets, and mentor students. Watching my work spark real-world change keeps me going.</div><div class=\"main-text\">When I’m off the clock you’ll catch me chasing soccer balls, soaking up mountain sunshine, or experimenting in the kitchen (follow the chaos at <span style=\"color:#ea3d3d;\" class=\"texteditor-inline-color\"><a href=\"https://www.instagram.com/cooking.with.max?utm_source=ig_web_button_share_sheet&amp;igsh=MTg5amJiZTRxeHNjaw==\" target=\"_self\">@cooking.with.max</a></span>). Let’s grab coffee, swap ideas, and cook up the next big thing together.</div><div><span style=\"color:#ea3d3d;\" class=\"texteditor-inline-color\"><a href=\"mailto:hello@maxhammons.com\" target=\"_self\">Say Hey!</a></span>​​​​​​​",
+   "plain": "A little about me I'm a creative leader focused on building brand systems and UX that scales. My journey has taken me from the precision of agency work to the freedom of freelance, crafting a portfolio that's as innovative as it is diverse. I care about leaving the world a bit better than when I found it. I’ve teamed up with non-profits and mission-driven orgs that feed the hungry, shelter pets, and mentor students. Watching my work spark real-world change keeps me going. When I’m off the clock you’ll catch me chasing soccer balls, soaking up mountain sunshine, or experimenting in the kitchen (follow the chaos at @cooking.with.max ). Let’s grab coffee, swap ideas, and cook up the next big thing together. Say Hey! ​​​​​​​"
+  },
+  {
+   "kind": "footer",
+   "html": "Copyright Max Hammons 2025",
+   "plain": "Copyright Max Hammons 2025"
+  }
+ ],
+ "images": [
+  {
+   "id": "fd51675d-bcd6-4aad-882d-b40930e78c8b",
+   "file": "/Users/maxhammons/Documents/Professional/Marketing/Website/site/assets/fd51675d-bcd6-4aad-882d-b40930e78c8b_rw_600.jpeg",
+   "preceding_text": "A little about me",
+   "cover_link": null
+  }
+ ],
+ "page_title_tag": "Max Hammons: Senior Graphic & UX Designer | Empathy-Driven Ideator - About",
+ "meta_description": ""
+}

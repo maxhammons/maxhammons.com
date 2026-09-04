@@ -1,0 +1,31 @@
+{
+ "slug": "sur-coffee-email-flows",
+ "alt": {
+  "363f8f77-0df3-4cfa-b5c4-082f4a97ebc7": "Grid of tilted iPhone mockups displaying a range of Sur Coffee email designs with varied lifestyle photography and headlines",
+  "92c8cfe4-697c-4187-bf0d-9b293ec62b4e": "Two phone mockups of a Sur Coffee product email with the Gaviota blend description and a farmer portrait",
+  "63ee6670-c55a-4ae4-8331-81d09d9d5dee": "Original versus redesigned Sur Coffee email templates for the Give Your Mornings an Upgrade and Wake and Brew emails",
+  "f144e232-35a1-47a3-b869-6f2a3258dc55": "Original versus redesigned Sur Coffee browse abandonment emails for the Your Coffee Is Lonely and Your Cart Is Waiting messages",
+  "ca4f6e09-7a37-48ea-948d-945956d6149c": "Original versus redesigned Sur Coffee emails for the Welcome to the Club and Start Your Day With the Best messages"
+ },
+ "copy": [
+  {
+   "kind": "text_module",
+   "find": "Browse Abandonment Flow",
+   "replace": "Browse abandonment flow",
+   "reason": "Sentence-case section labels site-wide (Max 2026-09-03)"
+  },
+  {
+   "kind": "text_module",
+   "find": "Abandoned Cart Flow",
+   "replace": "Abandoned cart flow",
+   "reason": "Sentence-case section labels site-wide (Max 2026-09-03)"
+  },
+  {
+   "kind": "text_module",
+   "find": "Welcome Flow",
+   "replace": "Welcome flow",
+   "reason": "Sentence-case section labels site-wide (Max 2026-09-03)"
+  }
+ ],
+ "questions": []
+}

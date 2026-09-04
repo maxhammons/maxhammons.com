@@ -37,6 +37,9 @@ PAGE_CSS_RE = re.compile(r'<link rel="stylesheet" href="https://cdn\.myportfolio
 BACK_TO_TOP_RE = re.compile(r'\s*<section class="back-to-top".*?</section>\s*<a class="back-to-top-fixed.*?</a>', re.S)
 MOBILE_SOCIAL_RE = re.compile(r'(<div class="js-responsive-nav">.*?)<div class="social pf-nav-social".*?</ul>\s*</div>(.*?</nav>)', re.S)
 MOBILE_EMAIL_ROW = '<div class="link-title"><a href="mailto:hello@maxhammons.com">Email me</a></div>'
+COVER_RE = re.compile(r'(<a class="project-cover[^"]*" href="/([a-z0-9-]+)/"[^>]*>.*?)(<div class="cover cover-normal">.*?</div>)(.*?<div class="title preserve-whitespace">)(.*?)(</div>.*?</a>)', re.S)
+SPECULATION = ('<script type="speculationrules">{"prefetch":[{"source":"document","where":{"selector_matches":"a.project-cover, nav a"},'
+               '"eagerness":"moderate"}]}</script>')
 BFCACHE_RELOAD_RE = re.compile(r"<script type=\"text/javascript\">\s*// fix for Safari.s back/forward cache.*?</script>\s*", re.S)
 LONG_INTRO_CHARS = 360
 # GitHub Pages refuses sites over 1 GB. Image variants wider than this, and the
@@ -126,6 +129,28 @@ def load_content():
             alt.update({k: v.strip() for k, v in d.get("alt", {}).items() if v and v.strip()})
             copy[d.get("slug", fn[:-5])] = d.get("copy", [])
     return alt, copy
+
+
+def first_image(page_html, dropped, remap):
+    """The first project image as it will exist after the size cap."""
+    m = re.search(r'class="js-lazy[^"]*"[^>]*?data-src="(/assets/[^"]+)"', page_html, re.S)
+    if not m:
+        return ""
+    name = os.path.basename(m.group(1))
+    return "/assets/" + remap.get(name, name)
+
+
+def cover_markup(m, html, dropped, remap):
+    """Give each gallery cover a real white panel, a plain twin of its title for the
+    zoom transition, and the first image of its project page to preload on hover."""
+    head, slug, cover, mid, title, tail = m.groups()
+    target = html.get(slug + ".html", "")
+    preload = first_image(localise(target), dropped, remap) if target else ""
+    if preload:
+        head = head.replace("<a class=", f'<a data-preload="{preload}" class=', 1)
+    cover = cover + '<div class="cover-panel"></div>'
+    title = f'<span class="title-text">{title}</span><span class="title-ghost" aria-hidden="true">{title}</span>'
+    return head + cover + mid + title + tail
 
 
 def add_alt(s, alt, report):
@@ -258,6 +283,8 @@ def main():
             s = s.replace('<header class="page-header content"', '<header class="page-header content is-long"', 1)
             report["long_intros"].append(slug)
         s = apply_copy(s, copy.get(slug, []), slug, report)
+        s = COVER_RE.sub(lambda m: cover_markup(m, html, dropped, remap), s)
+        s = s.replace("</head>", "  " + SPECULATION + "\n</head>", 1)
         s = add_alt(s, alt, report)
         targets = [os.path.join(OUT, "index.html"), os.path.join(OUT, "portfolio", "index.html")] if slug == "index" \
             else [os.path.join(OUT, slug, "index.html")]

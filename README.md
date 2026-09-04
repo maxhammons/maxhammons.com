@@ -35,6 +35,16 @@ open http://localhost:8765/
 6. Applies alt text and copy edits from `content/pages/*.json`.
 7. Writes every page as `slug/index.html`, plus `CNAME`, `.nojekyll`, and a `404.html`.
 
+## Page transitions
+
+`theme/site.js` + the last section of `theme/site.css`. Clicking a gallery thumbnail zooms it
+up to fill the screen (image, white panel, red struck title scale together), the image fades to
+white, the title un-strikes and collapses to the left, the panel drops away and the project page
+is underneath (760ms, `--vt-t` scales it). Going back plays it in reverse into the thumbnail.
+Built on cross-document View Transitions (Chrome 126+, Safari 18.2+, Firefox 144+); other browsers
+get a plain fade. The project page and its first image start loading on hover, so the click is
+instant. `python3 qa.py` verifies both directions.
+
 ## Hosting
 
 GitHub Pages, deployed by `.github/workflows/pages.yml` from `site/` on every push to `main`.

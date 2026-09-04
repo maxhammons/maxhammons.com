@@ -27,9 +27,16 @@ def box(pg, sel):
     return pg.evaluate("s => { const r=document.querySelector(s).getBoundingClientRect(); return [r.x,r.y,r.width,r.height].map(v=>Math.round(v*10)/10); }", sel)
 
 
+PROBE = """window.addEventListener('pageswap', e => { try { sessionStorage.setItem('qa:swap', JSON.stringify({vt: !!e.viewTransition, from: location.pathname})); } catch (x) {} });
+window.addEventListener('pagereveal', e => { window.__revealed = true; if (!e.viewTransition) { window.__vt = null; return; }
+  e.viewTransition.ready.then(() => { window.__vt = { types: Array.from(e.viewTransition.types), anims: document.getAnimations().length, t0: performance.now() }; }).catch(err => { window.__vt = { error: String(err), types: Array.from(e.viewTransition.types) }; });
+  e.viewTransition.finished.then(() => { window.__vt && (window.__vt.finished = performance.now()); }); });"""
+
 with sync_playwright() as p:
     b = p.chromium.launch(channel="chrome", headless=True)
-    pg = b.new_page(viewport={"width": 1440, "height": 900})
+    ctx = b.new_context(viewport={"width": 1440, "height": 900})
+    ctx.add_init_script(PROBE)
+    pg = ctx.new_page()
 
     # ---- home masthead
     pg.goto(BASE + "/"); pg.wait_for_timeout(1500)
@@ -69,18 +76,49 @@ with sync_playwright() as p:
     same = pg.evaluate("Array.from(document.querySelectorAll('a, .button-module, .project-cover .details')).map(e=>getComputedStyle(e).transitionDuration).filter(d=>d && d!=='0s')")
     check("every hover transition uses the same speed", all(d.split(",")[0].strip() == "0.1s" for d in same), f"{len(same)} elements, distinct={sorted(set(d.split(',')[0].strip() for d in same))}")
 
-    # ---- page fade: click must add transition-out and wait ~250ms before leaving
+    # ---- nav link: plain cross-fade via view transitions, page usable right after
     pg.goto(BASE + "/ambition-angels/"); pg.wait_for_timeout(1200)
-    t0 = time.time()
     pg.click("header.site-header nav .page-title a[href='/about/']", no_wait_after=True)
-    cls = pg.evaluate("document.body.className")
-    pg.wait_for_url("**/about/", timeout=5000)
-    dt = (time.time() - t0) * 1000
-    check("click starts fade-out", "transition-out" in cls, cls)
-    check("navigation waits for the fade (>=200ms)", dt >= 200, f"{dt:.0f}ms")
-    op = pg.evaluate("getComputedStyle(document.body).opacity")
-    pg.wait_for_timeout(600)
-    check("new page fades in to full opacity", pg.evaluate("getComputedStyle(document.body).opacity") == "1", f"early={op}")
+    pg.wait_for_url("**/about/", timeout=5000); pg.wait_for_timeout(800)
+    vt = pg.evaluate("window.__vt")
+    if not vt:
+        print("   note: inbound transition skipped once by the browser, retrying")
+        pg.goto(BASE + "/ambition-angels/"); pg.wait_for_timeout(1200)
+        pg.click("header.site-header nav .page-title a[href='/about/']", no_wait_after=True)
+        pg.wait_for_url("**/about/", timeout=5000); pg.wait_for_timeout(800)
+        vt = pg.evaluate("window.__vt")
+    check("nav link runs a cross-fade transition", bool(vt) and vt["anims"] >= 2 and "to-project" not in vt["types"], str(vt))
+    check("new page is at full opacity afterwards", pg.evaluate("getComputedStyle(document.body).opacity") == "1")
+
+    # ---- cover zoom transition (cross-document view transitions) + prefetch
+    pg.goto(BASE + "/"); pg.wait_for_timeout(1200)
+    pg.evaluate("window.scrollTo(0,1500)"); pg.wait_for_timeout(300)
+    reqs = []
+    pg.on("request", lambda r: reqs.append(r.url))
+    pg.hover("a.project-cover[href='/ambition-angels/']"); pg.wait_for_timeout(700)
+    check("hovering a cover prefetches its page", any(u.endswith("/ambition-angels/") for u in reqs), str([u for u in reqs][-3:]))
+    check("hovering a cover preloads its first image", any("_rw_1920" in u or "_rw_1200" in u for u in reqs))
+    def click_cover():
+        pg.click("a.project-cover[href='/ambition-angels/']", no_wait_after=True)
+        pg.wait_for_url("**/ambition-angels/"); pg.wait_for_timeout(1400)
+        return pg.evaluate("window.__vt")
+    vt = click_cover()
+    if not vt:
+        # headless Chrome occasionally declines to start the inbound transition (the page then just fades in,
+        # which is the designed fallback); retry once before calling it a failure
+        print("   note: inbound transition skipped once by the browser, retrying")
+        pg.go_back(); pg.wait_for_url(BASE + "/"); pg.wait_for_timeout(1200)
+        pg.hover("a.project-cover[href='/ambition-angels/']"); pg.wait_for_timeout(400)
+        vt = click_cover()
+    check("clicking a cover runs the zoom transition into the project page", bool(vt) and "to-project" in vt["types"] and vt["anims"] >= 12, str(vt))
+    check("zoom transition lasts about 760ms", bool(vt) and vt.get("finished") and 600 <= vt["finished"] - vt["t0"] <= 1000, str(vt and vt.get("finished") and round(vt["finished"] - vt["t0"])) + "ms")
+    check("page is scrollable right after the transition", pg.evaluate("window.scrollTo(0,500); window.scrollY") == 500)
+    check("no double fade after the transition", pg.evaluate("getComputedStyle(document.body).opacity") == "1")
+    pg.go_back(); pg.wait_for_url(BASE + "/"); pg.wait_for_timeout(1400)
+    vt = pg.evaluate("window.__vt")
+    check("going back zooms out into the thumbnail", bool(vt) and "to-home" in vt["types"] and vt["anims"] >= 12, str(vt))
+    check("thumbnail state is cleaned up afterwards", pg.evaluate("document.querySelectorAll('.vt-cover, .touch-hover').length") == 0)
+    check("gallery scroll position restored", pg.evaluate("window.scrollY") > 300, str(pg.evaluate("window.scrollY")))
 
     # ---- reel button font
     pg.goto(BASE + "/reel/"); pg.wait_for_timeout(1500)

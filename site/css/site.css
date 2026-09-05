@@ -190,14 +190,16 @@ nav .gallery-title a.active:hover, nav .page-title a.active:hover { color: var(-
 .vt-title .vt-strike { width: 100%; }
 /* the white panel is a real element (the export used ::after, which view transitions cannot capture) */
 .project-cover .cover-image:after { display: none; }
+/* the thumbnail's rounded corners come from the container clip, so the captured image and panel
+   are square and the transition can round them together (see vt-corners) */
+.project-cover .cover-image { position: relative; border-radius: 20px; overflow: hidden; }
+.project-cover .cover, .project-cover .cover img { border-radius: 0; }
 .project-cover .cover-panel {
-  position: absolute; inset: 0; background: var(--paper); opacity: 0; border-radius: 20px; pointer-events: none;
+  position: absolute; inset: 0; background: var(--paper); opacity: 0; pointer-events: none;
   transition: opacity var(--speed) ease;
 }
 .project-cover:hover .cover-panel, .project-cover.touch-hover .cover-panel { opacity: 0.9; }
 .project-cover.vt-cover .cover-panel { transition: none; }   /* captured instantly, no hover transition mid-way */
-.project-cover .cover-image { position: relative; }
-.project-cover .cover { border-radius: 20px; overflow: hidden; }
 .project-cover .description, .project-cover .date { color: var(--ink); font-size: var(--fs-small); line-height: var(--lh-small); font-weight: 400; }
 @media (max-width: 540px) { .project-cover .title { font-size: 19px; line-height: 22px; } }
 
@@ -302,8 +304,10 @@ html.vt .transition-in, html.vt .transition-out, html.vt-ready .transition-out {
   animation-duration: var(--z);
   animation-timing-function: var(--ease-zoom);
 }
-::view-transition-old(cover-image), ::view-transition-new(cover-image) { height: 100%; object-fit: cover; overflow: clip; }
+::view-transition-old(cover-image), ::view-transition-new(cover-image) { height: 100%; object-fit: cover; }
 ::view-transition-old(cover-panel), ::view-transition-new(cover-panel) { height: 100%; }
+/* image and panel share one rounded clip that opens up as they grow (and closes as they shrink) */
+::view-transition-image-pair(cover-image), ::view-transition-image-pair(cover-panel) { overflow: clip; }
 ::view-transition-old(cover-strike), ::view-transition-new(cover-strike) { height: 100%; }
 
 /* ---- going in: gallery -> project.
@@ -315,7 +319,10 @@ html.vt .transition-in, html.vt .transition-out, html.vt-ready .transition-out {
   animation: vt-erase var(--c) var(--ease) both; animation-play-state: paused;
 }
 :root:active-view-transition-type(to-project)::view-transition-image-pair(cover-image),
-:root:active-view-transition-type(to-project)::view-transition-image-pair(cover-panel),
+:root:active-view-transition-type(to-project)::view-transition-image-pair(cover-panel) {
+  animation: vt-corners var(--z) var(--ease-zoom) both, vt-out var(--f) var(--c) var(--ease) both;
+  animation-play-state: running, paused;
+}
 :root:active-view-transition-type(to-project)::view-transition-image-pair(cover-title) {
   animation: vt-out var(--f) var(--c) var(--ease) both; animation-play-state: paused;
 }
@@ -346,7 +353,9 @@ html.vt-loaded:active-view-transition-type(to-project)::view-transition-image-pa
   animation-delay: calc(var(--f) + var(--c));
 }
 :root:active-view-transition-type(to-home)::view-transition-image-pair(cover-image),
-:root:active-view-transition-type(to-home)::view-transition-image-pair(cover-panel),
+:root:active-view-transition-type(to-home)::view-transition-image-pair(cover-panel) {
+  animation: vt-in var(--f) var(--ease) both, vt-corners var(--z) calc(var(--f) + var(--c)) var(--ease-zoom) reverse both;
+}
 :root:active-view-transition-type(to-home)::view-transition-image-pair(cover-title) { animation: vt-in var(--f) var(--ease) both; }
 :root:active-view-transition-type(to-home)::view-transition-image-pair(cover-strike) { animation: vt-erase var(--c) var(--f) var(--ease) reverse both; }
 
@@ -355,6 +364,7 @@ html.vt-loaded:active-view-transition-type(to-project)::view-transition-image-pa
 @keyframes vt-out { to { opacity: 0; } }
 @keyframes vt-in { from { opacity: 0; } to { opacity: 1; } }
 @keyframes vt-erase { from { clip-path: inset(0 0 0 0); } to { clip-path: inset(0 0 0 100%); } }
+@keyframes vt-corners { from { border-radius: 20px; } to { border-radius: 0; } }
 
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation-duration: calc(1ms * var(--vt-t)) !important; animation-delay: calc(0ms * var(--vt-t)) !important; }

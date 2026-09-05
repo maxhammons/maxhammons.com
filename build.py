@@ -65,8 +65,10 @@ COVER_RE = re.compile(
     re.S,
 )
 SPECULATION = (
-    '<script type="speculationrules">{"prefetch":[{"source":"document","where":{"selector_matches":"a.project-cover, nav a"},'
-    '"eagerness":"moderate"}]}</script>'
+    '<script type="speculationrules">{'
+    '"prerender":[{"source":"document","where":{"selector_matches":"a.project-cover"},"eagerness":"moderate"}],'
+    '"prefetch":[{"source":"document","where":{"selector_matches":"nav a"},"eagerness":"moderate"}]'
+    "}</script>"
 )
 BFCACHE_RELOAD_RE = re.compile(
     r"<script type=\"text/javascript\">\s*// fix for Safari.s back/forward cache.*?</script>\s*",
@@ -447,6 +449,9 @@ def main():
             1,
         )
         s = swap_images(s)
+        first = first_image(s, dropped, remap) if layout == "project" else ""
+        if first:  # the first project image starts downloading before any script runs
+            s = s.replace("</head>", f'  <link rel="preload" as="image" href="{first}" fetchpriority="high" />\n</head>', 1)
         s = re.sub(r"<img\b(?![^>]*\bdecoding=)", '<img decoding="async"', s)
         s = add_alt(s, alt, report)
         for path, versioned in stamped.items():

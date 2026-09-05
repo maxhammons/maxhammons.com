@@ -53,8 +53,11 @@ fades off together (0.75s, `--vt-t` scales it). Logo, Home, back button or swipe
 reverse into the thumbnail, scrolled into view first.
 Built on cross-document View Transitions with full-size twins of the thumbnail parts on the
 project page, so the browser interpolates the geometry itself and the title is crisp text
-(Chrome 126+, Safari 18.2+, Firefox 144+); other browsers get a plain fade. The project page and its first image start loading on hover, so the click is
-instant. `python3 qa.py` verifies both directions.
+(Chrome 126+, Safari 18.2+, Firefox 144+); other browsers get a plain fade. Loading ahead of the click: Chrome and Edge prerender a project page on hover (speculation
+rules); every browser prefetches its HTML and first image on hover or touch; once a gallery is
+idle, all project pages' HTML is fetched at low priority in top-to-bottom order, plus the first
+image of the covers on screen; each project page preloads its first image from the head.
+`python3 qa.py` verifies both directions.
 
 ## Hosting
 

@@ -282,17 +282,53 @@
     document.body.classList.remove("transition-out");
   });
 
-  /* ---- prefetch on intent: the page HTML and its first image ---- */
+  /* ---- idle prefetch: once a gallery has settled, fetch every project page's HTML at low
+     priority, top of the page first, then the first image of the covers currently on screen.
+     Skipped on data-saver or 2G connections. ---- */
   var warmed = {};
+  function lowFetch(url, done) {
+    fetch(url, { credentials: "same-origin", priority: "low" }).catch(function () {
+      warmed[url] = false; // offline or blocked: let a later hover try again
+    }).then(done, done);
+  }
+  function idlePrefetch() {
+    var covers = Array.prototype.slice.call(document.querySelectorAll("a.project-cover[href]"));
+    var conn = navigator.connection || {};
+    if (!covers.length || conn.saveData || /2g/.test(conn.effectiveType || "")) return;
+    covers.sort(function (a, b) { return a.getBoundingClientRect().top - b.getBoundingClientRect().top; });
+    var onScreen = covers.filter(function (c) {
+      var r = c.getBoundingClientRect();
+      return r.bottom > 0 && r.top < window.innerHeight;
+    });
+    var queue = covers.map(function (c) { return c.href; })
+      .concat(onScreen.map(function (c) { return c.getAttribute("data-preload"); }).filter(Boolean))
+      .filter(function (url) { return url && !warmed[url]; });
+    var active = 0;
+    (function next() {
+      while (active < 2 && queue.length) {
+        var url = queue.shift();
+        if (warmed[url]) continue;
+        warmed[url] = true;
+        active += 1;
+        lowFetch(url, function () { active -= 1; next(); });
+      }
+    })();
+  }
+  function whenIdle(fn) {
+    if (window.requestIdleCallback) requestIdleCallback(fn, { timeout: 4000 });
+    else setTimeout(fn, 1500);
+  }
+  window.addEventListener("load", function () { whenIdle(idlePrefetch); });
+
+  /* ---- prefetch on intent: the page HTML and its first image ---- */
   function warm(a) {
     var href = a.href;
     if (!href || warmed[href] || a.host !== location.host) return;
     warmed[href] = true;
-    fetch(href, { credentials: "same-origin", priority: "low" }).catch(function () {
-      warmed[href] = false; // offline or blocked: let a later hover try again
-    });
+    lowFetch(href, function () {});
     var img = a.getAttribute("data-preload");
-    if (img) {
+    if (img && !warmed[img]) {
+      warmed[img] = true;
       var i = new Image();
       i.src = img;
     }

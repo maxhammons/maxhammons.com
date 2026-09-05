@@ -203,10 +203,14 @@ nav .gallery-title a.active:hover, nav .page-title a.active:hover { color: var(-
 .project-cover .description, .project-cover .date { color: var(--ink); font-size: var(--fs-small); line-height: var(--lh-small); font-weight: 400; }
 @media (max-width: 540px) { .project-cover .title { font-size: 19px; line-height: 22px; } }
 
-.masthead h1 { color: var(--accent); font-weight: 700; text-transform: none; }
-.masthead p { color: var(--ink); font-weight: 400; }
+/* name: one big line on wide screens, two big lines on phones */
+.masthead h1 {
+  color: var(--accent); font-weight: 700; text-transform: none; white-space: nowrap;
+  font-size: clamp(88px, 8.5vw, 150px); line-height: 1; margin: 0 0 16px; letter-spacing: -0.01em;
+}
+.masthead p { color: var(--ink); font-weight: 400; font-size: 22px; line-height: 30px; margin: 0 0 20px; }
 
-.masthead-contents { padding: 0 24px; box-sizing: border-box; }
+.masthead-contents { max-width: none; padding: 0 5%; box-sizing: border-box; }
 .masthead-text { text-align: center; }
 .masthead-buttons { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 16px; padding-top: 12px; }
 .masthead-button + .masthead-button-spacer + .masthead-button { margin-left: 0; }
@@ -214,16 +218,16 @@ nav .gallery-title a.active:hover, nav .page-title a.active:hover { color: var(-
 .masthead-button + .masthead-button-spacer {
   display: none;
 }
-/* tablet */
+/* tablet: still one line */
 @media (max-width: 932px) {
-  .masthead h1 { font-size: 56px; line-height: 60px; margin: 0 0 8px; }
-  .masthead p { font-size: 18px; line-height: 26px; margin: 0 0 12px; }
+  .masthead h1 { font-size: 9.5vw; margin: 0 0 12px; }
+  .masthead p { font-size: 18px; line-height: 26px; margin: 0 0 14px; }
 }
 /* phone: bigger name, more air, buttons stacked at one width */
 @media (max-width: 540px) {
   .masthead { padding-left: 5%; padding-right: 5%; }   /* the export used 17% each side, which left 209px for the name */
   .masthead-contents { padding: 0; max-width: none; }
-  .masthead h1 { font-size: clamp(56px, 19vw, 96px); line-height: 0.95; margin: 0 0 14px; overflow-wrap: normal; }
+  .masthead h1 { white-space: normal; font-size: clamp(56px, 20vw, 104px); line-height: 0.92; margin: 0 0 16px; overflow-wrap: normal; }
   .masthead p { font-size: 17px; line-height: 24px; margin: 0 0 22px; }
   .masthead-buttons { flex-direction: column; gap: 12px; padding-top: 4px; }
   .masthead-button, .masthead-button-1, .masthead-button-2 {

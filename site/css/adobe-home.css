@@ -1068,7 +1068,7 @@ nav {
 .masthead {
   background-color: #FAFAFA;
   /* stylelint-disable function-url-quotes */
-  background-image: url("/assets/066337a7-12de-4ef6-b197-d1ab17f41287_rwc_10x0x1338x555x4096.gif");
+  background-image: none;
   /* stylelint-enable function-url-quotes */
   background-position: center center;
   background-repeat: no-repeat;

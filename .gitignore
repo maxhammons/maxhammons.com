@@ -7,6 +7,9 @@ qa-shots/
 raw/cdn.myportfolio.com/*/*
 !raw/cdn.myportfolio.com/*/*.css
 
+# conversion cache (build.py rebuilds it)
+raw/derived/
+
 # build leftovers
 *.part
 __pycache__/

@@ -14,6 +14,7 @@ can be hosted anywhere (target: GitHub Pages with the existing custom domain).
 | `content/pages/` | Per-page JSON from the review pass: alt text for every image, copy fixes as find/replace, open questions. | Yes, hand-edit alt text or add copy fixes here. |
 | `content/copy-changelog.md` | Every copy edit the build applied, with the reason. | Generated. |
 | `content/voice/` | Max's resume text, used as the voice reference during the copy review. | Reference only. |
+| `optimize.py` | Image and video conversion used by the build: every raster becomes WebP, every animated GIF a muted looping MP4 + WebM pair. Cached in `raw/derived/`. | Only to change quality settings. |
 | `build.py` | Builds `site/` from all of the above. | Yes. |
 | `site/` | The finished site. Disposable; rebuilt by `build.py`. | Never by hand. |
 
@@ -33,16 +34,26 @@ open http://localhost:8765/
 4. Removes the back-to-top links.
 5. Marks intros longer than 360 characters with `is-long`, which the CSS lays out as two columns above the first image.
 6. Applies alt text and copy edits from `content/pages/*.json`.
+6b. Converts images to WebP and animated GIFs to video, preloads the two main fonts, marks images `decoding="async"`, and prunes unreferenced assets. First run takes about a minute per 1,000 images; later runs use the cache.
 7. Writes every page as `slug/index.html`, plus `CNAME`, `.nojekyll`, and a `404.html`.
+
+## Linting
+
+`kento all` and `mai all` (from the killua checkout) run on the source files only: `build.py`,
+`make_manifest.py`, `optimize.py`, `qa.py`, `theme/`. `.kentoignore` and `.maiignore` exclude
+`site/` (generated), `raw/` (verbatim mirror) and `fonts/` (binary). mai's formatter owns the
+source formatting.
 
 ## Page transitions
 
 `theme/site.js` + the last section of `theme/site.css`. Clicking a gallery thumbnail zooms it
-up to fill the screen (image, white panel, red struck title scale together), the image fades to
-white, the title un-strikes and collapses to the left, the panel drops away and the project page
-is underneath (760ms, `--vt-t` scales it). Going back plays it in reverse into the thumbnail.
-Built on cross-document View Transitions (Chrome 126+, Safari 18.2+, Firefox 144+); other browsers
-get a plain fade. The project page and its first image start loading on hover, so the click is
+edge to edge (image, white panel, red title and strike line grow together), holds until the
+project page underneath has loaded, then the strike erases like a progress bar and everything
+fades off together (1.25s, `--vt-t` scales it). Logo, Home, back button or swipe play the exact
+reverse into the thumbnail, scrolled into view first.
+Built on cross-document View Transitions with full-size twins of the thumbnail parts on the
+project page, so the browser interpolates the geometry itself and the title is crisp text
+(Chrome 126+, Safari 18.2+, Firefox 144+); other browsers get a plain fade. The project page and its first image start loading on hover, so the click is
 instant. `python3 qa.py` verifies both directions.
 
 ## Hosting

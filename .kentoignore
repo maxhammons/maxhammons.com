@@ -1,0 +1,5 @@
+# kento: skip generated output (site/ is rebuilt by build.py), the verbatim Adobe mirror (raw/), and binary fonts.
+# Same rationale and scope as .maiignore.
+site/
+raw/
+fonts/

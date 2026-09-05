@@ -3,7 +3,6 @@
    over it. Everything the site should be consistent about lives here:
    fonts, palette, type scale, nav, links, grids, buttons. */
 
-/* ---------- fonts (Proxima Nova, self-hosted; "vcsm"/"mtyl" are the old kit names) ---------- */
 @font-face { font-family: "Proxima Nova"; font-weight: 300; font-style: normal; font-display: swap;
   src: url("/fonts/vcsm-n3.woff2") format("woff2"), url("/fonts/vcsm-n3.woff") format("woff"); }
 @font-face { font-family: "Proxima Nova"; font-weight: 400; font-style: normal; font-display: swap;
@@ -23,7 +22,6 @@
 @font-face { font-family: "mtyl"; font-weight: 700; src: url("/fonts/vcsm-n7.woff2") format("woff2"); }
 @font-face { font-family: "bcnw"; font-weight: 400; src: url("/fonts/bcnw-n4.woff2") format("woff2"); }
 
-/* ---------- tokens ---------- */
 :root {
   --font-sans: "Proxima Nova", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --font-mono: "Site Mono", ui-monospace, "SF Mono", Menlo, monospace;
@@ -39,7 +37,8 @@
   --gutter: 8px;         /* every image grid */
   --speed: 100ms;        /* every hover / colour change on the site */
   --fade: 250ms;         /* page fade out / in between pages (site.js + dist/css/main.css) */
-  --vt-t: 1;             /* time multiplier for the cover zoom choreography (1 = 760ms total) */
+  --vt-t: 1;             /* time multiplier for the cover zoom choreography (1 = 1.25s each way) */
+
   --strike: 0.08em;      /* link strikethrough thickness, relative to font size */
   --nav-h: 96px;
 
@@ -51,6 +50,13 @@
   --fs-nav: 16px;     --lh-nav: 28px;
   --fs-small: 14px;   --lh-small: 20px;
   --fs-logo: 24px;    --lh-logo: 36px;
+
+  /* cover zoom choreography (site.js + the page-transition rules); --vt-t scales it, 1 = 1.25s each way */
+  --z: calc(550ms * var(--vt-t));   /* zoom */
+  --c: calc(250ms * var(--vt-t));   /* strike erase / draw */
+  --f: calc(450ms * var(--vt-t));   /* fade */
+  --ease-zoom: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
 }
 @media (max-width: 932px) {
   :root { --fs-display: 30px; --lh-display: 33px; --fs-lede: 17px; --lh-lede: 24px;
@@ -61,16 +67,14 @@
           --fs-body: 15px; --lh-body: 22px; --fs-label: 15px; --lh-label: 22px; --fs-logo: 22px; --lh-logo: 23px; }
 }
 
-/* ---------- base ---------- */
 /* no background on html/body: splash pages (Reel) paint their GIF on <html> */
 html, body { font-family: var(--font-sans); color: var(--ink); }
-code, kbd, pre, samp, [style*="bcnw"] { font-family: var(--font-mono) !important; }
+code, kbd, pre, samp { font-family: var(--font-mono); }
 .logo, .logo-secondary, nav a, .masthead h1, .masthead p, .masthead-button, .site-footer,
 .page-header .title, .page-header .description, .page-header .date, .page-header .custom1, .page-header .custom2,
 .rich-text, .rich-text *, .button-module, .project-cover .title, .project-cover .description,
 .other-projects-title, .grid__caption-text, .responsive-nav a, .lightbox-content { font-family: var(--font-sans); }
 
-/* ---------- sticky header ---------- */
 .site-header {
   position: sticky; top: 0; z-index: 1000;
   background: var(--paper);
@@ -87,11 +91,10 @@ nav .gallery-title a, nav .page-title a, nav .link-title a, nav .project-title a
 }
 nav .gallery-title a.active, nav .page-title a.active, nav .link-title a.active { color: var(--ink-faint); }
 /* email icon: just the envelope, black, red on hover (no grey tile) */
-.pf-nav-social a, .pf-nav-social a:hover { background: transparent !important; }
+.pf-nav-social a, .pf-nav-social a:hover { background: transparent; }
 .pf-nav-social svg { fill: var(--ink); }
 .pf-nav-social a:hover svg { fill: var(--accent); }
 
-/* ---------- links: one hover everywhere (red + strikethrough scaled to the type) ---------- */
 body.link-transition a, a, .link-transition a svg, .pf-nav-social svg, .masthead-button, .button-module,
 .project-cover .details, .project-cover .details-wrap, .project-cover .title, .hamburger i {
   transition-property: color, background-color, border-color, fill, opacity, text-decoration-color;
@@ -124,7 +127,6 @@ nav a:hover, .responsive-nav a:hover, .other-projects-title a:hover,
 .logo a:hover, nav a:hover, .responsive-nav a:hover { font-weight: inherit; font-style: normal; }
 nav .gallery-title a.active:hover, nav .page-title a.active:hover { color: var(--accent); }
 
-/* ---------- page header (every page: left aligned, same scale) ---------- */
 .page-header { float: left; width: 50%; max-width: 800px; padding-top: 20px; padding-bottom: 60px; margin: 0; }
 .page-header .title {
   color: var(--ink); font-size: var(--fs-display); line-height: var(--lh-display); font-weight: 700;
@@ -143,7 +145,6 @@ nav .gallery-title a.active:hover, nav .page-title a.active:hover { color: var(-
 @media (max-width: 932px) { .page-header { width: 100%; } }
 @media (max-width: 768px) { .page-header.is-long .description { column-count: 1; } }
 
-/* ---------- text modules ---------- */
 .standard-modules .rich-text .title, .splash-modules .rich-text .title {
   color: var(--ink); font-size: var(--fs-display); line-height: var(--lh-display); font-weight: 700; text-transform: none;
 }
@@ -160,46 +161,46 @@ nav .gallery-title a.active:hover, nav .page-title a.active:hover { color: var(-
 }
 .rich-text .sub-title + div, .rich-text .sub-title + p { padding-top: 4px; }
 
-/* ---------- image grids: one gutter ---------- */
 .standard-modules .media_collection .grid__item-container, .splash-modules .media_collection .grid__item-container,
 .standard-modules .modules .project-module-media_collection[data-id] .grid__item-container,
 .splash-modules .modules .project-module-media_collection[data-id] .grid__item-container {
-  border-bottom: var(--gutter) solid transparent !important;
-  border-left: calc(var(--gutter) / 2) solid transparent !important;
-  border-right: calc(var(--gutter) / 2) solid transparent !important;
+  border-bottom: var(--gutter) solid transparent;
+  border-left: calc(var(--gutter) / 2) solid transparent;
+  border-right: calc(var(--gutter) / 2) solid transparent;
 }
 .standard-modules .media_collection .grid--main, .splash-modules .media_collection .grid--main,
 .standard-modules .modules .project-module-media_collection[data-id] .grid--main,
 .splash-modules .modules .project-module-media_collection[data-id] .grid--main {
-  margin: 0 calc(var(--gutter) / -2) !important;
+  margin: 0 calc(var(--gutter) / -2);
 }
 .project-module-image img, .grid__img, .cover__img { background: var(--line); }
 
-/* ---------- gallery covers (home, sandbox): white panel, red struck title, as on the live site ---------- */
 .project-cover .title {
-  position: relative; color: var(--accent); font-size: 24px; line-height: 28px; font-weight: 700; text-transform: none;
+  position: relative; display: inline-block; width: auto; max-width: 100%;
+  color: var(--accent); font-size: 24px; line-height: 28px; font-weight: 700; text-transform: none; white-space: nowrap;
 }
-.project-cover:hover .title-text, .project-cover.touch-hover .title-text {
-  text-decoration: line-through; text-decoration-thickness: var(--strike);
+.project-cover .details-inner { text-align: center; }
+/* the strikethrough is a real line so the zoom transition can erase and redraw it like a progress bar */
+.project-cover .title-strike, .vt-title .vt-strike {
+  position: absolute; left: 0; top: calc(50% - var(--strike) / 2); height: var(--strike); background: currentColor; pointer-events: none;
 }
-/* un-struck twin of the title, only made visible while a view transition captures it */
-.project-cover .title-ghost { position: absolute; inset: 0; opacity: 0; text-decoration: none; pointer-events: none; }
-.project-cover.vt-cover .title-ghost { opacity: 1; }
-.project-cover.vt-cover .title-text { position: relative; z-index: 1; }
+.project-cover .title-strike { width: 0; transition: width var(--speed) ease; }
+.project-cover:hover .title-strike, .project-cover.touch-hover .title-strike { width: 100%; }
+.project-cover.vt-cover .title-strike { width: 100%; transition: none; }
+.vt-title .vt-strike { width: 100%; }
 /* the white panel is a real element (the export used ::after, which view transitions cannot capture) */
-.project-cover .cover-image:after { display: none !important; }
+.project-cover .cover-image:after { display: none; }
 .project-cover .cover-panel {
   position: absolute; inset: 0; background: var(--paper); opacity: 0; border-radius: 20px; pointer-events: none;
   transition: opacity var(--speed) ease;
 }
 .project-cover:hover .cover-panel, .project-cover.touch-hover .cover-panel { opacity: 0.9; }
-.project-cover.vt-cover .cover-panel { opacity: 1; }   /* captured solid; the 90% is applied to the snapshot instead */
+.project-cover.vt-cover .cover-panel { transition: none; }   /* captured instantly, no hover transition mid-way */
 .project-cover .cover-image { position: relative; }
 .project-cover .cover { border-radius: 20px; overflow: hidden; }
 .project-cover .description, .project-cover .date { color: var(--ink); font-size: var(--fs-small); line-height: var(--lh-small); font-weight: 400; }
 @media (max-width: 540px) { .project-cover .title { font-size: 19px; line-height: 22px; } }
 
-/* ---------- masthead (home) ---------- */
 .masthead h1 { color: var(--accent); font-weight: 700; text-transform: none; }
 .masthead p { color: var(--ink); font-weight: 400; }
 
@@ -207,7 +208,10 @@ nav .gallery-title a.active:hover, nav .page-title a.active:hover { color: var(-
 .masthead-text { text-align: center; }
 .masthead-buttons { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 16px; padding-top: 12px; }
 .masthead-button + .masthead-button-spacer + .masthead-button { margin-left: 0; }
-.masthead-button-spacer { display: none !important; }
+.masthead-button-spacer,
+.masthead-button + .masthead-button-spacer {
+  display: none;
+}
 /* tablet */
 @media (max-width: 932px) {
   .masthead h1 { font-size: 56px; line-height: 60px; margin: 0 0 8px; }
@@ -215,7 +219,7 @@ nav .gallery-title a.active:hover, nav .page-title a.active:hover { color: var(-
 }
 /* phone: bigger name, more air, buttons stacked at one width */
 @media (max-width: 540px) {
-  .masthead { padding-left: 5% !important; padding-right: 5% !important; }   /* the export used 17% each side, which left 209px for the name */
+  .masthead { padding-left: 5%; padding-right: 5%; }   /* the export used 17% each side, which left 209px for the name */
   .masthead-contents { padding: 0; max-width: none; }
   .masthead h1 { font-size: clamp(56px, 19vw, 96px); line-height: 0.95; margin: 0 0 14px; overflow-wrap: normal; }
   .masthead p { font-size: 17px; line-height: 24px; margin: 0 0 22px; }
@@ -225,30 +229,25 @@ nav .gallery-title a.active:hover, nav .page-title a.active:hover { color: var(-
   }
 }
 
-/* ---------- buttons: same box in every state so nothing shifts on hover ---------- */
-.masthead-button, .masthead-button-1, .masthead-button-2, .button-module, .project-module-button .button-module {
-  font-family: var(--font-sans) !important; font-size: 16px; font-weight: 700; letter-spacing: 0.02em; text-transform: uppercase;
+.masthead-button, .masthead-button-1, .masthead-button-2, .button-module, .project-module-button[data-id] .button-module {
+  font-family: var(--font-sans); font-size: 16px; font-weight: 700; letter-spacing: 0.02em; text-transform: uppercase;
   box-sizing: border-box; height: 40px; line-height: 38px; padding: 0 20px; border: 1px solid var(--ink); border-radius: 8px;
   color: var(--paper); background-color: var(--ink);
 }
 /* primary: black, hover red */
-.masthead-button-1:hover, .button-module:hover, .project-module-button .button-module:hover {
+.masthead-button-1:hover, .button-module:hover, .project-module-button[data-id] .button-module:hover {
   color: var(--paper); background-color: var(--accent); border-color: var(--accent);
 }
 /* secondary: red outline, no fill; hover fills red */
 .masthead-button-2 { color: var(--accent); background-color: transparent; border-color: var(--accent); }
 .masthead-button-2:hover { color: var(--paper); background-color: var(--accent); border-color: var(--accent); }
 
-/* ---------- footer ---------- */
 .site-footer, .site-footer a { color: var(--ink-faint); font-size: var(--fs-small); line-height: var(--lh-small); font-weight: 300; }
 
-/* ---------- removed UI ---------- */
 .back-to-top, .back-to-top-fixed { display: none !important; }
 
-/* ---------- lightbox ---------- */
 .lightbox-content .grid__caption-text, .grid__caption-text { font-size: var(--fs-small); line-height: var(--lh-small); }
 
-/* ---------- mobile menu: full-screen rows of big bold labels (breakpoint matches the Adobe hamburger) ---------- */
 @media (max-width: 932px) {
   .responsive-nav { padding: 0; }
   .responsive-nav .nav-container { height: 100%; }
@@ -271,9 +270,17 @@ nav .gallery-title a.active:hover, nav .page-title a.active:hover { color: var(-
   .close-responsive-click-area { z-index: 2; }
 }
 
+/* ---------- animated GIFs became muted looping videos (build.py) ---------- */
+.module-video { display: block; width: 100%; height: auto; }
+.masthead { background-image: none; }
+.masthead-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+.masthead-contents { position: relative; z-index: 1; }
+html.has-page-video { background-image: none; }
+.page-video { position: fixed; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; }
+
 /* =====================================================================
    Page transitions (cross-document View Transitions; site.js sets the
-   names, the types, and the --vt-* target transforms on <html>)
+   names, the types, and builds the full-screen twins on the project page)
    ===================================================================== */
 @view-transition { navigation: auto; }
 
@@ -286,57 +293,76 @@ html.vt .transition-in, html.vt .transition-out, html.vt-ready .transition-out {
 @keyframes vt-fade-out { to { opacity: 0; } }
 @keyframes vt-fade-in { from { opacity: 0; } }
 
+/* full-screen twins of a thumbnail's parts, built by site.js on the project page for the capture only */
+.vt-overlay { position: fixed; inset: 0; z-index: 2147483000; pointer-events: none; display: flex; align-items: center; justify-content: center; }
+.vt-overlay .vt-image { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.vt-overlay .vt-panel { position: absolute; inset: 0; background: var(--paper); opacity: 0.9; }
+.vt-overlay .vt-title { position: relative; font-family: var(--font-sans); font-weight: 700; color: var(--accent); text-align: center; white-space: nowrap; }
+
+
+/* the browser animates each part from thumbnail geometry to full screen (and back); we set the pace */
 ::view-transition-group(cover-image), ::view-transition-group(cover-panel),
-::view-transition-group(cover-title), ::view-transition-group(cover-title-plain) {
-  transform-origin: 0 0;
-  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  animation-fill-mode: both;
+::view-transition-group(cover-title), ::view-transition-group(cover-strike),
+::view-transition-old(cover-image), ::view-transition-new(cover-image),
+::view-transition-old(cover-panel), ::view-transition-new(cover-panel),
+::view-transition-old(cover-title), ::view-transition-new(cover-title),
+::view-transition-old(cover-strike), ::view-transition-new(cover-strike) {
+  animation-duration: var(--z);
+  animation-timing-function: var(--ease-zoom);
 }
-::view-transition-old(cover-image), ::view-transition-new(cover-image) {
-  object-fit: cover; height: 100%; overflow: clip; border-radius: 20px;
+::view-transition-old(cover-image), ::view-transition-new(cover-image) { height: 100%; object-fit: cover; overflow: clip; }
+::view-transition-old(cover-panel), ::view-transition-new(cover-panel) { height: 100%; }
+::view-transition-old(cover-strike), ::view-transition-new(cover-strike) { height: 100%; }
+
+/* ---- going in: gallery -> project.
+   zoom 0-550 | HOLD until the page underneath has loaded (html.vt-loaded) |
+   strike erases right-to-left 0-250 | image, panel and title fade off together 250-700  = 1.25s when ready ---- */
+:root:active-view-transition-type(to-project)::view-transition-old(root) { animation: vt-hold var(--z) steps(1, end) both; }
+:root:active-view-transition-type(to-project)::view-transition-new(root) { animation: vt-show var(--z) steps(1, end) both; }
+:root:active-view-transition-type(to-project)::view-transition-image-pair(cover-strike) {
+  animation: vt-erase var(--c) var(--ease) both; animation-play-state: paused;
 }
-::view-transition-old(cover-panel), ::view-transition-new(cover-panel) { height: 100%; border-radius: 20px; }
-::view-transition-image-pair(cover-image), ::view-transition-image-pair(cover-panel),
-::view-transition-image-pair(cover-title), ::view-transition-image-pair(cover-title-plain) { isolation: auto; }
-::view-transition-old(cover-title), ::view-transition-old(cover-title-plain),
-::view-transition-new(cover-title), ::view-transition-new(cover-title-plain) { mix-blend-mode: normal; }
+:root:active-view-transition-type(to-project)::view-transition-image-pair(cover-image),
+:root:active-view-transition-type(to-project)::view-transition-image-pair(cover-panel),
+:root:active-view-transition-type(to-project)::view-transition-image-pair(cover-title) {
+  animation: vt-out var(--f) var(--c) var(--ease) both; animation-play-state: paused;
+}
+/* the snapshots inherit timing from their pair by default; the cross-fade must run with the zoom, unpaused */
+:root:active-view-transition-type(to-project)::view-transition-old(cover-image), :root:active-view-transition-type(to-project)::view-transition-new(cover-image),
+:root:active-view-transition-type(to-project)::view-transition-old(cover-panel), :root:active-view-transition-type(to-project)::view-transition-new(cover-panel),
+:root:active-view-transition-type(to-project)::view-transition-old(cover-title), :root:active-view-transition-type(to-project)::view-transition-new(cover-title),
+:root:active-view-transition-type(to-project)::view-transition-old(cover-strike), :root:active-view-transition-type(to-project)::view-transition-new(cover-strike) {
+  animation-delay: 0s; animation-play-state: running;
+}
+html.vt-loaded:active-view-transition-type(to-project)::view-transition-image-pair(cover-strike),
+html.vt-loaded:active-view-transition-type(to-project)::view-transition-image-pair(cover-image),
+html.vt-loaded:active-view-transition-type(to-project)::view-transition-image-pair(cover-panel),
+html.vt-loaded:active-view-transition-type(to-project)::view-transition-image-pair(cover-title) { animation-play-state: running; }
 
-/* ---- going in: gallery -> project (calc(760ms * var(--vt-t))) ---- */
-:root:active-view-transition-type(to-project)::view-transition-old(root) { animation: vt-hold calc(320ms * var(--vt-t)) steps(1, end) both; }
-:root:active-view-transition-type(to-project)::view-transition-new(root) { animation: vt-show calc(320ms * var(--vt-t)) steps(1, end) both; }
-:root:active-view-transition-type(to-project)::view-transition-group(cover-image) { animation-name: vt-zoom-image; animation-duration: calc(320ms * var(--vt-t)); }
-:root:active-view-transition-type(to-project)::view-transition-group(cover-panel) { animation-name: vt-zoom-panel; animation-duration: calc(320ms * var(--vt-t)); }
-:root:active-view-transition-type(to-project)::view-transition-group(cover-title) { animation-name: vt-zoom-title; animation-duration: calc(320ms * var(--vt-t)); }
-:root:active-view-transition-type(to-project)::view-transition-group(cover-title-plain) { animation-name: vt-zoom-plain; animation-duration: calc(320ms * var(--vt-t)); }
-:root:active-view-transition-type(to-project)::view-transition-old(cover-image) { animation: vt-corners calc(320ms * var(--vt-t)) both, vt-out calc(100ms * var(--vt-t)) calc(320ms * var(--vt-t)) ease both; }
-:root:active-view-transition-type(to-project)::view-transition-old(cover-panel) { animation: vt-corners calc(320ms * var(--vt-t)) both, vt-solid calc(100ms * var(--vt-t)) calc(320ms * var(--vt-t)) both, vt-solid-out calc(100ms * var(--vt-t)) calc(660ms * var(--vt-t)) ease both; }
-:root:active-view-transition-type(to-project)::view-transition-old(cover-title) { animation: vt-out calc(100ms * var(--vt-t)) calc(420ms * var(--vt-t)) ease both; }
-:root:active-view-transition-type(to-project)::view-transition-old(cover-title-plain) { animation: vt-in calc(100ms * var(--vt-t)) calc(420ms * var(--vt-t)) ease both, vt-collapse calc(140ms * var(--vt-t)) calc(520ms * var(--vt-t)) ease-in both; }
+/* ---- coming back: project -> gallery, the exact reverse.
+   image, panel and title fade in 0-450 | strike draws in 450-700 | zoom out into the thumbnail 700-1250 ---- */
+:root:active-view-transition-type(to-home)::view-transition-old(root) { animation: vt-hold calc(var(--f) + var(--c)) steps(1, end) both; }
+:root:active-view-transition-type(to-home)::view-transition-new(root) { animation: vt-show calc(var(--f) + var(--c)) steps(1, end) both; }
+:root:active-view-transition-type(to-home)::view-transition-group(cover-image),
+:root:active-view-transition-type(to-home)::view-transition-group(cover-panel),
+:root:active-view-transition-type(to-home)::view-transition-group(cover-title),
+:root:active-view-transition-type(to-home)::view-transition-group(cover-strike),
+:root:active-view-transition-type(to-home)::view-transition-old(cover-image), :root:active-view-transition-type(to-home)::view-transition-new(cover-image),
+:root:active-view-transition-type(to-home)::view-transition-old(cover-panel), :root:active-view-transition-type(to-home)::view-transition-new(cover-panel),
+:root:active-view-transition-type(to-home)::view-transition-old(cover-title), :root:active-view-transition-type(to-home)::view-transition-new(cover-title),
+:root:active-view-transition-type(to-home)::view-transition-old(cover-strike), :root:active-view-transition-type(to-home)::view-transition-new(cover-strike) {
+  animation-delay: calc(var(--f) + var(--c));
+}
+:root:active-view-transition-type(to-home)::view-transition-image-pair(cover-image),
+:root:active-view-transition-type(to-home)::view-transition-image-pair(cover-panel),
+:root:active-view-transition-type(to-home)::view-transition-image-pair(cover-title) { animation: vt-in var(--f) var(--ease) both; }
+:root:active-view-transition-type(to-home)::view-transition-image-pair(cover-strike) { animation: vt-erase var(--c) var(--f) var(--ease) reverse both; }
 
-/* ---- coming back: project -> gallery (calc(760ms * var(--vt-t)), the same in reverse) ---- */
-:root:active-view-transition-type(to-home)::view-transition-old(root) { animation: vt-hold calc(440ms * var(--vt-t)) steps(1, end) both; }
-:root:active-view-transition-type(to-home)::view-transition-new(root) { animation: vt-show calc(440ms * var(--vt-t)) steps(1, end) both; }
-:root:active-view-transition-type(to-home)::view-transition-group(cover-image) { animation-name: vt-zoom-image; animation-duration: calc(320ms * var(--vt-t)); animation-delay: calc(440ms * var(--vt-t)); animation-direction: reverse; }
-:root:active-view-transition-type(to-home)::view-transition-group(cover-panel) { animation-name: vt-zoom-panel; animation-duration: calc(320ms * var(--vt-t)); animation-delay: calc(440ms * var(--vt-t)); animation-direction: reverse; }
-:root:active-view-transition-type(to-home)::view-transition-group(cover-title) { animation-name: vt-zoom-title; animation-duration: calc(320ms * var(--vt-t)); animation-delay: calc(440ms * var(--vt-t)); animation-direction: reverse; }
-:root:active-view-transition-type(to-home)::view-transition-group(cover-title-plain) { animation-name: vt-zoom-plain; animation-duration: calc(320ms * var(--vt-t)); animation-delay: calc(440ms * var(--vt-t)); animation-direction: reverse; }
-:root:active-view-transition-type(to-home)::view-transition-new(cover-panel) { animation: vt-in calc(100ms * var(--vt-t)) ease both, vt-solid calc(100ms * var(--vt-t)) calc(340ms * var(--vt-t)) reverse both, vt-corners calc(320ms * var(--vt-t)) calc(440ms * var(--vt-t)) reverse both; }
-:root:active-view-transition-type(to-home)::view-transition-new(cover-title-plain) { animation: vt-collapse calc(140ms * var(--vt-t)) calc(100ms * var(--vt-t)) ease-out reverse both, vt-out calc(100ms * var(--vt-t)) calc(240ms * var(--vt-t)) ease both; }
-:root:active-view-transition-type(to-home)::view-transition-new(cover-title) { animation: vt-in calc(100ms * var(--vt-t)) calc(240ms * var(--vt-t)) ease both; }
-:root:active-view-transition-type(to-home)::view-transition-new(cover-image) { animation: vt-in calc(100ms * var(--vt-t)) calc(340ms * var(--vt-t)) ease both, vt-corners calc(320ms * var(--vt-t)) calc(440ms * var(--vt-t)) reverse both; }
-
-@keyframes vt-zoom-image { to { transform: var(--vt-image); } }
-@keyframes vt-zoom-panel { to { transform: var(--vt-panel); } }
-@keyframes vt-zoom-title { to { transform: var(--vt-title); } }
-@keyframes vt-zoom-plain { to { transform: var(--vt-plain); } }
 @keyframes vt-hold { to { opacity: 0; } }
 @keyframes vt-show { from { opacity: 0; } to { opacity: 1; } }
 @keyframes vt-out { to { opacity: 0; } }
 @keyframes vt-in { from { opacity: 0; } to { opacity: 1; } }
-@keyframes vt-solid { from { opacity: 0.9; } to { opacity: 1; } }
-@keyframes vt-solid-out { from { opacity: 1; } to { opacity: 0; } }
-@keyframes vt-corners { from { border-radius: 20px; } to { border-radius: 0; } }
-@keyframes vt-collapse { from { clip-path: inset(0 0 0 0); opacity: 1; } to { clip-path: inset(0 100% 0 0); opacity: 0; } }
+@keyframes vt-erase { from { clip-path: inset(0 0 0 0); } to { clip-path: inset(0 0 0 100%); } }
 
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation-duration: calc(1ms * var(--vt-t)) !important; animation-delay: calc(0ms * var(--vt-t)) !important; }

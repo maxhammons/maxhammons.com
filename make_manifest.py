@@ -2,6 +2,7 @@
 """Emit content/manifest/<slug>.json for every page: the page's text (verbatim
 HTML snippets, so copy edits can be exact find/replace) and its images in
 document order with a small local file agents can look at."""
+
 import html
 import json
 import os
@@ -31,8 +32,13 @@ def main():
             continue
         slug = fn[:-5]
         s = open(os.path.join(RAW_SITE, fn), encoding="utf-8").read()
-        body = s[s.find("<main"):]
-        m = {"slug": slug, "url": f"https://maxhammons.com/{slug if slug != 'index' else ''}", "texts": [], "images": []}
+        body = s[s.find("<main") :]
+        m = {
+            "slug": slug,
+            "url": f"https://maxhammons.com/{slug if slug != 'index' else ''}",
+            "texts": [],
+            "images": [],
+        }
         t = re.search(r"<title>(.*?)</title>", s, re.S)
         m["page_title_tag"] = html.unescape(t.group(1).strip()) if t else ""
         d = re.search(r'<meta name="description" content="([^"]*)"', s)
@@ -41,7 +47,10 @@ def main():
         for kind, pat in [
             ("title", r'<h1 class="title[^"]*">(.*?)</h1>'),
             ("description", r'<p class="description">(.*?)</p>'),
-            ("masthead", r'<(?:h1|p)[^>]*class="[^"]*main-text[^"]*"[^>]*>(.*?)</(?:h1|p)>'),
+            (
+                "masthead",
+                r'<(?:h1|p)[^>]*class="[^"]*main-text[^"]*"[^>]*>(.*?)</(?:h1|p)>',
+            ),
             ("masthead_button", r'class="masthead-button[^"]*">(.*?)</a>'),
             ("text_module", r'<div class="rich-text[^"]*">(.*?)</div>\s*</div>'),
             ("cover_title", r'<div class="title preserve-whitespace">(.*?)</div>'),
@@ -51,7 +60,9 @@ def main():
             for mm in re.finditer(pat, body, re.S):
                 raw = mm.group(1)
                 if strip_tags(raw):
-                    m["texts"].append({"kind": kind, "html": raw, "plain": " ".join(strip_tags(raw))})
+                    m["texts"].append(
+                        {"kind": kind, "html": raw, "plain": " ".join(strip_tags(raw))}
+                    )
         # images in order, deduped by id, with nearest preceding text for context
         seen = set()
         for mm in re.finditer(r"<img[^>]*>", body, re.S):
@@ -63,13 +74,21 @@ def main():
             seen.add(uid)
             before = body[: mm.start()]
             ctx = re.findall(r'<div class="rich-text[^"]*">(.*?)</div>', before, re.S)
-            cover = re.search(r'<a class="project-cover[^>]*href="([^"]+)"[^>]*>(?:(?!</a>).)*$', before, re.S)
-            m["images"].append({
-                "id": uid,
-                "file": small_variant(uid),
-                "preceding_text": " ".join(strip_tags(ctx[-1]))[:300] if ctx else "",
-                "cover_link": cover.group(1) if cover else None,
-            })
+            cover = re.search(
+                r'<a class="project-cover[^>]*href="([^"]+)"[^>]*>(?:(?!</a>).)*$',
+                before,
+                re.S,
+            )
+            m["images"].append(
+                {
+                    "id": uid,
+                    "file": small_variant(uid),
+                    "preceding_text": " ".join(strip_tags(ctx[-1]))[:300]
+                    if ctx
+                    else "",
+                    "cover_link": cover.group(1) if cover else None,
+                }
+            )
         with open(os.path.join(OUT, slug + ".json"), "w", encoding="utf-8") as f:
             json.dump(m, f, indent=1, ensure_ascii=False)
         print(f"{slug:36} texts={len(m['texts']):3} images={len(m['images']):3}")

@@ -14,7 +14,7 @@ can be hosted anywhere (target: GitHub Pages with the existing custom domain).
 | `content/pages/` | Per-page JSON from the review pass: alt text for every image, copy fixes as find/replace, open questions. | Yes, hand-edit alt text or add copy fixes here. |
 | `content/copy-changelog.md` | Every copy edit the build applied, with the reason. | Generated. |
 | `content/voice/` | Max's resume text, used as the voice reference during the copy review. | Reference only. |
-| `optimize.py` | Image conversion used by the build: every raster becomes WebP, animated GIFs become animated WebP. Cached in `raw/derived.nosync/`. | Only to change quality settings. |
+| `optimize.py` | Image conversion used by the build: every raster becomes WebP, animated GIFs become animated WebP. Cached in `raw/derived/`. | Only to change quality settings. |
 | `build.py` | Builds `site/` from all of the above. | Yes. |
 | `site/` | The finished site. Disposable; rebuilt by `build.py`. | Never by hand. |
 

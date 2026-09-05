@@ -31,7 +31,7 @@ ASSETS = os.path.join(OUT, "assets")
 FONTS_SRC = os.path.join(ROOT, "fonts")
 THEME = os.path.join(ROOT, "theme")
 PAGES_JSON = os.path.join(ROOT, "content", "pages")
-DERIVED = os.path.join(RAW, "derived.nosync")  # WebP / video conversion cache (git-ignored; .nosync keeps iCloud away)
+DERIVED = os.path.join(RAW, "derived")  # WebP conversion cache (git-ignored)
 FONT_PRELOAD = (
     '<link rel="preload" href="/fonts/vcsm-n4.woff2" as="font" type="font/woff2" crossorigin />\n'
     '    <link rel="preload" href="/fonts/vcsm-n7.woff2" as="font" type="font/woff2" crossorigin />'

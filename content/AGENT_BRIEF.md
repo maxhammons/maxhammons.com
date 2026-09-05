@@ -4,10 +4,10 @@ You are auditing pages of Max Hammons' design portfolio (maxhammons.com) for two
 
 For each page slug you were given:
 
-PAGE MANIFEST (read it first): /Users/maxhammons/Documents/Professional/Marketing/Website/content/manifest/<slug>.json
+PAGE MANIFEST (read it first): /Users/maxhammons/Developer/maxhammons.com/content/manifest/<slug>.json
 VOICE REFERENCE (read both once; they are Max's resumes and show his voice, facts, and how he names things):
-- /Users/maxhammons/Documents/Professional/Marketing/Website/content/voice/resume-designer.txt
-- /Users/maxhammons/Documents/Professional/Marketing/Website/content/voice/resume-art-director.txt
+- /Users/maxhammons/Developer/maxhammons.com/content/voice/resume-designer.txt
+- /Users/maxhammons/Developer/maxhammons.com/content/voice/resume-art-director.txt
 
 The manifest has:
 - "texts": every text block on the page in order. "html" is the verbatim inner HTML; "plain" is the same with tags stripped. "kind" says what it is (title, description, text_module, cover_title, footer, masthead, masthead_button, button).
@@ -23,7 +23,7 @@ TASK 2, copy cleanup. Read every text block. Fix only obvious errors: typos, mis
 - Each edit is an exact find/replace on the "html" string of one text block. "find" must be a verbatim substring copied from that block's "html" value (a short phrase is fine, not the whole block). "replace" is the corrected substring. Keep any HTML tags inside the substring unchanged.
 - Give a one-line "reason" per edit.
 
-OUTPUT. Write exactly this JSON to /Users/maxhammons/Documents/Professional/Marketing/Website/content/pages/<slug>.json with the Write tool:
+OUTPUT. Write exactly this JSON to /Users/maxhammons/Developer/maxhammons.com/content/pages/<slug>.json with the Write tool:
 {
   "slug": "<slug>",
   "alt": { "<image id from manifest>": "<alt text>", ... },

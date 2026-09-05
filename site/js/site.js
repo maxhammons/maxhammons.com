@@ -282,16 +282,6 @@
     document.body.classList.remove("transition-out");
   });
 
-  /* ---- videos that replaced animated GIFs: nudge autoplay in case the browser held it back ---- */
-  function playVideos() {
-    Array.prototype.forEach.call(document.querySelectorAll("video[autoplay]"), function (v) {
-      var p = v.play();
-      if (p && p.catch) p.catch(function () { /* autoplay blocked (low-power mode): the poster stays */ });
-    });
-  }
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", playVideos);
-  else playVideos();
-
   /* ---- prefetch on intent: the page HTML and its first image ---- */
   var warmed = {};
   function warm(a) {

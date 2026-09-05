@@ -270,14 +270,6 @@ nav .gallery-title a.active:hover, nav .page-title a.active:hover { color: var(-
   .close-responsive-click-area { z-index: 2; }
 }
 
-/* ---------- animated GIFs became muted looping videos (build.py) ---------- */
-.module-video { display: block; width: 100%; height: auto; }
-.masthead { background-image: none; }
-.masthead-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
-.masthead-contents { position: relative; z-index: 1; }
-html.has-page-video { background-image: none; }
-.page-video { position: fixed; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; }
-
 /* =====================================================================
    Page transitions (cross-document View Transitions; site.js sets the
    names, the types, and builds the full-screen twins on the project page)

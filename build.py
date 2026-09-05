@@ -219,31 +219,6 @@ def cover_markup(m, html, dropped, remap):
     return head + cover + mid + title + tail
 
 
-def video_tag(v, cls):
-    return (
-        f'<video class="{cls}" autoplay muted loop playsinline preload="auto" '
-        f'poster="/assets/{v["poster"]}" width="{v["w"]}" height="{v["h"]}">'
-        f'<source src="/assets/{v["mp4"]}" type=\'video/mp4; codecs="avc1.640028"\' />'
-        f'<source src="/assets/{v["webm"]}" type=\'video/webm; codecs="vp9"\' /></video>'
-    )
-
-
-def swap_videos(s, videos, layout):
-    """Animated GIFs become muted looping videos: inline image modules on project pages,
-    the masthead background on the home page, the full-page background on the reel page."""
-    for name, v in videos.items():
-        module = re.compile(
-            r'<div class="js-lightbox" data-src="/assets/' + re.escape(name) + r'">\s*<img\b[^>]*>\s*</div>', re.S
-        )
-        s = module.sub(video_tag(v, "module-video"), s)
-        if layout == "home" and v["masthead"]:
-            s = re.sub(r'(<div class="masthead js-masthead-fixed"[^>]*>)', lambda m: m.group(1) + video_tag(v, "masthead-video"), s, count=1)
-        if layout == "reel" and v["page"]:
-            s = re.sub(r"(<body[^>]*>)", lambda m: m.group(1) + video_tag(v, "page-video"), s, count=1)
-            s = s.replace('<html class="', '<html class="has-page-video ', 1)
-    return s
-
-
 def add_alt(s, alt, report):
     def fix(m):
         tag = m.group(0)
@@ -334,18 +309,13 @@ def main():
         print("FAILED", u, e)
     sources = {name: raw_cdn_path(u) for name, u in by_name.items()}
 
-    # 2b. WebP for every image, video for every animated GIF, converted from the mirror into the
-    # cache; anything that is not an image (css is handled separately) is copied as is
-    renames, videos = optimise(sources, DERIVED)
+    # 2b. WebP for every image (animated GIFs become animated WebP), converted from the mirror
+    # into the cache; anything that is not an image (css is handled separately) is copied as is
+    renames = optimise(sources, DERIVED)
     for name, src in sources.items():
         dest = os.path.join(ASSETS, name)
-        if src and name not in renames and name not in videos and not os.path.exists(dest):
+        if src and name not in renames and not os.path.exists(dest):
             shutil.copyfile(src, dest)
-    for name, v in videos.items():
-        v["masthead"] = name in css_src["home"]
-        v["page"] = name in css_src["reel"]
-        for key in ("mp4", "webm", "poster"):
-            place(os.path.join(DERIVED, v[key]), os.path.join(ASSETS, v[key]))
     for new_name in renames.values():
         place(os.path.join(DERIVED, new_name), os.path.join(ASSETS, new_name))
 
@@ -364,10 +334,7 @@ def main():
         with open(
             os.path.join(OUT, "css", f"adobe-{name}.css"), "w", encoding="utf-8"
         ) as f:
-            text = swap_images(apply_trim(localise(text), dropped, remap))
-            for name in videos:
-                text = re.sub(r'background-image: url\("/assets/' + re.escape(name) + r'"\);', "background-image: none;", text)
-            f.write(text)
+            f.write(swap_images(apply_trim(localise(text), dropped, remap)))
     shutil.copyfile(
         os.path.join(THEME, "site.css"), os.path.join(OUT, "css", "site.css")
     )
@@ -469,7 +436,7 @@ def main():
             FONT_PRELOAD + '\n    <link rel="stylesheet" href="/dist/css/main.css" type="text/css" />',
             1,
         )
-        s = swap_videos(swap_images(s), videos, layout)
+        s = swap_images(s)
         s = re.sub(r"<img\b(?![^>]*\bdecoding=)", '<img decoding="async"', s)
         s = add_alt(s, alt, report)
         targets = (
@@ -518,7 +485,7 @@ def main():
     print(
         f"images: {len(dropped)} variants over {MAX_IMAGE_WIDTH}px or originals dropped, {len(by_name)} kept; site/ is {total / 1e6:.0f} MB"
     )
-    print(f"optimised: {len(renames)} images to WebP, {len(videos)} animated GIFs to video, {pruned} unreferenced files pruned")
+    print(f"optimised: {len(renames)} images to WebP (animated GIFs included), {pruned} unreferenced files pruned")
     print(
         f"alt text: {report['added']} added, {report['missing']} images with no text yet"
     )

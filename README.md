@@ -14,7 +14,7 @@ can be hosted anywhere (target: GitHub Pages with the existing custom domain).
 | `content/pages/` | Per-page JSON from the review pass: alt text for every image, copy fixes as find/replace, open questions. | Yes, hand-edit alt text or add copy fixes here. |
 | `content/copy-changelog.md` | Every copy edit the build applied, with the reason. | Generated. |
 | `content/voice/` | Max's resume text, used as the voice reference during the copy review. | Reference only. |
-| `optimize.py` | Image and video conversion used by the build: every raster becomes WebP, every animated GIF a muted looping MP4 + WebM pair. Cached in `raw/derived/`. | Only to change quality settings. |
+| `optimize.py` | Image conversion used by the build: every raster becomes WebP, animated GIFs become animated WebP. Cached in `raw/derived.nosync/`. | Only to change quality settings. |
 | `build.py` | Builds `site/` from all of the above. | Yes. |
 | `site/` | The finished site. Disposable; rebuilt by `build.py`. | Never by hand. |
 
@@ -34,7 +34,7 @@ open http://localhost:8765/
 4. Removes the back-to-top links.
 5. Marks intros longer than 360 characters with `is-long`, which the CSS lays out as two columns above the first image.
 6. Applies alt text and copy edits from `content/pages/*.json`.
-6b. Converts images to WebP and animated GIFs to video, preloads the two main fonts, marks images `decoding="async"`, and prunes unreferenced assets. First run takes about a minute per 1,000 images; later runs use the cache.
+6b. Converts images to WebP (animated GIFs to animated WebP), preloads the two main fonts, marks images `decoding="async"`, and prunes unreferenced assets. First run takes about a minute per 1,000 images; later runs use the cache.
 7. Writes every page as `slug/index.html`, plus `CNAME`, `.nojekyll`, and a `404.html`.
 
 ## Linting

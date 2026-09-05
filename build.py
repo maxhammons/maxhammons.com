@@ -10,6 +10,7 @@ Re-run after any change: `python3 build.py`. site/ is disposable output.
 """
 
 import concurrent.futures as cf
+import hashlib
 import html as htmlmod
 import json
 import os
@@ -363,7 +364,16 @@ def main():
         shutil.rmtree(os.path.join(OUT, "fonts"))
     shutil.copytree(FONTS_SRC, os.path.join(OUT, "fonts"))
 
-    # 4. pages
+    # 4. pages (stylesheets and scripts get a content hash in their URL, so a deploy never
+    # pairs new HTML with a stylesheet the browser cached from the previous build)
+    def stamp(path):
+        with open(os.path.join(OUT, path.lstrip("/")), "rb") as f:
+            return f"{path}?v={hashlib.md5(f.read()).hexdigest()[:8]}"
+
+    stamped = {path: stamp(path) for path in (
+        "/dist/css/main.css", "/css/site.css", "/js/site.js", "/dist/js/main.js", "/site/translations.js",
+        *(f"/css/adobe-{name}.css" for name in ADOBE_CSS),
+    )}
     for d in os.listdir(OUT):
         if os.path.isdir(os.path.join(OUT, d)) and d not in (
             "assets",
@@ -439,6 +449,8 @@ def main():
         s = swap_images(s)
         s = re.sub(r"<img\b(?![^>]*\bdecoding=)", '<img decoding="async"', s)
         s = add_alt(s, alt, report)
+        for path, versioned in stamped.items():
+            s = s.replace(f'"{path}"', f'"{versioned}"')
         targets = (
             [
                 os.path.join(OUT, "index.html"),

@@ -289,6 +289,8 @@ html.vt .transition-in, html.vt .transition-out, html.vt-ready .transition-out {
 
 /* full-screen twins of a thumbnail's parts, built by site.js on the project page for the capture only */
 .vt-overlay { position: fixed; inset: 0; z-index: 2147483000; pointer-events: none; display: flex; align-items: center; justify-content: center; }
+/* the twins exist only for the capture; the instant the transition ends they must not paint (site.js removes them a frame later) */
+html:not(:active-view-transition) .vt-overlay { display: none; }
 .vt-overlay .vt-image { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .vt-overlay .vt-panel { position: absolute; inset: 0; background: var(--paper); opacity: 0.9; }
 .vt-overlay .vt-title { position: relative; font-family: var(--font-sans); font-weight: 700; color: var(--accent); text-align: center; white-space: nowrap; }

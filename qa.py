@@ -170,12 +170,12 @@ with sync_playwright() as p:
     )
 
     # ---- cover zoom transition (cross-document view transitions) + prefetch
+    reqs = []
+    pg.on("request", lambda r: reqs.append(r.url))
     pg.goto(BASE + "/")
     pg.wait_for_timeout(1200)
     pg.evaluate("window.scrollTo(0,1500)")
     pg.wait_for_timeout(300)
-    reqs = []
-    pg.on("request", lambda r: reqs.append(r.url))
     pg.hover("a.project-cover[href='/ambition-angels/']")
     pg.wait_for_timeout(700)
     check(

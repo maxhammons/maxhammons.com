@@ -49,7 +49,7 @@ source formatting.
 `theme/site.js` + the last section of `theme/site.css`. Clicking a gallery thumbnail zooms it
 edge to edge (image, white panel, red title and strike line grow together), holds until the
 project page underneath has loaded, then the strike erases like a progress bar and everything
-fades off together (1.25s, `--vt-t` scales it). Logo, Home, back button or swipe play the exact
+fades off together (0.75s, `--vt-t` scales it). Logo, Home, back button or swipe play the exact
 reverse into the thumbnail, scrolled into view first.
 Built on cross-document View Transitions with full-size twins of the thumbnail parts on the
 project page, so the browser interpolates the geometry itself and the title is crisp text

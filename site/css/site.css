@@ -37,7 +37,7 @@
   --gutter: 8px;         /* every image grid */
   --speed: 100ms;        /* every hover / colour change on the site */
   --fade: 250ms;         /* page fade out / in between pages (site.js + dist/css/main.css) */
-  --vt-t: 1;             /* time multiplier for the cover zoom choreography (1 = 1.25s each way) */
+  --vt-t: 1;             /* time multiplier for the cover zoom choreography (1 = 0.75s each way) */
 
   --strike: 0.08em;      /* link strikethrough thickness, relative to font size */
   --nav-h: 96px;
@@ -51,10 +51,10 @@
   --fs-small: 14px;   --lh-small: 20px;
   --fs-logo: 24px;    --lh-logo: 36px;
 
-  /* cover zoom choreography (site.js + the page-transition rules); --vt-t scales it, 1 = 1.25s each way */
-  --z: calc(550ms * var(--vt-t));   /* zoom */
-  --c: calc(250ms * var(--vt-t));   /* strike erase / draw */
-  --f: calc(450ms * var(--vt-t));   /* fade */
+  /* cover zoom choreography (site.js + the page-transition rules); --vt-t scales it, 1 = 0.75s each way */
+  --z: calc(330ms * var(--vt-t));   /* zoom */
+  --c: calc(150ms * var(--vt-t));   /* strike erase / draw */
+  --f: calc(270ms * var(--vt-t));   /* fade */
   --ease-zoom: cubic-bezier(0.65, 0, 0.35, 1);
   --ease: cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -311,8 +311,8 @@ html.vt .transition-in, html.vt .transition-out, html.vt-ready .transition-out {
 ::view-transition-old(cover-strike), ::view-transition-new(cover-strike) { height: 100%; }
 
 /* ---- going in: gallery -> project.
-   zoom 0-550 | HOLD until the page underneath has loaded (html.vt-loaded) |
-   strike erases right-to-left 0-250 | image, panel and title fade off together 250-700  = 1.25s when ready ---- */
+   zoom 0-330 | HOLD until the page underneath has loaded (html.vt-loaded) |
+   strike erases right-to-left 0-150 | image, panel and title fade off together 150-420  = 0.75s when ready ---- */
 :root:active-view-transition-type(to-project)::view-transition-old(root) { animation: vt-hold var(--z) steps(1, end) both; }
 :root:active-view-transition-type(to-project)::view-transition-new(root) { animation: vt-show var(--z) steps(1, end) both; }
 :root:active-view-transition-type(to-project)::view-transition-image-pair(cover-strike) {
@@ -339,7 +339,7 @@ html.vt-loaded:active-view-transition-type(to-project)::view-transition-image-pa
 html.vt-loaded:active-view-transition-type(to-project)::view-transition-image-pair(cover-title) { animation-play-state: running; }
 
 /* ---- coming back: project -> gallery, the exact reverse.
-   image, panel and title fade in 0-450 | strike draws in 450-700 | zoom out into the thumbnail 700-1250 ---- */
+   image, panel and title fade in 0-270 | strike draws in 270-420 | zoom out into the thumbnail 420-750 ---- */
 :root:active-view-transition-type(to-home)::view-transition-old(root) { animation: vt-hold calc(var(--f) + var(--c)) steps(1, end) both; }
 :root:active-view-transition-type(to-home)::view-transition-new(root) { animation: vt-show calc(var(--f) + var(--c)) steps(1, end) both; }
 :root:active-view-transition-type(to-home)::view-transition-group(cover-image),

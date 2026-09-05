@@ -203,7 +203,7 @@
     function revealProject(vt, zoom) {
       buildOverlay(zoom);
       vt.finished.then(removeOverlay);
-      releaseWhenLoaded(550 * timeScale(), 550 * timeScale() + 3000);
+      releaseWhenLoaded(330 * timeScale(), 330 * timeScale() + 3000);
     }
     /* back on a gallery: the thumbnail we came from is the new side of the zoom-out */
     function coverWeCameFrom() {

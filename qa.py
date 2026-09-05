@@ -211,8 +211,8 @@ with sync_playwright() as p:
         str(vt),
     )
     check(
-        "zoom transition lasts about 1.25s once the page is loaded",
-        bool(vt) and vt.get("finished") and 1150 <= vt["finished"] - vt["t0"] <= 1700,
+        "zoom transition lasts about 0.75s once the page is loaded",
+        bool(vt) and vt.get("finished") and 650 <= vt["finished"] - vt["t0"] <= 1200,
         str(vt and vt.get("finished") and round(vt["finished"] - vt["t0"])) + "ms",
     )
     check(
@@ -237,8 +237,8 @@ with sync_playwright() as p:
         str(vt),
     )
     check(
-        "zoom-back lasts about 1.25s",
-        bool(vt) and vt.get("finished") and 1150 <= vt["finished"] - vt["t0"] <= 1600,
+        "zoom-back lasts about 0.75s",
+        bool(vt) and vt.get("finished") and 650 <= vt["finished"] - vt["t0"] <= 1100,
         str(vt and vt.get("finished") and round(vt["finished"] - vt["t0"])) + "ms",
     )
     check(

@@ -10,7 +10,10 @@ import concurrent.futures as cf
 import os
 import subprocess
 
-from PIL import Image, ImageOps
+from PIL import Image, ImageFile, ImageOps
+
+# a few CDN JPEGs end a couple of bytes short of what Pillow expects; they decode fine
+ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 WEBP_QUALITY = 82
 WEBP_METHOD = 4
@@ -26,7 +29,7 @@ def is_animated(path):
 
 
 def to_webp(src, dst):
-    if os.path.exists(dst) and os.path.getmtime(dst) >= os.path.getmtime(src):
+    if os.path.exists(dst) and os.path.getsize(dst) > 0:  # originals never change; the cache is by name
         return dst
     with Image.open(src) as im:
         im = ImageOps.exif_transpose(im)
@@ -52,7 +55,8 @@ def to_video(src, base):
     even = "scale=trunc(iw/2)*2:trunc(ih/2)*2"
     if not os.path.exists(mp4):
         subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", src, "-vf", even, "-movflags", "+faststart",
-                        "-pix_fmt", "yuv420p", "-c:v", "libx264", "-crf", "30", "-preset", "medium", "-an", mp4], check=True)
+                        "-pix_fmt", "yuv420p", "-c:v", "libx264", "-profile:v", "high", "-level", "4.0",
+                        "-crf", "30", "-preset", "medium", "-an", mp4], check=True)
     if not os.path.exists(webm):
         subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", src, "-vf", even, "-pix_fmt", "yuv420p", "-c:v", "libvpx-vp9", "-b:v", "0",
                         "-crf", "36", "-deadline", "good", "-cpu-used", "2", "-row-mt", "1", "-an", webm], check=True)
@@ -62,17 +66,16 @@ def to_video(src, base):
     return mp4, webm, w, h
 
 
-def optimise(assets_dir, cache_dir, names):
-    """names: iterable of asset basenames in assets_dir.
+def optimise(sources, cache_dir):
+    """sources: {asset basename: path of the original (or None if unavailable)}.
     Returns (renames, videos): renames maps an image basename to its .webp basename;
     videos maps an animated gif basename to {mp4, webm, poster, w, h} basenames."""
     os.makedirs(cache_dir, exist_ok=True)
     renames, videos, jobs = {}, {}, []
-    for name in names:
+    for name, src in sources.items():
         stem, ext = os.path.splitext(name)
-        if ext.lower() not in RASTER:
+        if ext.lower() not in RASTER or not src:
             continue
-        src = os.path.join(assets_dir, name)
         if ext.lower() == ".gif" and is_animated(src):
             mp4, webm, w, h = to_video(src, os.path.join(cache_dir, stem))
             post = poster(src, os.path.join(cache_dir, stem + ".webp"))

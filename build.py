@@ -30,7 +30,7 @@ ASSETS = os.path.join(OUT, "assets")
 FONTS_SRC = os.path.join(ROOT, "fonts")
 THEME = os.path.join(ROOT, "theme")
 PAGES_JSON = os.path.join(ROOT, "content", "pages")
-DERIVED = os.path.join(RAW, "derived")  # WebP / video conversion cache (git-ignored)
+DERIVED = os.path.join(RAW, "derived.nosync")  # WebP / video conversion cache (git-ignored; .nosync keeps iCloud away)
 FONT_PRELOAD = (
     '<link rel="preload" href="/fonts/vcsm-n4.woff2" as="font" type="font/woff2" crossorigin />\n'
     '    <link rel="preload" href="/fonts/vcsm-n7.woff2" as="font" type="font/woff2" crossorigin />'
@@ -108,12 +108,32 @@ def raw_cdn_path(url):
     return None
 
 
+def place(src, dest):
+    """Copy only when the destination is missing or differs in size: an unchanged site/ means
+    nothing for iCloud or git to churn on."""
+    if not os.path.exists(dest) or os.path.getsize(dest) != os.path.getsize(src):
+        shutil.copyfile(src, dest)
+
+
+def mirror_path(url):
+    """Where a CDN original is kept in raw/ when the wget mirror did not have it."""
+    rel = urllib.parse.urlsplit(url).path.lstrip("/")
+    path = os.path.join(RAW_CDN, rel)
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    return path
+
+
 def fetch(url, dest):
     req = urllib.request.Request(
         url, headers={"User-Agent": UA, "Referer": "https://maxhammons.com/"}
     )
     with urllib.request.urlopen(req, timeout=60) as r, open(dest + ".part", "wb") as f:
+        expected = int(r.headers.get("Content-Length") or 0)
         shutil.copyfileobj(r, f)
+    got = os.path.getsize(dest + ".part")
+    if expected and got != expected:  # a reset connection must not leave a truncated original
+        os.remove(dest + ".part")
+        raise OSError(f"truncated download: {got} of {expected} bytes")
     os.replace(dest + ".part", dest)
 
 
@@ -203,8 +223,8 @@ def video_tag(v, cls):
     return (
         f'<video class="{cls}" autoplay muted loop playsinline preload="auto" '
         f'poster="/assets/{v["poster"]}" width="{v["w"]}" height="{v["h"]}">'
-        f'<source src="/assets/{v["webm"]}" type="video/webm" />'
-        f'<source src="/assets/{v["mp4"]}" type="video/mp4" /></video>'
+        f'<source src="/assets/{v["mp4"]}" type=\'video/mp4; codecs="avc1.640028"\' />'
+        f'<source src="/assets/{v["webm"]}" type=\'video/webm; codecs="vp9"\' /></video>'
     )
 
 
@@ -297,19 +317,12 @@ def main():
     for f in os.listdir(ASSETS):
         if f not in by_name:
             os.remove(os.path.join(ASSETS, f))
-    todo = []
-    for name, u in by_name.items():
-        dest = os.path.join(ASSETS, name)
-        if os.path.exists(dest):
-            continue
-        src = raw_cdn_path(u)
-        if src:
-            shutil.copyfile(src, dest)
-        else:
-            todo.append((u, dest))
+    # every original lives in the raw/ mirror first (Adobe's CDN will not be there forever),
+    # then is copied into site/assets
+    todo = [(u, mirror_path(u)) for u in by_name.values() if raw_cdn_path(u) is None]
     failed = []
     if todo:
-        print(f"downloading {len(todo)} assets")
+        print(f"downloading {len(todo)} originals into raw/")
         with cf.ThreadPoolExecutor(8) as ex:
             futs = {ex.submit(fetch, u, d): u for u, d in todo}
             for f in cf.as_completed(futs):
@@ -319,16 +332,22 @@ def main():
                     failed.append((futs[f], str(e)))
     for u, e in failed:
         print("FAILED", u, e)
+    sources = {name: raw_cdn_path(u) for name, u in by_name.items()}
 
-    # 2b. WebP for every image, video for every animated GIF (cached in raw/derived)
-    renames, videos = optimise(ASSETS, DERIVED, list(by_name))
+    # 2b. WebP for every image, video for every animated GIF, converted from the mirror into the
+    # cache; anything that is not an image (css is handled separately) is copied as is
+    renames, videos = optimise(sources, DERIVED)
+    for name, src in sources.items():
+        dest = os.path.join(ASSETS, name)
+        if src and name not in renames and name not in videos and not os.path.exists(dest):
+            shutil.copyfile(src, dest)
     for name, v in videos.items():
         v["masthead"] = name in css_src["home"]
         v["page"] = name in css_src["reel"]
         for key in ("mp4", "webm", "poster"):
-            shutil.copyfile(os.path.join(DERIVED, v[key]), os.path.join(ASSETS, v[key]))
+            place(os.path.join(DERIVED, v[key]), os.path.join(ASSETS, v[key]))
     for new_name in renames.values():
-        shutil.copyfile(os.path.join(DERIVED, new_name), os.path.join(ASSETS, new_name))
+        place(os.path.join(DERIVED, new_name), os.path.join(ASSETS, new_name))
 
     def swap_images(text):
         return re.sub(

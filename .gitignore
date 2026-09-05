@@ -8,7 +8,7 @@ raw/cdn.myportfolio.com/*/*
 !raw/cdn.myportfolio.com/*/*.css
 
 # conversion cache (build.py rebuilds it)
-raw/derived/
+raw/derived.nosync/
 
 # build leftovers
 *.part

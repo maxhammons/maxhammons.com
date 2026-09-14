@@ -27,5 +27,6 @@
    "reason": "Sentence-case section labels site-wide (Max 2026-09-03)"
   }
  ],
+ "keep_captions": ["Browse abandonment flow", "Abandoned cart flow", "Welcome flow"],
  "questions": []
 }

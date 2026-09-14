@@ -139,11 +139,21 @@ nav .gallery-title a.active:hover, nav .page-title a.active:hover { color: var(-
 .page-header .date, .page-header .custom1, .page-header .custom2 {
   color: var(--ink-muted); font-size: var(--fs-small); line-height: var(--lh-small); font-weight: 400;
 }
-/* long intros run as two columns across the full width, above the first image */
+/* long intros run as columns across the full width, above the first image */
 .page-header.is-long { width: 100%; max-width: none; }
 .page-header.is-long .description { column-count: 2; column-gap: 48px; column-fill: balance; }
 @media (max-width: 932px) { .page-header { width: 100%; } }
 @media (max-width: 768px) { .page-header.is-long .description { column-count: 1; } }
+/* wide screens: project pages sit on the homepage's 3-column grid, images spanning all three. A homepage
+   tile is 96% of a third of .site-content, so the outer edge is 2% of a third and the gutter 4% of a third;
+   the page then holds 2.96 thirds, which makes one gutter 4/296 of its width and two columns 196/296. */
+@media (min-width: 933px) {
+  .page { margin-left: calc(2% / 3); margin-right: calc(2% / 3); width: calc(100% - 4% / 3); }
+  /* the intro section runs 2.5x its exported height (244px to 610px for a three-line intro); the extra 366px
+     keeps the export's 40:60 split of space above the title and below the text */
+  .page-header { width: calc(100% * 196 / 296); max-width: none; padding-top: 166px; padding-bottom: 280px; }
+  .page-header.is-long .description { column-count: 3; column-gap: calc(100% * 4 / 296); }
+}
 
 .standard-modules .rich-text .title, .splash-modules .rich-text .title {
   color: var(--ink); font-size: var(--fs-display); line-height: var(--lh-display); font-weight: 700; text-transform: none;
@@ -293,8 +303,11 @@ html.vt .transition-in, html.vt .transition-out, html.vt-ready .transition-out {
 
 /* full-screen twins of a thumbnail's parts, built by site.js on the project page for the capture only */
 .vt-overlay { position: fixed; inset: 0; z-index: 2147483000; pointer-events: none; display: flex; align-items: center; justify-content: center; }
-/* the twins exist only for the capture; the instant the transition ends they must not paint (site.js removes them a frame later) */
-html:not(:active-view-transition) .vt-overlay { display: none; }
+/* the twins exist only for the capture and must never reach the screen: leaving a project page, the browser
+   presents the capture frame itself (a one-frame flash of the panel before the zoom-out), and after a
+   transition they live on until site.js removes them. Snapshots ignore ancestor clips, so this empties the
+   screen without emptying the capture. */
+.vt-overlay { clip-path: inset(50%); }
 .vt-overlay .vt-image { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .vt-overlay .vt-panel { position: absolute; inset: 0; background: var(--paper); opacity: 0.9; }
 .vt-overlay .vt-title { position: relative; font-family: var(--font-sans); font-weight: 700; color: var(--accent); text-align: center; white-space: nowrap; }

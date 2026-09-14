@@ -10,6 +10,7 @@ Re-run after any change: `python3 build.py`. site/ is disposable output.
 """
 
 import concurrent.futures as cf
+import datetime
 import hashlib
 import html as htmlmod
 import json
@@ -75,6 +76,13 @@ BFCACHE_RELOAD_RE = re.compile(
     re.S,
 )
 LONG_INTRO_CHARS = 360
+# a caption is a text module holding one short line and nothing else (intro-style text modules carry more markup)
+CAPTION_RE = re.compile(
+    r'\s*<div class="project-module module text[^"]*">\s*'
+    r'<div class="rich-text js-text-editable module-text"><div>((?:(?!</?div\b).)*?)</div></div>\s*</div>',
+    re.S,
+)
+COPYRIGHT_RE = re.compile(r"Copyright Max Hammons \d{4}")
 # GitHub Pages refuses sites over 1 GB. Image variants wider than this, and the
 # full-size originals the lightbox used, are dropped and every reference is
 # pointed at the largest variant that remains (Max, 2026-09-03).
@@ -185,9 +193,9 @@ def apply_trim(s, dropped, remap):
 
 
 def load_content():
-    alt, copy = {}, {}
+    alt, copy, captions = {}, {}, {}
     if not os.path.isdir(PAGES_JSON):
-        return alt, copy
+        return alt, copy, captions
     for fn in sorted(os.listdir(PAGES_JSON)):
         if fn.endswith(".json"):
             d = json.load(open(os.path.join(PAGES_JSON, fn), encoding="utf-8"))
@@ -195,7 +203,8 @@ def load_content():
                 {k: v.strip() for k, v in d.get("alt", {}).items() if v and v.strip()}
             )
             copy[d.get("slug", fn[:-5])] = d.get("copy", [])
-    return alt, copy
+            captions[d.get("slug", fn[:-5])] = d.get("keep_captions", [])
+    return alt, copy, captions
 
 
 def first_image(page_html, dropped, remap):
@@ -254,16 +263,44 @@ def apply_copy(s, edits, slug, report):
     return s
 
 
+def caption_text(fragment):
+    return re.sub(r"\s+", " ", htmlmod.unescape(re.sub(r"<[^>]+>", "", fragment))).strip()
+
+
+def drop_captions(s, keep, slug, report):
+    """Remove the one-line labels under project images unless the page keeps them
+    (content/pages/<slug>.json "keep_captions", matched on the label as it reads after copy edits)."""
+    wanted = {caption_text(k) for k in keep}
+    found = set()
+
+    def fix(m):
+        text = caption_text(m.group(1))
+        if text in wanted:
+            found.add(text)
+            return m.group(0)
+        report["captions_dropped"] += 1
+        return ""
+
+    s = CAPTION_RE.sub(fix, s)
+    report["captions_kept"] += len(found)
+    report["captions_missing"] += [(slug, k) for k in sorted(wanted - found)]
+    return s
+
+
 def main():
     pages = sorted(f for f in os.listdir(RAW_SITE) if f.endswith(".html"))
     html = {p: open(os.path.join(RAW_SITE, p), encoding="utf-8").read() for p in pages}
-    alt, copy = load_content()
+    alt, copy, captions = load_content()
+    year = datetime.date.today().year
     report = {
         "added": 0,
         "missing": 0,
         "copy_applied": [],
         "copy_failed": [],
         "long_intros": [],
+        "captions_dropped": 0,
+        "captions_kept": 0,
+        "captions_missing": [],
     }
 
     # 1. every CDN asset referenced by html or by the kept theme css
@@ -441,6 +478,9 @@ def main():
             )
             report["long_intros"].append(slug)
         s = apply_copy(s, copy.get(slug, []), slug, report)
+        s = drop_captions(s, captions.get(slug, []), slug, report)
+        # the build stamps the year it ran; site.js keeps it current between builds
+        s = COPYRIGHT_RE.sub(f'Copyright Max Hammons <span class="js-year">{year}</span>', s)
         s = COVER_RE.sub(lambda m: cover_markup(m, html, dropped, remap), s)
         s = s.replace("</head>", "  " + SPECULATION + "\n</head>", 1)
         s = s.replace(
@@ -512,7 +552,12 @@ def main():
     for slug, find in report["copy_failed"]:
         print(f"  FAILED {slug}: {find!r}")
     print(
-        f"two-column intros: {len(report['long_intros'])} ({', '.join(report['long_intros'])})"
+        f"captions: {report['captions_dropped']} removed, {report['captions_kept']} kept, {len(report['captions_missing'])} kept labels not found"
+    )
+    for slug, label in report["captions_missing"]:
+        print(f"  NOT FOUND {slug}: {label!r}")
+    print(
+        f"column intros: {len(report['long_intros'])} ({', '.join(report['long_intros'])})"
     )
     print("remaining external cdn/typekit refs:", left)
     with open(

@@ -282,6 +282,15 @@
     document.body.classList.remove("transition-out");
   });
 
+  /* ---- footer year: the build stamps the year it ran; this keeps it current between builds ---- */
+  function stampYear() {
+    Array.prototype.forEach.call(document.querySelectorAll(".js-year"), function (el) {
+      el.textContent = new Date().getFullYear();
+    });
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", stampYear);
+  else stampYear();
+
   /* ---- idle prefetch: once a gallery has settled, fetch every project page's HTML at low
      priority, top of the page first, then the first image of the covers currently on screen.
      Skipped on data-saver or 2G connections. ---- */

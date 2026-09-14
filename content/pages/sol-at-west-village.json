@@ -1,5 +1,6 @@
 {
   "slug": "sol-at-west-village",
+  "intro": "I owned identity, marketing collateral, and signage for Sol at West Village, a student-housing development. I delivered a logo suite, palette, and typography, integrated the branding into the built environment, and provided guidelines for leasing teams. The logo pairs an orange sunburst of leaf-shaped rays with a bold, rounded Sol wordmark, in versions with and without the West Village tagline. The warm orange carries through the stationery: an orange envelope with the LiveLikeAnAggie hashtag on its flap, a leasing professional’s business card, a letterhead template topped with a banner of property photos, and a we’re open window cling. For signage, I scaled the rays up across the leasing center desk and an exterior monument sign, and prepared dimensioned elevation drawings comparing each existing sign with the proposed design. The differentiated presence supported leasing and fostered a sense of community.",
   "alt": {
     "64f89461-63a0-4918-95e8-e4a485a91c2a": "Close-up of an orange Sol at West Village envelope with the sunburst logo and address on a wood table",
     "6e7b1028-f7bb-4a62-85ab-817c8b53effa": "Close-up of an orange envelope flap printed with the hashtag LiveLikeAnAggie, resting on a wood table",
@@ -16,5 +17,8 @@
     "8b15409d-c7da-46e5-b247-ce05f17cb895": "Sol at West Village letterhead template with a property photo banner, placeholder body copy, and a director's signature block"
   },
   "copy": [],
-  "questions": []
+  "questions": [
+    "intro: the lobby desk spec sheet says samples go to HollisBC for approval, so this looks like Hollis Brand Culture work. The intro does not name the studio. Should it?",
+    "intro: the LiveLikeAnAggie hashtag and the letterhead address point to Davis, CA. The intro leaves the location out. Include it?"
+  ]
 }

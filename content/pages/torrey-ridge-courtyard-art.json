@@ -1,5 +1,6 @@
 {
   "slug": "torrey-ridge-courtyard-art",
+  "intro": "I conceived and delivered an immersive outdoor art installation for the Torrey Ridge business-park courtyard. I designed the sculptural and graphic elements and coordinated fabrication and installation with landscape teams and contractors. One concept is a modern take on Japanese koi ponds: kite-like koi fish made of layered mesh hang above the courtyard, and river-bed lines set into the paving guide guests toward the restaurant. Planters filled with sand become small zen gardens, lined with wood slat benches. Another concept stretches multi-colored hanging mesh in orange and yellow across the space, drawn from natural topography, with rust-painted monkey sculptures placed throughout and a trellis draped in leaf-pattern mesh or lit with LEDs. I also designed curvilinear benches whose wave-like shapes come from the same topography. The concept plans, 3D renderings, and bench elevations are below. The transformed space functions as an engaging gallery that improves tenant experience.",
   "alt": {
     "305e58d2-d380-42a3-9d91-a0bc58ae4f02": "Courtyard concept plan for Torrey Ridge with labeled callouts for hanging koi mesh sculptures, river-bed paths, and zen garden planters",
     "763ccdb9-8e67-470f-ac47-625f156cc5a0": "3D rendering of the Torrey Ridge courtyard with curved koi-inspired paths and hanging kite-like koi sculptures guiding guests",
@@ -16,5 +17,7 @@
       "reason": "Add missing space before hyphen for consistent punctuation"
     }
   ],
-  "questions": []
+  "questions": [
+    "Intro (new): the koi-pond board and the color-gradient mesh/monkey board are described as two separate concepts. Confirm they were alternative directions, and which one (if either) was built, since the page shows only plans and renderings."
+  ]
 }

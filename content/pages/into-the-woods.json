@@ -1,5 +1,6 @@
 {
   "slug": "into-the-woods",
+  "intro": "On a shoestring student-theatre budget, I illustrated posters and programs for Salomon Theatre’s production of Into the Woods, and the work won an AIGA award. It proved scrappy ideas beat pricey paper any day. Each poster is built around a single image from the story, like a hooded cloak, scissors cutting through golden hair, a longhorn cow, or a lace-trimmed shoe, set in one color of red, yellow, blue, or green. A heavy white sans-serif title stacks the show name along the bottom, with the theatre’s name running vertically along the edge and show details set in a small serif. Pasted up side by side, the series forms a bold, repeating grid. The program opens with a black-and-white forest photo on the cover and carries the same images through its spreads, beside the cast list, songs for both acts, the director’s note, bios, and crew credits.",
   "alt": {
     "976e4f92-8bdf-46f7-9638-c6a0b64771c8": "Into the Woods poster grid wheatpasted on a wall with a blurred passerby in a hard hat walking past",
     "9ebe0a1c-d8d1-4cd6-b81a-ae2f50e86c98": "Into the Woods show program cover with a black and white forest photo and the Salomon Theatre logo",
@@ -16,5 +17,9 @@
     "7d013201-309d-4e80-8feb-326cc1b740cb": "Dark green Into the Woods poster with a red Little Red Riding Hood cloak silhouette in the forest"
   },
   "copy": [],
-  "questions": []
+  "questions": [
+    "intro: the current intro says 'illustrated', but the posters and program use photographic imagery (cloak, scissors and hair, cow, shoe). The claim is kept as written. Should it say 'designed' instead?",
+    "intro: no source gives the AIGA award's name, chapter, or year, so the intro does not specify them.",
+    "intro: the posters point to pointloma.edu/salomontheatre, but the intro names only Salomon Theatre, not PLNU."
+  ]
 }

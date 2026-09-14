@@ -1,10 +1,14 @@
 {
   "slug": "donut-mag-1",
+  "intro": "I curated, designed, illustrated, and produced a playful zine celebrating San Diego’s donut culture. I conducted interviews and research, wrote and edited the copy, crafted the photo, type, and illustration layouts, and managed print and distribution. Every spread runs an oversized lowercase headline in bold red sans-serif that overlaps cut-out donut photos on a white page. “The origin of donuts” sets the history in narrow text columns beside a glazed donut. “This week’s shops” pairs a sprinkled donut with a sidebar of shop reviews rated in red stars. “So hot right now” lays out a grid of individual donuts, each with its name and a short write-up. Small red italic asides, such as “what’s your favorite donut?” and “get out there and check ’em out!”, keep the voice conversational. The zine became a beloved local guide and design artifact.",
   "alt": {
     "d82adb89-e7bf-4d33-b010-ba2e05a9588b": "Donut Mag spread with a bold red the origin of donuts headline over a glazed donut photo",
     "9cee320a-c14d-431a-9d57-fc3c0347030e": "Donut Mag spread headlined this week's shops in red type, with a sprinkled donut photo and shop review sidebar",
     "858b88a4-5f2f-46d5-a58c-1282763e497a": "Donut Mag spread headlined so hot right now, red type overlapping photos of assorted donuts"
   },
   "copy": [],
-  "questions": []
+  "questions": [
+    "intro: the current intro claims illustration and illustration layouts, but the three spreads shown contain only photography and type. The claim is kept as written. Is there illustration elsewhere in the zine?",
+    "intro: 'became a beloved local guide' comes from the current intro and no other source supports it. Kept as written."
+  ]
 }

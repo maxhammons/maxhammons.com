@@ -1,5 +1,6 @@
 {
   "slug": "nixed-apparel",
+  "intro": "NIXED Apparel Company was a clothing line, and this page collects the graphics I designed for its tees, long sleeves, hoodies, and sweatshirts. The prints lean on tropical and desert imagery: a navy palm tree over a red sun, a cactus under the same sun, a monstera leaf, bird of paradise flowers, palm fronds, and a two-tone mustard and charcoal pineapple. Short lines of copy do the talking, including Embrace Rejection, Make Your Own, Make Your Path, Spread Aloha, Good Vibes, and Paradise Lost Found with Lost struck through. A small NIXED wordmark signs most pieces. On others it becomes the graphic itself, running down the chest of a hoodie, repeating across a back print, or set bold across tie-dye. The photos show the line on beaches, dunes, coastal cliffs, and in the woods, plus a shop rack of black Embrace Rejection tees. Now defunct. Forever NIXED.",
   "alt": {
     "970e3ecc-c60c-4872-81ae-af5e3f4d8286": "Man's back in a white NIXED tee printed with a navy palm tree over a red sun",
     "c37b4e10-7127-4edd-a79c-8604d20743ac": "Cactus and red sun graphic on a NIXED tee with the tagline uniquely crafted for the one of a kind",
@@ -20,5 +21,7 @@
     "d2e6c8c5-a661-4ef4-b86c-e7222db0906a": "Woman's back in a NIXED Apparel hoodie with repeated wordmark and palm print, standing on a beach, black-and-white photo"
   },
   "copy": [],
-  "questions": []
+  "questions": [
+    "Intro (new): no source states Max's role at NIXED. The intro says only that he designed the graphics. Confirm, and say whether he also founded or ran the brand."
+  ]
 }

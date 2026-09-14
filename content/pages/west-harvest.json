@@ -1,5 +1,6 @@
 {
   "slug": "west-harvest",
+  "intro": "I directed branding, environmental graphics, and wayfinding for West Harvest, a high‑volume café on a Fortune‑50 tech campus in Menlo Park. The work moved from mood boards and two alternate concepts, Grateful Garden and Urban Market, through rounds of wordmark studies to a sage green logotype with a carrot mark. I created a distinct identity and mural series built from illustrated produce patterns in sage, coral, and cream, hung as framed art beside a dimensional wall sign. I designed digital menu boards and a signage system that runs from painted floor arrows like Have a Seat and Dish Return to exterior blade signs, plus branded shirts and caps. I prepared 200+ production‑ready files for fabrication and installation, including wall elevations with paint callouts, and managed on‑site reviews and placement approvals. The café became a stand‑out space with smooth peak‑time flows and a memorable atmosphere.",
   "alt": {
     "124c842f-c322-4674-9111-a7b8a8c6ee82": "Have a Seat wayfinding arrow painted on West Harvest cafe's concrete floor near seating",
     "336f7094-3791-4e3d-9d8c-64862864c1b4": "Fresh Air floor graphic arrow pointing toward an accessible exit door at West Harvest",
@@ -48,5 +49,8 @@
     "c807bd85-e289-4629-8797-9055fa911575": "Ceiling-mounted Dish Drop and Start Here wood signage details beside a floor plan with wayfinding graphic path"
   },
   "copy": [],
-  "questions": []
+  "questions": [
+    "Intro keeps the current verb 'I directed'; the art director resume says 'Co-led' for this Fortune-50 campus project. Which verb is right?",
+    "Resume ties 200+ production-ready files to this page, but describes them as signage, wayfinding, and collateral for the whole campus. Is 200+ accurate for West Harvest alone?"
+  ]
 }

@@ -1,5 +1,6 @@
 {
   "slug": "creation-care-week",
+  "intro": "Every year Point Loma Nazarene University (PLNU) dedicates a week to raising awareness of the school’s sustainability efforts and educating students about sustainability in their own lives. This year the senior class of graphic designers worked closely with the PLNU Office of Sustainability to promote the week on campus. Using a human-centered design approach, we began with the design question: How might we ignite a campus-wide dialogue about Creation Care Week at PLNU? Our answer was to create opportunities for students to learn about the week and PLNU’s sustainability tactics. Working as part of a team, my job was to create installations that stated facts about PLNU’s efforts to be environmentally friendly. Those facts were stenciled step by step onto outdoor staircases across campus in green, orange, and teal, covering solar panels, recycling, water use, and shuttle ridership.",
   "alt": {
     "1c1e2402-2e85-4dd8-a606-9eb23f440e6d": "Wooden pledge installation with hanging fabric ribbons in a PLNU campus courtyard, next to a Take the Pledge sign",
     "0d71b7ac-0b76-4be3-a6af-85227298336b": "Outdoor staircase at PLNU with green stenciled sustainability statistics painted on each step, campus banner in foreground",
@@ -15,6 +16,8 @@
   },
   "copy": [],
   "questions": [
-    "description: 'Using a human-centered design approach we began with the design question' has no comma after 'approach' — left as is since it may be a deliberate stylistic choice rather than an error."
+    "description: 'Using a human-centered design approach we began with the design question' has no comma after 'approach' — left as is since it may be a deliberate stylistic choice rather than an error.",
+    "intro: added a comma after 'approach' in the rewritten intro.",
+    "intro: the page also shows a pledge installation with fabric ribbons, event t-shirts, and schedule banners. It is unclear whether Max designed those, so the intro credits him only with the fact installations on the staircases."
   ]
 }

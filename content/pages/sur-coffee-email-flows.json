@@ -1,32 +1,35 @@
 {
- "slug": "sur-coffee-email-flows",
- "alt": {
-  "363f8f77-0df3-4cfa-b5c4-082f4a97ebc7": "Grid of tilted iPhone mockups displaying a range of Sur Coffee email designs with varied lifestyle photography and headlines",
-  "92c8cfe4-697c-4187-bf0d-9b293ec62b4e": "Two phone mockups of a Sur Coffee product email with the Gaviota blend description and a farmer portrait",
-  "63ee6670-c55a-4ae4-8331-81d09d9d5dee": "Original versus redesigned Sur Coffee email templates for the Give Your Mornings an Upgrade and Wake and Brew emails",
-  "f144e232-35a1-47a3-b869-6f2a3258dc55": "Original versus redesigned Sur Coffee browse abandonment emails for the Your Coffee Is Lonely and Your Cart Is Waiting messages",
-  "ca4f6e09-7a37-48ea-948d-945956d6149c": "Original versus redesigned Sur Coffee emails for the Welcome to the Club and Start Your Day With the Best messages"
- },
- "copy": [
-  {
-   "kind": "text_module",
-   "find": "Browse Abandonment Flow",
-   "replace": "Browse abandonment flow",
-   "reason": "Sentence-case section labels site-wide (Max 2026-09-03)"
+  "slug": "sur-coffee-email-flows",
+  "intro": "I directed the visual and UX approach for Sur Coffee’s lifecycle email, working on contract through Weir Creative. I audited the current flows and analyzed drop‑offs, then redesigned the welcome, browse abandonment, and abandoned cart flows, shown here against the originals. The result is a modular template system with a clean, modern layout and a brand‑true voice, developed in collaboration with copy. The redesigns come in desktop and mobile versions built from the same blocks: lifestyle photography, short headlines, product cards with colorful bag art, café locations, and stories like the Gaviota blend with a farmer portrait. I led concept development and A/B testing across email and web. The system accelerated updates, ensured consistent aesthetics, and increased engagement while keeping Sur Coffee’s inviting tone. The wider program, which also covered direct mail and in‑store promotions, lifted conversion rate from 2.8% to 3.6%.",
+  "alt": {
+    "363f8f77-0df3-4cfa-b5c4-082f4a97ebc7": "Grid of tilted iPhone mockups displaying a range of Sur Coffee email designs with varied lifestyle photography and headlines",
+    "92c8cfe4-697c-4187-bf0d-9b293ec62b4e": "Two phone mockups of a Sur Coffee product email with the Gaviota blend description and a farmer portrait",
+    "63ee6670-c55a-4ae4-8331-81d09d9d5dee": "Original versus redesigned Sur Coffee email templates for the Give Your Mornings an Upgrade and Wake and Brew emails",
+    "f144e232-35a1-47a3-b869-6f2a3258dc55": "Original versus redesigned Sur Coffee browse abandonment emails for the Your Coffee Is Lonely and Your Cart Is Waiting messages",
+    "ca4f6e09-7a37-48ea-948d-945956d6149c": "Original versus redesigned Sur Coffee emails for the Welcome to the Club and Start Your Day With the Best messages"
   },
-  {
-   "kind": "text_module",
-   "find": "Abandoned Cart Flow",
-   "replace": "Abandoned cart flow",
-   "reason": "Sentence-case section labels site-wide (Max 2026-09-03)"
-  },
-  {
-   "kind": "text_module",
-   "find": "Welcome Flow",
-   "replace": "Welcome flow",
-   "reason": "Sentence-case section labels site-wide (Max 2026-09-03)"
-  }
- ],
- "keep_captions": ["Browse abandonment flow", "Abandoned cart flow", "Welcome flow"],
- "questions": []
+  "copy": [
+    {
+      "kind": "text_module",
+      "find": "Browse Abandonment Flow",
+      "replace": "Browse abandonment flow",
+      "reason": "Sentence-case section labels site-wide (Max 2026-09-03)"
+    },
+    {
+      "kind": "text_module",
+      "find": "Abandoned Cart Flow",
+      "replace": "Abandoned cart flow",
+      "reason": "Sentence-case section labels site-wide (Max 2026-09-03)"
+    },
+    {
+      "kind": "text_module",
+      "find": "Welcome Flow",
+      "replace": "Welcome flow",
+      "reason": "Sentence-case section labels site-wide (Max 2026-09-03)"
+    }
+  ],
+  "keep_captions": ["Browse abandonment flow", "Abandoned cart flow", "Welcome flow"],
+  "questions": [
+    "Intro closes with the 2.8% to 3.6% conversion lift from the Weir Creative resume bullet linked to this page; that bullet covers email, direct mail, and in-store promotions together. Keep it on this email page, or drop it?"
+  ]
 }

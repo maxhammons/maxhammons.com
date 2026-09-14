@@ -1,5 +1,6 @@
 {
   "slug": "procurecon",
+  "intro": "I served as lead art director for TCWGlobal's retro-futurist booth at ProcureCon 2024, blending 1970s textures with futuristic motifs. I designed the booth as an immersive environment. Elevations and 3D renderings lay out sections like Old-Fashioned Customer Service and World's Favorite Employer of Record, with orange stripes, teal panels, starburst signposts, and retro city skyline illustrations. The concept boards show how I got there, from moodboards of vintage interiors and travel imagery to wall studies in varied retro palettes and headlines. For visitors to take home, I designed the EOR Times, a keepsake newspaper with feature articles, a letter from the CEO, a staffing app screenshot, and a crossword puzzle. A witty sticker set adds slogans like HR Squad and Walking HR Violation in layered 1970s script lettering. I also coordinated fabrication. Engagement was high, and the sticker pack became a sought-after takeaway that extended brand recall.",
   "alt": {
     "8209bb9b-6e3b-4b2e-8655-d0d42ba9c6c5": "EOR Times keepsake newspaper mockup for TCWGlobal with the headline Payrolling That Hits the Mark, styled beside a coffee cup",
     "63b8a9ba-3f2c-4db1-9f9a-7017224bda0b": "Walking HR Violation sticker in retro 1970s lettering, teal and orange outline, mounted on a textured wall for TCWGlobal",
@@ -10,5 +11,7 @@
     "8b6406cc-160a-49f5-abf7-e0eaf330a3ae": "Grid of sixteen TCWGlobal campaign banner ad thumbnails in varied retro color palettes and headlines"
   },
   "copy": [],
-  "questions": []
+  "questions": [
+    "Image 8b6406cc-160a-49f5-abf7-e0eaf330a3ae is described in alt as sixteen campaign banner ad thumbnails, but it looks like booth concept boards (a moodboard row, then long wall studies with human silhouettes for scale). The intro calls them concept boards and wall studies; please confirm, and consider correcting the alt text."
+  ]
 }

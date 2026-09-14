@@ -21,7 +21,7 @@ import sys
 import urllib.parse
 import urllib.request
 
-from optimize import optimise
+from optimize import optimise, placeholder
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 RAW = os.path.join(ROOT, "raw")
@@ -33,6 +33,7 @@ FONTS_SRC = os.path.join(ROOT, "fonts")
 THEME = os.path.join(ROOT, "theme")
 PAGES_JSON = os.path.join(ROOT, "content", "pages")
 DERIVED = os.path.join(RAW, "derived")  # WebP conversion cache (git-ignored)
+PLACEHOLDERS = os.path.join(DERIVED, "placeholders.json")  # low-res previews, by image name
 FONT_PRELOAD = (
     '<link rel="preload" href="/fonts/vcsm-n4.woff2" as="font" type="font/woff2" crossorigin />\n'
     '    <link rel="preload" href="/fonts/vcsm-n7.woff2" as="font" type="font/woff2" crossorigin />'
@@ -67,7 +68,7 @@ COVER_RE = re.compile(
 )
 SPECULATION = (
     '<script type="speculationrules">{'
-    '"prerender":[{"source":"document","where":{"selector_matches":"a.project-cover"},"eagerness":"moderate"}],'
+    '"prerender":[{"source":"document","where":{"selector_matches":"a.project-cover, a.next-project"},"eagerness":"moderate"}],'
     '"prefetch":[{"source":"document","where":{"selector_matches":"nav a"},"eagerness":"moderate"}]'
     "}</script>"
 )
@@ -75,6 +76,40 @@ BFCACHE_RELOAD_RE = re.compile(
     r"<script type=\"text/javascript\">\s*// fix for Safari.s back/forward cache.*?</script>\s*",
     re.S,
 )
+# the hosted theme's runtime: its settings object, translations, bundle, and the lightbox slide templates
+EXPORT_SCRIPTS_RE = re.compile(
+    r'\s*<script type="text/javascript">var __config__.*?</script>'
+    r'|\s*<script type="text/javascript" src="/(?:site/translations|dist/js/main\.js)[^"]*"></script>'
+    r'|\s*<script type="text/html" class="js-lightbox-slide-content">.*?</script>',
+    re.S,
+)
+# hooks for the hosted editor and its scripts that nothing reads any more
+EDITOR_ATTR_RE = re.compile(
+    r'\s(?:data-hover-hint|data-hover-hint-id|data-context|data-identity)="[^"]*"'
+)
+JS_HOOKS_USED = {"js-hamburger", "js-close-responsive-nav", "js-responsive-nav", "js-year"}
+MODULE_IMG_RE = re.compile(
+    r'<div class="js-lightbox" data-src="[^"]*">(\s*)(<img\b[^>]*>)', re.S
+)
+GRID_ITEM_RE = re.compile(
+    r'<div class="grid__item-container js-grid-item-container" data-flex-grow="[^"]*" style="[^"]*"'
+    r' data-width="(\d+)" data-height="(\d+)">(\s*)(<img\b[^>]*>)',
+    re.S,
+)
+COVER_IMG_RE = re.compile(r'<div class="cover cover-normal">(\s*)(<img\b[^>]*>)', re.S)
+GRID_SIZES = "(max-width: 768px) 50vw, 33vw"
+EAGER_COVERS = 3  # the first gallery row is on screen at load
+ANALYTICS_ID = "G-RTL7NDG1FY"
+# Google Analytics, requested only after the page has loaded so it never competes with it
+ANALYTICS = (
+    "<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}"
+    f'gtag("js",new Date());gtag("config","{ANALYTICS_ID}");'
+    'addEventListener("load",function(){var s=document.createElement("script");s.async=true;'
+    f's.src="https://www.googletagmanager.com/gtag/js?id={ANALYTICS_ID}";document.head.appendChild(s)}})</script>'
+)
+EMAIL = "mailto:hello@maxhammons.com"
+RESUME_RE = re.compile(r'<a href="(https://drive\.google\.com/[^"]+)"[^>]*>Resume</a>')
+GALLERY_RE = re.compile(r'<a class="project-cover[^"]*" href="/([a-z0-9-]+)"')
 LONG_INTRO_CHARS = 360
 # a caption is a text module holding one short line and nothing else (intro-style text modules carry more markup)
 CAPTION_RE = re.compile(
@@ -207,9 +242,9 @@ def apply_trim(s, dropped, remap):
 
 
 def load_content():
-    alt, copy, captions = {}, {}, {}
+    alt, copy, captions, intros = {}, {}, {}, {}
     if not os.path.isdir(PAGES_JSON):
-        return alt, copy, captions
+        return alt, copy, captions, intros
     for fn in sorted(os.listdir(PAGES_JSON)):
         if fn.endswith(".json"):
             d = json.load(open(os.path.join(PAGES_JSON, fn), encoding="utf-8"))
@@ -218,7 +253,8 @@ def load_content():
             )
             copy[d.get("slug", fn[:-5])] = d.get("copy", [])
             captions[d.get("slug", fn[:-5])] = d.get("keep_captions", [])
-    return alt, copy, captions
+            intros[d.get("slug", fn[:-5])] = d.get("intro", "")
+    return alt, copy, captions, intros
 
 
 def first_image(page_html, dropped, remap):
@@ -303,10 +339,122 @@ def drop_captions(s, keep, slug, report):
     return s
 
 
+def attr(tag, name):
+    m = re.search(rf'\s{name}="([^"]*)"', tag)
+    return m.group(1) if m else None
+
+
+def image_markup(s, first, preview):
+    """Swap the exported lazy-loader's attributes for real src/srcset/sizes and native lazy loading (the first
+    project image and the first gallery row load at once), and give each image box a blurred low-res copy of
+    its image (--ph, cleared by site.js). preview(url) returns the data URI for an image URL, or None."""
+    covers = [0]
+
+    def img(tag, sizes, extra="", eager=False):
+        src, srcset = attr(tag, "data-src"), attr(tag, "data-srcset")
+        parts = ["<img"]
+        if attr(tag, "class"):
+            parts.append(f'class="{attr(tag, "class")}"')
+        parts.append(f'src="{src}"')
+        if srcset:
+            parts += [f'srcset="{srcset}"', f'sizes="{attr(tag, "data-sizes") or sizes}"']
+        if extra:
+            parts.append(extra)
+        if src == first:
+            parts.append('fetchpriority="high"')
+        elif not eager:
+            parts.append('loading="lazy"')
+        if attr(tag, "alt") is not None:
+            parts.append(f'alt="{attr(tag, "alt")}"')
+        return " ".join(parts) + ">"
+
+    def smallest(tag):
+        cands = []
+        for entry in (attr(tag, "data-srcset") or "").split(","):
+            bits = entry.split()
+            if len(bits) == 2 and bits[1].endswith("w"):
+                cands.append((int(bits[1][:-1]), bits[0]))
+        return min(cands)[1] if cands else attr(tag, "data-src")
+
+    def ph(url):
+        uri = preview(url)
+        return f"--ph:url({uri})" if uri else ""
+
+    def module(m):
+        tag = m.group(2)
+        width = attr(tag, "width")
+        pct = re.search(r"padding-bottom:\s*([\d.]+)%", tag)
+        size = ""
+        if width and pct:
+            size = f'width="{width}" height="{round(int(width) * float(pct.group(1)) / 100)}"'
+        return f'<div class="ph" style="{ph(smallest(tag))}">{m.group(1)}{img(tag, "100vw", size)}'
+
+    def grid(m):
+        w, h, ws, tag = m.groups()
+        style = f"--ar:{int(w) / int(h):.4f};{ph(smallest(tag))}"
+        return f'<div class="grid__item-container ph" style="{style}">{ws}{img(tag, GRID_SIZES)}'
+
+    def cover(m):
+        covers[0] += 1
+        tag = m.group(2)  # its src is the export's 32px copy, the ideal preview source
+        eager = covers[0] <= EAGER_COVERS
+        return f'<div class="cover cover-normal ph" style="{ph(attr(tag, "src"))}">{m.group(1)}{img(tag, "33vw", eager=eager)}'
+
+    s = MODULE_IMG_RE.sub(module, s)
+    s = GRID_ITEM_RE.sub(grid, s)
+    s = COVER_IMG_RE.sub(cover, s)
+    return re.sub(r"<img\b[^>]*\bdata-src=[^>]*>", lambda m: img(m.group(0), "100vw"), s)
+
+
+def next_projects(html):
+    """Project slug -> the next project in its gallery (homepage or sandbox order, wrapping round)."""
+    nxt = {}
+    for gallery in ("index.html", "sandbox.html"):
+        slugs = list(dict.fromkeys(GALLERY_RE.findall(html.get(gallery, ""))))
+        for i, slug in enumerate(slugs):
+            nxt[slug] = slugs[(i + 1) % len(slugs)]
+    return nxt
+
+
+def closing(s, slug, nxt):
+    """The call to action above the footer (email and resume), and Next project in a project page's footer."""
+    resume = RESUME_RE.search(s)
+    links = f'<a class="cta-email" href="{EMAIL}">Let’s work together</a>'
+    if resume:
+        links += f'\n                <a class="cta-resume" href="{resume.group(1)}" target="_blank" rel="noopener">Resume</a>'
+    s = s.replace(
+        '<footer class="site-footer"',
+        f'<section class="cta">\n                {links}\n              </section>\n              <footer class="site-footer"',
+        1,
+    )
+    if slug in nxt:
+        s = s.replace(
+            "</footer>",
+            f'  <a class="next-project" href="/{nxt[slug]}/">Next project</a>\n              </footer>',
+            1,
+        )
+    return s
+
+
+def clean_classes(s):
+    """Drop the export's test hooks (e2e-*) and script hooks (js-*) that no script uses."""
+
+    def fix(m):
+        kept = [
+            c
+            for c in m.group(1).split()
+            if not c.startswith("e2e-") and (not c.startswith("js-") or c in JS_HOOKS_USED)
+        ]
+        return f' class="{" ".join(kept)}"' if kept else ""
+
+    return re.sub(r'\sclass="([^"]*)"', fix, s)
+
+
 def main():
     pages = sorted(f for f in os.listdir(RAW_SITE) if f.endswith(".html"))
     html = {p: open(os.path.join(RAW_SITE, p), encoding="utf-8").read() for p in pages}
-    alt, copy, captions = load_content()
+    alt, copy, captions, intros = load_content()
+    nxt = next_projects(html)
     year = datetime.date.today().year
     report = {
         "added": 0,
@@ -378,29 +526,11 @@ def main():
     shutil.rmtree(
         os.path.join(OUT, "css"), ignore_errors=True
     )  # stylesheets of earlier builds
-    shutil.rmtree(os.path.join(OUT, "dist", "css"), ignore_errors=True)
-    for d in ("css", "js", "dist/js", "site"):
+    for d in ("css", "js"):
         os.makedirs(os.path.join(OUT, d), exist_ok=True)
     shutil.copyfile(os.path.join(THEME, "site.js"), os.path.join(OUT, "js", "site.js"))
     with open(os.path.join(OUT, "css", "site.css"), "w", encoding="utf-8") as f:
         f.write(swap_images(apply_trim(css, dropped, remap)))
-    js = [
-        f
-        for f in os.listdir(os.path.join(RAW_SITE, "dist", "js"))
-        if f.startswith("main.js")
-    ][0]
-    shutil.copyfile(
-        os.path.join(RAW_SITE, "dist", "js", js),
-        os.path.join(OUT, "dist", "js", "main.js"),
-    )
-    tr = [
-        f
-        for f in os.listdir(os.path.join(RAW_SITE, "site"))
-        if f.startswith("translations")
-    ][0]
-    shutil.copyfile(
-        os.path.join(RAW_SITE, "site", tr), os.path.join(OUT, "site", "translations.js")
-    )
     if os.path.isdir(os.path.join(OUT, "fonts")):
         shutil.rmtree(os.path.join(OUT, "fonts"))
     shutil.copytree(FONTS_SRC, os.path.join(OUT, "fonts"))
@@ -411,31 +541,30 @@ def main():
         with open(os.path.join(OUT, path.lstrip("/")), "rb") as f:
             return f"{path}?v={hashlib.md5(f.read()).hexdigest()[:8]}"
 
-    stamped = {
-        path: stamp(path)
-        for path in (
-            "/css/site.css",
-            "/js/site.js",
-            "/dist/js/main.js",
-            "/site/translations.js",
-        )
-    }
-    for d in os.listdir(OUT):
-        if os.path.isdir(os.path.join(OUT, d)) and d not in (
-            "assets",
-            "css",
-            "js",
-            "dist",
-            "fonts",
-            "site",
-        ):
+    stamped = {path: stamp(path) for path in ("/css/site.css", "/js/site.js")}
+    for d in os.listdir(OUT):  # page folders and anything an earlier build left behind
+        if os.path.isdir(os.path.join(OUT, d)) and d not in ("assets", "css", "js", "fonts"):
             shutil.rmtree(os.path.join(OUT, d))
+    try:
+        previews = json.load(open(PLACEHOLDERS, encoding="utf-8"))
+    except (OSError, ValueError):
+        previews = {}
+
+    def preview(url):
+        path = os.path.join(ASSETS, os.path.basename(url or ""))
+        return placeholder(path, previews) if url and os.path.isfile(path) else None
+
     for p, s in html.items():
         slug = p[:-5]
         if slug == "portfolio":
             continue
         layout = LAYOUT.get(slug, "project")
         s = TYPEKIT_RE.sub("", s)
+        s = EXPORT_SCRIPTS_RE.sub("", s)
+        s = EDITOR_ATTR_RE.sub("", s)
+        s = re.sub(r'\s*<meta name="twitter:site"\s+content="@AdobePortfolio" />', "", s)
+        s = s.replace('<body class="transition-enabled">', '<body class="link-transition">', 1)
+        s = s.replace("</body>", ANALYTICS + "\n</body>", 1)
         s = re.sub(
             r'\s*<link rel="stylesheet" href="/dist/css/main\.css" type="text/css" />',
             "",
@@ -445,12 +574,6 @@ def main():
             '<link rel="stylesheet" href="/css/site.css" type="text/css" />', s
         )
         s = apply_trim(localise(s), dropped, remap)
-        s = re.sub(
-            r'src="/dist/js/main\.js\?cb=[0-9a-f]+"', 'src="/dist/js/main.js"', s
-        )
-        s = re.sub(
-            r'src="/site/translations\?cb=[0-9a-f]+"', 'src="/site/translations.js"', s
-        )
         s = s.replace(
             '<html lang="en-US">', f'<html lang="en-US" class="l-{layout}">', 1
         )
@@ -479,6 +602,16 @@ def main():
             '<link rel="canonical" href="https://maxhammons.com/portfolio" />',
             '<link rel="canonical" href="https://maxhammons.com/" />',
         )
+        s = apply_copy(s, copy.get(slug, []), slug, report)
+        if intros.get(slug):  # a rewritten intro (content/pages) replaces the exported one, after its copy edits
+            text = htmlmod.escape(intros[slug], quote=False)
+            s = re.sub(
+                r'(<p class="description">).*?(</p>)',
+                lambda m: m.group(1) + text + m.group(2),
+                s,
+                count=1,
+                flags=re.S,
+            )
         m = re.search(r'<p class="description">(.*?)</p>', s, re.S)
         if m and len(re.sub(r"<[^>]+>", "", m.group(1)).strip()) > LONG_INTRO_CHARS:
             s = s.replace(
@@ -487,12 +620,12 @@ def main():
                 1,
             )
             report["long_intros"].append(slug)
-        s = apply_copy(s, copy.get(slug, []), slug, report)
         s = drop_captions(s, captions.get(slug, []), slug, report)
         # the build stamps the year it ran; site.js keeps it current between builds
         s = COPYRIGHT_RE.sub(
             f'Copyright Max Hammons <span class="js-year">{year}</span>', s
         )
+        s = closing(s, slug, nxt)
         s = COVER_RE.sub(lambda m: cover_markup(m, html, dropped, remap), s)
         s = s.replace("</head>", "  " + SPECULATION + "\n</head>", 1)
         s = s.replace(
@@ -509,6 +642,7 @@ def main():
                 f'  <link rel="preload" as="image" href="{first}" fetchpriority="high" />\n</head>',
                 1,
             )
+        s = clean_classes(image_markup(s, first, preview))
         s = re.sub(r"<img\b(?![^>]*\bdecoding=)", '<img decoding="async"', s)
         s = add_alt(s, alt, report)
         for path, versioned in stamped.items():
@@ -525,6 +659,8 @@ def main():
             os.makedirs(os.path.dirname(t), exist_ok=True)
             with open(t, "w", encoding="utf-8") as f:
                 f.write(s)
+
+    json.dump(previews, open(PLACEHOLDERS, "w", encoding="utf-8"))
 
     # 5. GitHub Pages plumbing
     open(os.path.join(OUT, "CNAME"), "w").write("maxhammons.com\n")

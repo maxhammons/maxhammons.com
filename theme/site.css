@@ -1,6 +1,5 @@
 /* maxhammons.com design system.
-   Loaded after the exported Adobe Portfolio theme CSS on every page and wins
-   over it. Everything the site should be consistent about lives here:
+   Served after theme/base.css in the same stylesheet and wins over it. Everything the site should be consistent about lives here:
    fonts, palette, type scale, nav, links, grids, buttons. */
 
 @font-face { font-family: "Proxima Nova"; font-weight: 300; font-style: normal; font-display: swap;
@@ -13,7 +12,7 @@
   src: url("/fonts/vcsm-n7.woff2") format("woff2"), url("/fonts/vcsm-n7.woff") format("woff"); }
 @font-face { font-family: "Site Mono"; font-weight: 400; font-style: normal; font-display: swap;
   src: url("/fonts/bcnw-n4.woff2") format("woff2"), url("/fonts/bcnw-n4.woff") format("woff"); }
-/* aliases for the family names the exported Adobe CSS still uses, so nothing can fall back to a system font */
+/* aliases for the family names theme/base.css still uses, so nothing can fall back to a system font */
 @font-face { font-family: "vcsm"; font-weight: 300; src: url("/fonts/vcsm-n3.woff2") format("woff2"); }
 @font-face { font-family: "vcsm"; font-weight: 400; src: url("/fonts/vcsm-n4.woff2") format("woff2"); }
 @font-face { font-family: "vcsm"; font-weight: 600; src: url("/fonts/vcsm-n6.woff2") format("woff2"); }
@@ -36,7 +35,8 @@
 
   --gutter: 8px;         /* every image grid */
   --speed: 100ms;        /* every hover / colour change on the site */
-  --fade: 250ms;         /* page fade out / in between pages (site.js + dist/css/main.css) */
+  --fade: 250ms;         /* page fade out / in between pages (site.js + theme/base.css) */
+  --reveal: 600ms;       /* a blurred image preview clearing once its image has loaded */
   --vt-t: 1;             /* time multiplier for the cover zoom choreography (1 = 0.75s each way) */
 
   --strike: 0.08em;      /* link strikethrough thickness, relative to font size */
@@ -73,7 +73,7 @@ code, kbd, pre, samp { font-family: var(--font-mono); }
 .logo, .logo-secondary, nav a, .masthead h1, .masthead p, .masthead-button, .site-footer,
 .page-header .title, .page-header .description, .page-header .date, .page-header .custom1, .page-header .custom2,
 .rich-text, .rich-text *, .button-module, .project-cover .title, .project-cover .description,
-.other-projects-title, .grid__caption-text, .responsive-nav a, .lightbox-content { font-family: var(--font-sans); }
+.other-projects-title, .grid__caption-text, .responsive-nav a { font-family: var(--font-sans); }
 
 .site-header {
   position: sticky; top: 0; z-index: 1000;
@@ -157,9 +157,12 @@ nav .gallery-title a.active:hover, nav .page-title a.active:hover { color: var(-
   }
   .page-header .description:empty { height: auto; }
 }
-/* below 1200px the longest intros (900 characters) need eleven lines to stay inside three columns */
+/* narrower desktops need a taller box so the longest intros (about 1,000 characters) stay inside three columns */
 @media (min-width: 933px) and (max-width: 1199px) {
-  .page-header.is-long .description { height: calc(var(--lh-lede) * 11); }
+  .page-header.is-long .description { height: calc(var(--lh-lede) * 12); }
+}
+@media (min-width: 1200px) and (max-width: 1365px) {
+  .page-header.is-long .description { height: calc(var(--lh-lede) * 9); }
 }
 
 .standard-modules .rich-text .title, .splash-modules .rich-text .title {
@@ -191,6 +194,29 @@ nav .gallery-title a.active:hover, nav .page-title a.active:hover { color: var(-
   margin: 0 calc(var(--gutter) / -2);
 }
 .project-module-image img, .grid__img, .cover__img { background: var(--line); }
+/* the width/height attributes only reserve the aspect ratio while the image loads */
+.project-module-image img { height: auto; }
+/* image grids: justified rows without a script. Each item starts at its aspect ratio (--ar, from build.py)
+   times the row height and grows in proportion to it, so a row fills the width at one shared height; the
+   last row keeps the natural height */
+.grid--main { visibility: visible; --row-h: 300px; }
+.grid--main::after { content: ""; flex-grow: 1000000; }
+.grid__item-container { width: auto; flex: var(--ar) 1 calc(var(--ar) * var(--row-h)); }
+@media (max-width: 1324px) { .grid--main { --row-h: 250px; } }
+@media (max-width: 1024px) { .grid--main { --row-h: 190px; } }
+@media (max-width: 768px) { .grid--main { --row-h: 150px; } }
+
+/* blurred previews: build.py puts a 16px copy of each image in --ph on its box, site.js sets the classes.
+   The copy covers the image, blurred, until the image loads; loading on screen, the blur clears into the
+   image; loaded off screen, the copy is simply gone */
+.ph { position: relative; overflow: hidden; }
+.ph-on .ph::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: var(--ph) center / cover no-repeat; filter: blur(20px); transform: scale(1.2);
+  transition: filter var(--reveal) var(--ease), transform var(--reveal) var(--ease), opacity var(--reveal) var(--ease);
+}
+.ph-on .ph.ph-done::after { filter: blur(0); transform: scale(1); opacity: 0; }
+.ph-on .ph.ph-instant::after { transition: none; }
 
 .project-cover .title {
   position: relative; display: inline-block; width: auto; max-width: 100%;
@@ -201,8 +227,10 @@ nav .gallery-title a.active:hover, nav .page-title a.active:hover { color: var(-
 .project-cover .title-strike, .vt-title .vt-strike {
   position: absolute; left: 0; top: calc(50% - var(--strike) / 2); height: var(--strike); background: currentColor; pointer-events: none;
 }
-.project-cover .title-strike { width: 0; transition: width var(--speed) ease; }
-.project-cover:hover .title-strike, .project-cover.touch-hover .title-strike { width: 100%; }
+/* cover hover, paced like the zoom transition: the white panel and title fade in (--f), then the strike
+   draws across (--c); leaving, the strike erases first and the panel and title fade out after it */
+.project-cover .title-strike { width: 0; transition: width var(--c) var(--ease); }
+.project-cover:hover .title-strike, .project-cover.touch-hover .title-strike { width: 100%; transition-delay: var(--f); }
 .project-cover.vt-cover .title-strike { width: 100%; transition: none; }
 .vt-title .vt-strike { width: 100%; }
 /* the white panel is a real element (the export used ::after, which view transitions cannot capture) */
@@ -213,9 +241,11 @@ nav .gallery-title a.active:hover, nav .page-title a.active:hover { color: var(-
 .project-cover .cover, .project-cover .cover img { border-radius: 0; }
 .project-cover .cover-panel {
   position: absolute; inset: 0; background: var(--paper); opacity: 0; pointer-events: none;
-  transition: opacity var(--speed) ease;
 }
+.project-cover .cover-panel, .project-cover .details-wrap { transition: opacity var(--f) var(--ease) var(--c); }
 .project-cover:hover .cover-panel, .project-cover.touch-hover .cover-panel { opacity: 0.9; }
+.project-cover:hover .cover-panel, .project-cover:hover .details-wrap,
+.project-cover.touch-hover .cover-panel, .project-cover.touch-hover .details-wrap { transition-delay: 0s; }
 .project-cover.vt-cover .cover-panel { transition: none; }   /* captured instantly, no hover transition mid-way */
 .project-cover .description, .project-cover .date { color: var(--ink); font-size: var(--fs-small); line-height: var(--lh-small); font-weight: 400; }
 @media (max-width: 540px) { .project-cover .title { font-size: 19px; line-height: 22px; } }
@@ -267,9 +297,30 @@ nav .gallery-title a.active:hover, nav .page-title a.active:hover { color: var(-
 
 .site-footer, .site-footer a { color: var(--ink-faint); font-size: var(--fs-small); line-height: var(--lh-small); font-weight: 300; }
 
+/* closing call to action on every page (build.py): "Let’s work together" in red, sized so the line runs
+   from margin to margin (--cta-em is its width in em), the resume link centred under it; a project page's
+   footer adds Next project on the right, opposite the copyright */
+.cta { container-type: inline-size; clear: both; text-align: center; padding: 160px 5% 64px; }   /* 5%: the page text margin */
+.cta .cta-email {
+  display: block; color: var(--accent); font-weight: 700; white-space: nowrap; line-height: 1; letter-spacing: -0.02em;
+  --cta-em: 8.4; font-size: calc(100cqi / var(--cta-em));   /* measured 8.36em in Proxima Nova Bold */
+}
+.cta .cta-email:hover { color: var(--ink); text-decoration: line-through; text-decoration-thickness: var(--strike); }
+.cta .cta-resume, .site-footer .next-project {
+  color: var(--ink); font-size: var(--fs-body); line-height: var(--lh-body); font-weight: 400;
+}
+.cta .cta-resume { display: inline-block; margin-top: 24px; }
+.cta .cta-resume:hover, .site-footer .next-project:hover {
+  color: var(--accent); text-decoration: line-through; text-decoration-thickness: var(--strike);
+}
+.site-footer { display: flex; justify-content: space-between; align-items: baseline; }
+@media (min-width: 933px) {   /* on the grid's outer edges, like the images */
+  .cta, .site-footer { width: auto; margin-left: calc(2% / 3); margin-right: calc(2% / 3); padding-left: 0; padding-right: 0; }
+}
+
 .back-to-top, .back-to-top-fixed { display: none !important; }
 
-.lightbox-content .grid__caption-text, .grid__caption-text { font-size: var(--fs-small); line-height: var(--lh-small); }
+.grid__caption-text { font-size: var(--fs-small); line-height: var(--lh-small); }
 
 @media (max-width: 932px) {
   .responsive-nav { padding: 0; }
@@ -297,8 +348,7 @@ nav .gallery-title a.active:hover, nav .page-title a.active:hover { color: var(-
    names, the types, and builds the full-screen twins on the project page) */
 @view-transition { navigation: auto; }
 
-html.vt .transition-enabled { opacity: 1; }
-html.vt .transition-in, html.vt .transition-out, html.vt-ready .transition-out { animation: none; }
+html.vt-ready .transition-out { animation: none; }   /* the fallback fade must not blank a transition's capture */
 
 /* default: plain cross-fade between any two pages, same length as the old fade */
 ::view-transition-old(root) { animation: vt-fade-out var(--fade) ease-out both; }

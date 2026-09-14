@@ -1,4 +1,4 @@
-/* maxhammons.com behaviour on top of the exported Adobe bundle. Loaded in <head>, before
+/* maxhammons.com behaviour, the only script the pages run. Loaded in <head>, before
    the first render, so the pagereveal listener is in place when a view transition starts.
 
    1. Cover zoom (cross-document View Transitions). Clicking a gallery thumbnail: the
@@ -8,9 +8,11 @@
       loaded, the strike erases like a progress bar and everything fades off together.
       Going back (logo, Home, back button, swipe) plays the exact reverse into the thumbnail.
    2. Plain page fade for browsers without view transitions.
-   3. Prefetch: a project page and its first image start loading on hover / touch. */
+   3. Prefetch: a project page and its first image start loading on hover / touch.
+   4. Phone menu.
+   5. Blurred image previews that clear when the image loads on screen. */
 (function () {
-  var FADE = 250; // ms, matches .transition-out in dist/css/main.css
+  var FADE = 250; // ms, matches .transition-out in theme/base.css
   var VT = "onpagereveal" in window && "CSSViewTransitionRule" in window;
   var html = document.documentElement;
   var lastCover = null;
@@ -20,7 +22,7 @@
     title: "cover-title",
     strike: "cover-strike",
   };
-  if (VT) html.classList.add("vt-ready"); // CSS: the Adobe click fade-out must not run, or the capture is blank
+  if (VT) html.classList.add("vt-ready"); // CSS: the fallback click fade-out must not run, or the capture is blank
 
   /* sessionStorage can be missing or locked (private mode); the zoom then simply degrades to a fade */
   function storage(op, key, value) {
@@ -228,8 +230,6 @@
         markCover(c, false);
       });
       if (!vt) return;
-      html.classList.add("vt"); // neutralises the Adobe body fade for this page load
-      if (document.body) document.body.classList.remove("transition-enabled");
       armSkip(vt);
       var zoom = zoomHandoff();
       var cover = zoom ? null : coverWeCameFrom();
@@ -349,6 +349,45 @@
     whenIdle(idlePrefetch);
   });
 
+  /* ---- phone menu: the hamburger opens the full-screen nav; its close button or any of its links shuts it ---- */
+  document.addEventListener("click", function (e) {
+    var hit =
+      e.target.closest &&
+      e.target.closest(".js-hamburger, .js-close-responsive-nav, .js-responsive-nav a");
+    if (hit)
+      document.body.classList.toggle("show-responsive-nav", hit.classList.contains("js-hamburger"));
+  });
+
+  /* ---- blurred previews: each image box (.ph) shows a blurred low-res copy of its image until the image
+     has loaded. An image that finishes loading on screen clears the blur over itself; one that loaded off
+     screen, or before the first paint, just shows. ---- */
+  html.classList.add("ph-on");
+  var painted = false;
+  requestAnimationFrame(function () {
+    setTimeout(function () {
+      painted = true;
+    });
+  });
+  function revealImage(img) {
+    var box = img.closest && img.closest(".ph");
+    if (!box || box.classList.contains("ph-done")) return;
+    var r = img.getBoundingClientRect();
+    if (!painted || r.bottom <= 0 || r.top >= window.innerHeight) box.classList.add("ph-instant");
+    box.classList.add("ph-done");
+  }
+  function onImageSettled(e) {
+    if (e.target.tagName === "IMG") revealImage(e.target);
+  }
+  document.addEventListener("load", onImageSettled, true);
+  document.addEventListener("error", onImageSettled, true);
+  function revealComplete() {
+    Array.prototype.forEach.call(document.querySelectorAll(".ph img"), function (img) {
+      if (img.complete) revealImage(img);
+    });
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", revealComplete);
+  else revealComplete();
+
   /* ---- prefetch on intent: the page HTML and its first image ---- */
   function warm(a) {
     var href = a.href;
@@ -366,7 +405,7 @@
     document.addEventListener(
       ev,
       function (e) {
-        var a = e.target.closest && e.target.closest("a.project-cover[href], nav a[href]");
+        var a = e.target.closest && e.target.closest("a.project-cover[href], a.next-project[href], nav a[href]");
         if (a) warm(a);
       },
       { capture: true, passive: true },

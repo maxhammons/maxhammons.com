@@ -249,7 +249,7 @@ with sync_playwright() as p:
         == 0,
     )
     pg.hover("a.project-cover[href='/ambition-angels/']")
-    pg.wait_for_timeout(300)
+    pg.wait_for_timeout(700)  # the panel fades in, then the strike draws
     st = pg.evaluate(
         "(()=>{const a=document.querySelector(\"a.project-cover[href='/ambition-angels/']\"); const s=a.querySelector('.title-strike').getBoundingClientRect(); const t=a.querySelector('.title').getBoundingClientRect(); return [Math.round(s.width), Math.round(t.width)]})()"
     )

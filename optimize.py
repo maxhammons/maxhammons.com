@@ -8,7 +8,9 @@ the size and in full colour. Results are cached (git-ignored) so a rebuild only
 converts what is missing.
 """
 
+import base64
 import concurrent.futures as cf
+import io
 import os
 
 from PIL import Image, ImageFile, ImageOps, ImageSequence
@@ -20,6 +22,22 @@ WEBP_QUALITY = 82
 ANIMATED_QUALITY = 65  # photo slideshows keep their look; UI recordings stay crisp
 WEBP_METHOD = 4
 RASTER = (".jpg", ".jpeg", ".png", ".gif")
+PLACEHOLDER_PX = 16  # longest side of an image's low-res preview; the page scales it up behind a blur
+PLACEHOLDER_QUALITY = 50
+
+
+def placeholder(path, cache):
+    """Data URI of a tiny WebP copy of an image, the source of its blurred preview.
+    cache maps file name -> data URI; the caller loads and saves it."""
+    name = os.path.basename(path)
+    if name not in cache:
+        with Image.open(path) as im:
+            im = im.convert("RGB")  # an animation's first frame
+            im.thumbnail((PLACEHOLDER_PX, PLACEHOLDER_PX))
+            buf = io.BytesIO()
+            im.save(buf, "WEBP", quality=PLACEHOLDER_QUALITY)
+        cache[name] = "data:image/webp;base64," + base64.b64encode(buf.getvalue()).decode()
+    return cache[name]
 
 
 def is_animated(path):

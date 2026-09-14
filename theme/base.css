@@ -3,19 +3,6 @@
    (l-project, l-home, l-sandbox, l-reel; build.py sets the class), which adds no specificity, so
    theme/site.css still overrides everything here by source order. Images are named by their original
    file; the build points them at the optimised copies. */
-.lightbox-spinner {
-  animation-duration: 0.7s;
-  animation-iteration-count: infinite;
-  animation-name: rotate-forever;
-  animation-timing-function: linear;
-  height: 30px;
-  width: 30px;
-  border: 4px solid #fff;
-  border-right-color: transparent;
-  border-radius: 50%;
-  display: inline-block;
-  opacity: 0.7;
-}
 .link-transition a {
   transition:
     background 0.2s ease,
@@ -24,148 +11,11 @@
 .link-transition a svg {
   transition: fill 0.2s ease;
 }
-.lightbox-link,
-.lightbox-content.zoomable {
-  cursor: zoom-in;
-}
 .project-cover .details {
   transition: background 0.2s ease;
 }
-.project-cover .title,
-.project-cover .fields,
-.project-cover .custom,
-.project-cover .description,
-.project-cover .date {
+.project-cover .title {
   transition: color 0.2s ease;
-}
-#lightbox-wrap .lightbox-contents {
-  -webkit-user-select: none;
-  user-select: none;
-}
-#lightbox-blocking {
-  align-items: center;
-  bottom: 0;
-  display: flex;
-  justify-content: center;
-  left: 0;
-  position: fixed;
-  right: 0;
-  top: 0;
-  z-index: 1002;
-}
-#lightbox-blocking .lightbox-spinner {
-  display: none;
-}
-#lightbox-wrap {
-  height: 100%;
-  left: 0;
-  position: fixed;
-  top: 0;
-  width: 100vw;
-  z-index: 1001;
-}
-#lightbox-wrap .offscreen,
-#lightbox-wrap.offscreen {
-  height: 0;
-  overflow: hidden;
-  visibility: hidden;
-  transform: translateX(-99999px);
-  width: 0;
-}
-#lightbox-wrap .lightbox-contents {
-  display: inline-block;
-  max-height: 100%;
-  max-width: 100%;
-}
-#lightbox-inner-wrap {
-  height: 100%;
-  margin: auto;
-  position: relative;
-  z-index: 1003;
-}
-#lightbox-inner-wrap .control {
-  cursor: pointer;
-  position: absolute;
-  z-index: 1003;
-}
-#lightbox-inner-wrap svg .lightbox-icon-bg {
-  fill: #696969;
-  opacity: 0.2;
-}
-#lightbox-inner-wrap svg:hover .lightbox-icon-bg {
-  opacity: 0.4;
-}
-#lightbox-inner-wrap .next,
-#lightbox-inner-wrap .prev {
-  height: 100vh;
-  opacity: 0;
-  top: 0;
-  width: 30vw;
-}
-#lightbox-inner-wrap .next:hover,
-#lightbox-inner-wrap .prev:hover {
-  opacity: 1;
-}
-#lightbox-inner-wrap .next svg,
-#lightbox-inner-wrap .prev svg {
-  top: calc(50% - 30px);
-  position: absolute;
-}
-#lightbox-inner-wrap .next svg .lightbox-icon-arrow,
-#lightbox-inner-wrap .prev svg .lightbox-icon-arrow {
-  fill: #ffffff;
-}
-#lightbox-inner-wrap .next {
-  right: 0;
-}
-#lightbox-inner-wrap .next svg {
-  right: 20px;
-}
-#lightbox-inner-wrap .prev {
-  left: 0;
-}
-#lightbox-inner-wrap .prev svg {
-  left: 20px;
-}
-#lightbox-inner-wrap .close {
-  position: fixed;
-  height: 40px;
-  right: 20px;
-  top: 20px;
-  width: 40px;
-}
-#lightbox-inner-wrap .close:hover {
-  cursor: pointer;
-}
-#lightbox-inner-wrap .close .lightbox-icon-bg {
-  fill: #fff;
-}
-@media (max-width: 1024px) {
-  #lightbox-inner-wrap .close {
-    right: 0;
-    top: 0;
-  }
-  #lightbox-inner-wrap .close circle {
-    display: none;
-  }
-  #lightbox-inner-wrap .next:hover,
-  #lightbox-inner-wrap .prev:hover {
-    opacity: 0;
-  }
-}
-@media all and (-ms-high-contrast: none) {
-  .lightbox-link,
-  .lightbox-content.zoomable {
-    cursor: pointer;
-  }
-}
-.transition-enabled {
-  opacity: 0;
-}
-.transition-in {
-  animation: fade-in ease-in;
-  animation-duration: 0.25s;
-  animation-fill-mode: forwards;
 }
 .transition-out {
   opacity: 1;
@@ -186,18 +36,11 @@ html {
 body {
   margin: 0;
 }
-article,
-aside,
-details,
-figcaption,
-figure,
 footer,
 header,
-hgroup,
 main,
 nav,
-section,
-summary {
+section {
   display: block;
 }
 a {
@@ -312,8 +155,7 @@ html:where(.l-project):before {
   top: 0;
   width: 100%;
 }
-html:where(.l-home),
-:where(html.l-home) .site-wrap .page-background-video .video-wrap {
+html:where(.l-home) {
   left: 0;
   width: 100%;
 }
@@ -389,17 +231,14 @@ html:where(.l-reel):before {
 .preserve-whitespace--nowrap {
   white-space: pre;
 }
-.logo,
-.logo-secondary {
+.logo {
   clear: both;
   word-wrap: break-word;
 }
-.logo a,
-.logo-secondary a {
+.logo a {
   color: inherit;
 }
-.logo.logo-text,
-.logo-secondary.logo-text {
+.logo.logo-text {
   width: 100%;
 }
 .social {
@@ -423,22 +262,15 @@ html:where(.l-reel):before {
 }
 nav .page-title,
 nav .gallery-title,
-nav .project-title,
 nav .link-title,
 nav .social,
 nav .social li {
   display: inline-block;
   vertical-align: middle;
 }
-nav .project-title:first-child,
-nav .gallery-title:first-child,
-nav .page-title:first-child,
-nav .link-title:first-child {
+nav .gallery-title:first-child {
   padding-left: 0 !important;
 }
-nav .project-title:last-child,
-nav .gallery-title:last-child,
-nav .page-title:last-child,
 nav .link-title:last-child {
   padding-right: 0 !important;
 }
@@ -847,8 +679,7 @@ nav .link-title {
   text-align: left;
   width: 100%;
 }
-.site-footer,
-.site-footer a {
+.site-footer {
   color: #aaaaaa;
 }
 @media (max-width: 932px) {
@@ -866,10 +697,6 @@ nav .link-title {
     padding-bottom: 17px;
     padding-top: 17px;
   }
-}
-#lightbox-wrap,
-#lightbox-inner-wrap {
-  height: 100%;
 }
 .hamburger-click-area {
   transform: translateY(-50%);
@@ -960,21 +787,18 @@ nav .link-title {
     width: 100%;
   }
   .responsive-nav .page-title,
-  .responsive-nav .project-title,
   .responsive-nav .link-title,
   .responsive-nav .gallery-title {
     display: block;
     text-align: center;
   }
   .responsive-nav .page-title a,
-  .responsive-nav .project-title a,
   .responsive-nav .link-title a,
   .responsive-nav .gallery-title a {
     font-size: 22px;
     line-height: 32px;
   }
   .responsive-nav .page-title,
-  .responsive-nav .project-title,
   .responsive-nav .link-title,
   .responsive-nav .gallery-title {
     padding: 0 0 30px;
@@ -1053,28 +877,21 @@ nav .link-title {
     width: 100%;
   }
 }
-.other-projects:after,
-.other-projects .title-wrapper:after,
 .page-content:after,
-.project-module:after,
-.other-projects .project-cover .details-inner:after {
+.project-module:after {
   clear: both;
   content: "";
   display: table;
 }
 .page-header .title,
-.page-header .description,
-.page-header .date,
-.page-header .custom1,
-.page-header .custom2 {
+.page-header .description {
   margin: 0 auto;
 }
 .page-header .description {
   white-space: pre-line;
   word-wrap: break-word;
 }
-.page img,
-.page object {
+.page img {
   display: block;
   margin: 0 auto;
   max-width: 100%;
@@ -1127,9 +944,7 @@ nav .link-title {
   justify-content: center;
   padding: 20px;
 }
-.centered .outer-wrap,
-.image-right .outer-wrap,
-.image-left .outer-wrap {
+.centered .outer-wrap {
   align-items: center;
   display: flex;
   justify-content: center;
@@ -1160,9 +975,6 @@ nav .link-title {
   overflow: hidden;
   visibility: hidden;
 }
-.grid--ready {
-  visibility: visible;
-}
 .grid__item-container {
   box-sizing: content-box !important;
   display: inline-block;
@@ -1171,9 +983,6 @@ nav .link-title {
 .grid__item-filler {
   background: rgba(0, 0, 0, 0.03);
   display: block;
-}
-.image-loaded ~ .grid__item-filler {
-  background: transparent;
 }
 .grid__item-image {
   height: 100%;
@@ -1262,11 +1071,7 @@ nav .link-title {
     line-height: 24px;
   }
   .page-header .title,
-  .page-header .custom1,
-  .page-header .custom2,
-  .page-header .date,
-  .page-header .description,
-  .page-header .project-module-text {
+  .page-header .description {
     width: 100%;
   }
   .page {
@@ -1377,8 +1182,7 @@ nav .link-title {
   text-transform: none;
 }
 .standard-modules .rich-text .main-text,
-.standard-modules .rich-text div,
-.standard-modules .rich-text p {
+.standard-modules .rich-text div {
   color: #111111;
   font-family: vcsm;
   font-size: 20px;
@@ -1414,17 +1218,13 @@ nav .link-title {
     padding-top: 18px;
   }
   .standard-modules .rich-text .main-text,
-  .standard-modules .rich-text div,
-  .standard-modules .rich-text p {
+  .standard-modules .rich-text div {
     font-size: 17px;
     line-height: 24px;
     padding-bottom: 14px;
     padding-top: 0px;
   }
   .standard-modules .modules .image,
-  .standard-modules .modules .video,
-  .standard-modules .modules .embed,
-  .standard-modules .modules .audio,
   .standard-modules .modules .text {
     width: 100%;
   }
@@ -1444,8 +1244,7 @@ nav .link-title {
     padding-bottom: 5px;
     padding-top: 5px;
   }
-  .standard-modules .rich-text .title,
-  .standard-modules .rich-text .title span {
+  .standard-modules .rich-text .title {
     font-size: 25px !important;
     line-height: 35px !important;
   }
@@ -1453,23 +1252,19 @@ nav .link-title {
     padding-bottom: 0px;
     padding-top: 16px;
   }
-  .standard-modules .rich-text .sub-title,
-  .standard-modules .rich-text .sub-title span {
+  .standard-modules .rich-text .sub-title {
     font-size: 14px !important;
     line-height: 20px !important;
   }
   .standard-modules .rich-text .main-text,
-  .standard-modules .rich-text div,
-  .standard-modules .rich-text p {
+  .standard-modules .rich-text div {
     padding-bottom: 13px;
     padding-top: 0px;
   }
   .standard-modules .rich-text .main-text,
   .standard-modules .rich-text .main-text span,
   .standard-modules .rich-text div,
-  .standard-modules .rich-text div span,
-  .standard-modules .rich-text p,
-  .standard-modules .rich-text p span {
+  .standard-modules .rich-text div span {
     font-size: 14px !important;
     line-height: 20px !important;
   }
@@ -1559,17 +1354,7 @@ nav .link-title {
   transform: translate(-50%, -50%);
   width: calc(100% + 2px);
 }
-.project-cover .cover .cover__img.js-lazy {
-  background-color: rgba(0, 0, 0, 0.03);
-}
-.project-cover .cover .cover__img.js-lazy.image-loaded {
-  background-color: transparent;
-}
-.project-cover .title,
-.project-cover .date,
-.project-cover .custom1,
-.project-cover .custom2,
-.project-cover .description {
+.project-cover .title {
   clear: both;
 }
 .project-cover .details-inner {
@@ -1919,32 +1704,6 @@ nav .link-title {
 @media (max-width: 932px) {
   :where(html.l-reel) .other-projects .project-cover:nth-child(4n + 1) {
     clear: none;
-  }
-}
-
-@keyframes rotate-forever {
-  0% {
-    -webkit-transform: rotate(0deg);
-    -moz-transform: rotate(0deg);
-    -ms-transform: rotate(0deg);
-    -o-transform: rotate(0deg);
-    transform: rotate(0deg);
-  }
-  100% {
-    -webkit-transform: rotate(360deg);
-    -moz-transform: rotate(360deg);
-    -ms-transform: rotate(360deg);
-    -o-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
   }
 }
 

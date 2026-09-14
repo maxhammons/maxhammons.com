@@ -94,15 +94,11 @@ VARIANT_RE = re.compile(
     re.I,
 )
 
-# The exported theme came as 29 near-identical per-page stylesheets. Four are kept,
-# one per page layout; theme/site.css normalises everything on top of them.
-ADOBE_CSS = {
-    "project": "b012df7cabfe0cec978c916522ebf6d11756239070.css",  # every project page + About
-    "home": "90edfce16caeea790f2c620548817fb11756239070.css",  # gallery with masthead GIF
-    "sandbox": "eca398eb5b597f83bd44fec129bfb6951756239070.css",  # gallery, no masthead
-    "reel": "f8b83a954c68c516c5723a0248b7f8ea1756239070.css",  # splash page with background GIF
-}
+# theme/base.css holds the rules of the exported theme that the pages still use, merged from its
+# per-layout stylesheets; a rule only one layout needs is scoped to that layout's <html> class
+# (l-project, l-home, l-sandbox, l-reel). The build serves it and theme/site.css as one stylesheet.
 LAYOUT = {"index": "home", "portfolio": "home", "sandbox": "sandbox", "reel": "reel"}
+THEME_CSS = ("base.css", "site.css")
 
 
 def cdn_basename(url):
@@ -142,7 +138,9 @@ def fetch(url, dest):
         expected = int(r.headers.get("Content-Length") or 0)
         shutil.copyfileobj(r, f)
     got = os.path.getsize(dest + ".part")
-    if expected and got != expected:  # a reset connection must not leave a truncated original
+    if (
+        expected and got != expected
+    ):  # a reset connection must not leave a truncated original
         os.remove(dest + ".part")
         raise OSError(f"truncated download: {got} of {expected} bytes")
     os.replace(dest + ".part", dest)
@@ -150,6 +148,22 @@ def fetch(url, dest):
 
 def localise(s):
     return CDN_RE.sub(lambda m: "/assets/" + cdn_basename(m.group(0)), s)
+
+
+def theme_asset_urls(css):
+    """CDN URLs of the originals the theme stylesheets name as /assets/<original file name>."""
+    names = set(re.findall(r"/assets/([^\s\"'()<>,]+)", css))
+    urls = []
+    for dp, _, fns in os.walk(RAW_CDN):
+        for fn in fns:
+            name, _, query = fn.partition("@")
+            if name in names:
+                rel = os.path.relpath(os.path.join(dp, name), RAW_CDN)
+                urls.append(
+                    f"https://cdn.myportfolio.com/{rel}"
+                    + (f"?{query}" if query else "")
+                )
+    return urls
 
 
 def plan_trim(names):
@@ -264,7 +278,9 @@ def apply_copy(s, edits, slug, report):
 
 
 def caption_text(fragment):
-    return re.sub(r"\s+", " ", htmlmod.unescape(re.sub(r"<[^>]+>", "", fragment))).strip()
+    return re.sub(
+        r"\s+", " ", htmlmod.unescape(re.sub(r"<[^>]+>", "", fragment))
+    ).strip()
 
 
 def drop_captions(s, keep, slug, report):
@@ -303,23 +319,15 @@ def main():
         "captions_missing": [],
     }
 
-    # 1. every CDN asset referenced by html or by the kept theme css
+    # 1. every CDN asset referenced by html or by the theme stylesheets
     urls = set()
     for s in html.values():
         urls.update(CDN_RE.findall(s))
     urls = {u for u in urls if not urllib.parse.urlsplit(u).path.endswith(".css")}
-    css_src = {}
-    for name, fn in ADOBE_CSS.items():
-        p = [
-            x
-            for x in os.listdir(RAW_CDN + "/4f704c3da73b8f00cf5454392257914f")
-            if x.startswith(fn)
-        ][0]
-        css_src[name] = open(
-            os.path.join(RAW_CDN, "4f704c3da73b8f00cf5454392257914f", p),
-            encoding="utf-8",
-        ).read()
-        urls.update(CDN_RE.findall(css_src[name]))
+    css = "\n".join(
+        open(os.path.join(THEME, fn), encoding="utf-8").read() for fn in THEME_CSS
+    )
+    urls.update(theme_asset_urls(css))
     by_name = {}
     for u in urls:
         by_name.setdefault(cdn_basename(u), u)
@@ -367,21 +375,15 @@ def main():
         )
 
     # 3. css + js + fonts
-    for d in ("css", "js", "dist/css", "dist/js", "site"):
+    shutil.rmtree(
+        os.path.join(OUT, "css"), ignore_errors=True
+    )  # stylesheets of earlier builds
+    shutil.rmtree(os.path.join(OUT, "dist", "css"), ignore_errors=True)
+    for d in ("css", "js", "dist/js", "site"):
         os.makedirs(os.path.join(OUT, d), exist_ok=True)
     shutil.copyfile(os.path.join(THEME, "site.js"), os.path.join(OUT, "js", "site.js"))
-    for name, text in css_src.items():
-        with open(
-            os.path.join(OUT, "css", f"adobe-{name}.css"), "w", encoding="utf-8"
-        ) as f:
-            f.write(swap_images(apply_trim(localise(text), dropped, remap)))
-    shutil.copyfile(
-        os.path.join(THEME, "site.css"), os.path.join(OUT, "css", "site.css")
-    )
-    shutil.copyfile(
-        os.path.join(RAW_SITE, "dist", "css", "main.css"),
-        os.path.join(OUT, "dist", "css", "main.css"),
-    )
+    with open(os.path.join(OUT, "css", "site.css"), "w", encoding="utf-8") as f:
+        f.write(swap_images(apply_trim(css, dropped, remap)))
     js = [
         f
         for f in os.listdir(os.path.join(RAW_SITE, "dist", "js"))
@@ -409,10 +411,15 @@ def main():
         with open(os.path.join(OUT, path.lstrip("/")), "rb") as f:
             return f"{path}?v={hashlib.md5(f.read()).hexdigest()[:8]}"
 
-    stamped = {path: stamp(path) for path in (
-        "/dist/css/main.css", "/css/site.css", "/js/site.js", "/dist/js/main.js", "/site/translations.js",
-        *(f"/css/adobe-{name}.css" for name in ADOBE_CSS),
-    )}
+    stamped = {
+        path: stamp(path)
+        for path in (
+            "/css/site.css",
+            "/js/site.js",
+            "/dist/js/main.js",
+            "/site/translations.js",
+        )
+    }
     for d in os.listdir(OUT):
         if os.path.isdir(os.path.join(OUT, d)) and d not in (
             "assets",
@@ -429,10 +436,13 @@ def main():
             continue
         layout = LAYOUT.get(slug, "project")
         s = TYPEKIT_RE.sub("", s)
-        s = PAGE_CSS_RE.sub(
-            f'<link rel="stylesheet" href="/css/adobe-{layout}.css" type="text/css" />\n'
-            f'    <link rel="stylesheet" href="/css/site.css" type="text/css" />',
+        s = re.sub(
+            r'\s*<link rel="stylesheet" href="/dist/css/main\.css" type="text/css" />',
+            "",
             s,
+        )
+        s = PAGE_CSS_RE.sub(
+            '<link rel="stylesheet" href="/css/site.css" type="text/css" />', s
         )
         s = apply_trim(localise(s), dropped, remap)
         s = re.sub(
@@ -441,8 +451,8 @@ def main():
         s = re.sub(
             r'src="/site/translations\?cb=[0-9a-f]+"', 'src="/site/translations.js"', s
         )
-        s = s.replace('<html class="', '<html class="wf-active ').replace(
-            "<html>", '<html class="wf-active">'
+        s = s.replace(
+            '<html lang="en-US">', f'<html lang="en-US" class="l-{layout}">', 1
         )
         s = BACK_TO_TOP_RE.sub("\n", s)
         s = MOBILE_SOCIAL_RE.sub(
@@ -480,18 +490,25 @@ def main():
         s = apply_copy(s, copy.get(slug, []), slug, report)
         s = drop_captions(s, captions.get(slug, []), slug, report)
         # the build stamps the year it ran; site.js keeps it current between builds
-        s = COPYRIGHT_RE.sub(f'Copyright Max Hammons <span class="js-year">{year}</span>', s)
+        s = COPYRIGHT_RE.sub(
+            f'Copyright Max Hammons <span class="js-year">{year}</span>', s
+        )
         s = COVER_RE.sub(lambda m: cover_markup(m, html, dropped, remap), s)
         s = s.replace("</head>", "  " + SPECULATION + "\n</head>", 1)
         s = s.replace(
-            '<link rel="stylesheet" href="/dist/css/main.css" type="text/css" />',
-            FONT_PRELOAD + '\n    <link rel="stylesheet" href="/dist/css/main.css" type="text/css" />',
+            '<link rel="stylesheet" href="/css/site.css" type="text/css" />',
+            FONT_PRELOAD
+            + '\n    <link rel="stylesheet" href="/css/site.css" type="text/css" />',
             1,
         )
         s = swap_images(s)
         first = first_image(s, dropped, remap) if layout == "project" else ""
         if first:  # the first project image starts downloading before any script runs
-            s = s.replace("</head>", f'  <link rel="preload" as="image" href="{first}" fetchpriority="high" />\n</head>', 1)
+            s = s.replace(
+                "</head>",
+                f'  <link rel="preload" as="image" href="{first}" fetchpriority="high" />\n</head>',
+                1,
+            )
         s = re.sub(r"<img\b(?![^>]*\bdecoding=)", '<img decoding="async"', s)
         s = add_alt(s, alt, report)
         for path, versioned in stamped.items():
@@ -519,7 +536,9 @@ def main():
     for dp, _, fns in os.walk(OUT):
         for fn in fns:
             if fn.endswith((".html", ".css")):
-                text = open(os.path.join(dp, fn), encoding="utf-8", errors="ignore").read()
+                text = open(
+                    os.path.join(dp, fn), encoding="utf-8", errors="ignore"
+                ).read()
                 referenced.update(re.findall(r"/assets/([^\s\"'()<>,]+)", text))
     pruned = 0
     for fn in os.listdir(ASSETS):
@@ -542,7 +561,9 @@ def main():
     print(
         f"images: {len(dropped)} variants over {MAX_IMAGE_WIDTH}px or originals dropped, {len(by_name)} kept; site/ is {total / 1e6:.0f} MB"
     )
-    print(f"optimised: {len(renames)} images to WebP (animated GIFs included), {pruned} unreferenced files pruned")
+    print(
+        f"optimised: {len(renames)} images to WebP (animated GIFs included), {pruned} unreferenced files pruned"
+    )
     print(
         f"alt text: {report['added']} added, {report['missing']} images with no text yet"
     )

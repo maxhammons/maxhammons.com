@@ -149,10 +149,17 @@ nav .gallery-title a.active:hover, nav .page-title a.active:hover { color: var(-
    the page then holds 2.96 thirds, which makes one gutter 4/296 of its width and two columns 196/296. */
 @media (min-width: 933px) {
   .page { margin-left: calc(2% / 3); margin-right: calc(2% / 3); width: calc(100% - 4% / 3); }
-  /* the intro section runs 2.5x its exported height (244px to 610px for a three-line intro); the extra 366px
-     keeps the export's 40:60 split of space above the title and below the text */
-  .page-header { width: calc(100% * 196 / 296); max-width: none; padding-top: 166px; padding-bottom: 280px; }
-  .page-header.is-long .description { column-count: 3; column-gap: calc(100% * 4 / 296); }
+  /* every intro is a box eight lede lines tall on the grid's three columns: text fills the first column
+     top to bottom, then runs into the second and third as it gets longer */
+  .page-header, .page-header.is-long { width: 100%; max-width: none; }
+  .page-header .description, .page-header.is-long .description {
+    column-count: 3; column-gap: calc(100% * 4 / 296); column-fill: auto; height: calc(var(--lh-lede) * 8);
+  }
+  .page-header .description:empty { height: auto; }
+}
+/* below 1200px the longest intros (900 characters) need eleven lines to stay inside three columns */
+@media (min-width: 933px) and (max-width: 1199px) {
+  .page-header.is-long .description { height: calc(var(--lh-lede) * 11); }
 }
 
 .standard-modules .rich-text .title, .splash-modules .rich-text .title {
@@ -286,10 +293,8 @@ nav .gallery-title a.active:hover, nav .page-title a.active:hover { color: var(-
   .close-responsive-click-area { z-index: 2; }
 }
 
-/* =====================================================================
-   Page transitions (cross-document View Transitions; site.js sets the
-   names, the types, and builds the full-screen twins on the project page)
-   ===================================================================== */
+/* Page transitions (cross-document View Transitions; site.js sets the
+   names, the types, and builds the full-screen twins on the project page) */
 @view-transition { navigation: auto; }
 
 html.vt .transition-enabled { opacity: 1; }

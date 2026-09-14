@@ -32,7 +32,7 @@ open http://localhost:8765/
 2. Keeps four of the exported Adobe stylesheets (project, home, sandbox, reel) and links `theme/site.css` after them on every page.
 3. Replaces the Adobe Typekit loader with local `@font-face` rules.
 4. Removes the back-to-top links.
-5. Marks intros longer than 360 characters with `is-long`, which the CSS lays out above the first image as three columns on the homepage's grid on wide screens, two on tablets, one on phones.
+5. Marks intros longer than 360 characters with `is-long`. On wide screens every intro sits in a box eight lines tall on the homepage's three columns, filling the first column before running into the next (eleven lines for long intros below 1200px); on tablets `is-long` intros run as two columns, on phones one.
 6. Applies alt text and copy edits from `content/pages/*.json`, then removes every one-line image caption a page does not list in `keep_captions`. Stamps the footer copyright with the build year; `site.js` keeps it current between builds.
 6b. Converts images to WebP (animated GIFs to animated WebP), preloads the two main fonts, marks images `decoding="async"`, and prunes unreferenced assets. First run takes about a minute per 1,000 images; later runs use the cache.
 7. Writes every page as `slug/index.html`, plus `CNAME`, `.nojekyll`, and a `404.html`.

@@ -296,22 +296,37 @@
      Skipped on data-saver or 2G connections. ---- */
   var warmed = {};
   function lowFetch(url, done) {
-    fetch(url, { credentials: "same-origin", priority: "low" }).catch(function () {
-      warmed[url] = false; // offline or blocked: let a later hover try again
-    }).then(done, done);
+    fetch(url, { credentials: "same-origin", priority: "low" })
+      .catch(function () {
+        warmed[url] = false; // offline or blocked: let a later hover try again
+      })
+      .then(done, done);
   }
   function idlePrefetch() {
     var covers = Array.prototype.slice.call(document.querySelectorAll("a.project-cover[href]"));
     var conn = navigator.connection || {};
     if (!covers.length || conn.saveData || /2g/.test(conn.effectiveType || "")) return;
-    covers.sort(function (a, b) { return a.getBoundingClientRect().top - b.getBoundingClientRect().top; });
+    covers.sort(function (a, b) {
+      return a.getBoundingClientRect().top - b.getBoundingClientRect().top;
+    });
     var onScreen = covers.filter(function (c) {
       var r = c.getBoundingClientRect();
       return r.bottom > 0 && r.top < window.innerHeight;
     });
-    var queue = covers.map(function (c) { return c.href; })
-      .concat(onScreen.map(function (c) { return c.getAttribute("data-preload"); }).filter(Boolean))
-      .filter(function (url) { return url && !warmed[url]; });
+    var queue = covers
+      .map(function (c) {
+        return c.href;
+      })
+      .concat(
+        onScreen
+          .map(function (c) {
+            return c.getAttribute("data-preload");
+          })
+          .filter(Boolean),
+      )
+      .filter(function (url) {
+        return url && !warmed[url];
+      });
     var active = 0;
     (function next() {
       while (active < 2 && queue.length) {
@@ -319,7 +334,10 @@
         if (warmed[url]) continue;
         warmed[url] = true;
         active += 1;
-        lowFetch(url, function () { active -= 1; next(); });
+        lowFetch(url, function () {
+          active -= 1;
+          next();
+        });
       }
     })();
   }
@@ -327,7 +345,9 @@
     if (window.requestIdleCallback) requestIdleCallback(fn, { timeout: 4000 });
     else setTimeout(fn, 1500);
   }
-  window.addEventListener("load", function () { whenIdle(idlePrefetch); });
+  window.addEventListener("load", function () {
+    whenIdle(idlePrefetch);
+  });
 
   /* ---- prefetch on intent: the page HTML and its first image ---- */
   function warm(a) {

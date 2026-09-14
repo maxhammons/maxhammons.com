@@ -7,6 +7,7 @@ which plays everywhere a GIF does (including as a CSS background) at a quarter o
 the size and in full colour. Results are cached (git-ignored) so a rebuild only
 converts what is missing.
 """
+
 import concurrent.futures as cf
 import os
 
@@ -30,12 +31,16 @@ def is_animated(path):
 
 
 def to_webp(src, dst):
-    if os.path.exists(dst) and os.path.getsize(dst) > 0:  # originals never change; the cache is by name
+    if (
+        os.path.exists(dst) and os.path.getsize(dst) > 0
+    ):  # originals never change; the cache is by name
         return dst
     with Image.open(src) as im:
         im = ImageOps.exif_transpose(im)
         if im.mode not in ("RGB", "RGBA"):
-            im = im.convert("RGBA" if "transparency" in im.info or im.mode in ("P", "LA") else "RGB")
+            im = im.convert(
+                "RGBA" if "transparency" in im.info or im.mode in ("P", "LA") else "RGB"
+            )
         im.save(dst + ".part", "WEBP", quality=WEBP_QUALITY, method=WEBP_METHOD)
     os.replace(dst + ".part", dst)
     return dst
@@ -49,8 +54,16 @@ def to_animated_webp(src, dst):
         for frame in ImageSequence.Iterator(im):
             frames.append(frame.convert("RGB"))
             durations.append(frame.info.get("duration", 100))
-    frames[0].save(dst + ".part", "WEBP", save_all=True, append_images=frames[1:], duration=durations,
-                   loop=0, quality=ANIMATED_QUALITY, method=WEBP_METHOD)
+    frames[0].save(
+        dst + ".part",
+        "WEBP",
+        save_all=True,
+        append_images=frames[1:],
+        duration=durations,
+        loop=0,
+        quality=ANIMATED_QUALITY,
+        method=WEBP_METHOD,
+    )
     os.replace(dst + ".part", dst)
     return dst
 
@@ -64,7 +77,9 @@ def optimise(sources, cache_dir):
         stem, ext = os.path.splitext(name)
         if ext.lower() not in RASTER or not src:
             continue
-        convert = to_animated_webp if ext.lower() == ".gif" and is_animated(src) else to_webp
+        convert = (
+            to_animated_webp if ext.lower() == ".gif" and is_animated(src) else to_webp
+        )
         jobs.append((convert, src, os.path.join(cache_dir, stem + ".webp")))
         renames[name] = stem + ".webp"
     with cf.ThreadPoolExecutor(max(2, (os.cpu_count() or 4) - 1)) as ex:

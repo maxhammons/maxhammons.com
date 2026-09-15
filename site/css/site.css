@@ -2028,9 +2028,27 @@ nav .gallery-title a.active:hover, nav .page-title a.active:hover { color: var(-
   color: var(--ink); font-size: var(--fs-body); line-height: var(--lh-body); font-weight: 400;
 }
 .cta .cta-resume { display: inline-block; margin-top: 24px; }
-.cta .cta-resume:hover, .site-footer .next-project:hover {
+.cta .cta-resume:hover {
   color: var(--accent); text-decoration: line-through; text-decoration-thickness: var(--strike);
 }
+/* Next project: on hover the strike draws through the words and on past them (the padding), then an arrowhead
+   appears at its end, flush with the page's right edge */
+.site-footer .next-project { position: relative; padding-right: 1.5em; }
+.site-footer .next-project:hover { color: var(--accent); }
+.site-footer .next-project::before, .site-footer .next-project::after {
+  content: ""; position: absolute; box-sizing: border-box; pointer-events: none;
+}
+.site-footer .next-project::before {
+  left: 0; top: calc(50% - var(--strike) / 2); width: 0; height: var(--strike); background: currentColor;
+  transition: width var(--c) var(--ease);
+}
+.site-footer .next-project::after {
+  right: 0.05em; top: 50%; width: 0.45em; height: 0.45em;
+  border-top: var(--strike) solid currentColor; border-right: var(--strike) solid currentColor;
+  transform: translateY(-50%) rotate(45deg); opacity: 0; transition: opacity var(--c) var(--ease);
+}
+.site-footer .next-project:hover::before { width: 100%; }
+.site-footer .next-project:hover::after { opacity: 1; transition-delay: var(--c); }
 .site-footer { display: flex; justify-content: space-between; align-items: baseline; }
 @media (min-width: 933px) {   /* on the grid's outer edges, like the images */
   .cta, .site-footer { width: auto; margin-left: calc(2% / 3); margin-right: calc(2% / 3); padding-left: 0; padding-right: 0; }

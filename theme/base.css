@@ -207,7 +207,8 @@ html:where(.l-sandbox):before {
 }
 html:where(.l-reel) {
   background-color: #fff;
-  background-image: url("/assets/767f2236-537f-45e1-b028-b42ceebb1bfa_rwc_9x0x1492x915x4096.gif");
+  --reel: url("/assets/767f2236-537f-45e1-b028-b42ceebb1bfa_rwc_9x0x1492x915x4096.gif");   /* site.js reads it */
+  background-image: var(--reel);
   background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;

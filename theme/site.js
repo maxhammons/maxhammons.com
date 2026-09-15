@@ -349,6 +349,66 @@
     whenIdle(idlePrefetch);
   });
 
+  /* ---- Reel: its background animation (--reel in the stylesheet) is about 8 MB. html.reel-loading, set before
+     any style is read, keeps the stylesheet from requesting the file and hides the button while this fetches
+     it once, drawing the strike of a red "Loading" as the bytes arrive. The background is then pointed at
+     those bytes (no second download), and the animation and button fade in. If anything fails the class
+     just goes and the stylesheet loads the file itself. ---- */
+  var reelUrl = null;
+  if (html.classList.contains("l-reel")) {
+    html.classList.add("reel-loading");
+    reelUrl = (getComputedStyle(html).getPropertyValue("--reel").match(/url\(["']?([^"')]+)["']?\)/) || [])[1];
+    if (!reelUrl) html.classList.remove("reel-loading");
+  }
+  if (reelUrl) {
+    var reelLoader = document.createElement("div");
+    reelLoader.className = "reel-loader";
+    reelLoader.setAttribute("role", "status");
+    reelLoader.innerHTML = "<span>Loading</span>";
+    var placeLoader = function () {
+      document.body.appendChild(reelLoader);
+    };
+    if (document.body) placeLoader();
+    else document.addEventListener("DOMContentLoaded", placeLoader);
+    var readReel = function (res) {
+      if (!res.ok) throw new Error("reel " + res.status);
+      var total = +res.headers.get("content-length");
+      if (!res.body || !total) {
+        reelLoader.classList.add("is-indeterminate");
+        return res.blob();
+      }
+      var reader = res.body.getReader();
+      var parts = [];
+      var got = 0;
+      return (function pump() {
+        return reader.read().then(function (chunk) {
+          if (chunk.done) return new Blob(parts, { type: res.headers.get("content-type") || "" });
+          parts.push(chunk.value);
+          got += chunk.value.length;
+          reelLoader.style.setProperty("--reel-progress", Math.min(1, got / total));
+          return pump();
+        });
+      })();
+    };
+    fetch(reelUrl, { priority: "high" })
+      .then(readReel)
+      .then(function (blob) {
+        var local = URL.createObjectURL(blob);
+        var img = new Image();
+        img.src = local;
+        var decoded = img.decode ? img.decode() : Promise.resolve();
+        return decoded
+          .catch(function () {}) // some browsers will not pre-decode an animation; it still paints
+          .then(function () {
+            html.style.setProperty("--reel", 'url("' + local + '")');
+          });
+      })
+      .catch(function () {}) // offline or a bad response: fall back to the stylesheet's own request
+      .then(function () {
+        html.classList.remove("reel-loading");
+      });
+  }
+
   /* ---- phone menu: the hamburger opens the full-screen nav; its close button or any of its links shuts it ---- */
   document.addEventListener("click", function (e) {
     var hit =

@@ -207,7 +207,8 @@ html:where(.l-sandbox):before {
 }
 html:where(.l-reel) {
   background-color: #fff;
-  background-image: url("/assets/767f2236-537f-45e1-b028-b42ceebb1bfa_rwc_9x0x1492x915x4096.webp");
+  --reel: url("/assets/767f2236-537f-45e1-b028-b42ceebb1bfa_rwc_9x0x1492x915x4096.webp");   /* site.js reads it */
+  background-image: var(--reel);
   background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -2055,6 +2056,29 @@ nav .gallery-title a.active:hover, nav .page-title a.active:hover { color: var(-
 }
 
 .back-to-top, .back-to-top-fixed { display: none !important; }
+
+/* Reel: the background animation is about 8 MB. While site.js loads it, the page shows a red "Loading" whose
+   strike draws across as the file arrives (a repeating sweep when the size is unknown), and the button stays
+   hidden; then the animation and the button fade in together */
+html.reel-loading { background-image: none !important; }
+html.l-reel .project-module-button { transition: opacity var(--f) var(--ease); }
+html.reel-loading .project-module-button { opacity: 0; pointer-events: none; }
+.reel-loader {
+  position: fixed; inset: 0; z-index: 10; display: flex; align-items: center; justify-content: center;
+  pointer-events: none; transition: opacity var(--f) var(--ease);
+}
+html:not(.reel-loading) .reel-loader { opacity: 0; }
+.reel-loader span { position: relative; color: var(--accent); font-size: 24px; line-height: 28px; font-weight: 700; }
+.reel-loader span::after {
+  content: ""; position: absolute; left: 0; top: calc(50% - var(--strike) / 2); height: var(--strike);
+  width: calc(var(--reel-progress, 0) * 100%); background: currentColor; transition: width 150ms linear;
+}
+.reel-loader.is-indeterminate span::after { width: 100%; animation: reel-sweep 1.2s var(--ease) infinite; }
+@keyframes reel-sweep {
+  from { clip-path: inset(0 100% 0 0); }
+  50% { clip-path: inset(0 0 0 0); }
+  to { clip-path: inset(0 0 0 100%); }
+}
 
 .grid__caption-text { font-size: var(--fs-small); line-height: var(--lh-small); }
 
